@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/03 21:16:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/03 22:51:08 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,32 +18,10 @@
 #define BUFF_SIZE 4096
 #define STDIN 1
 
-/*
-** return: pretty much as jon snow knows...
-*/
-
-static void	minishell_showenv(char **env)
+static int	minishell_exec(const char *cmd, t_list *env)
 {
-	while (*env)
-		ft_putendl(*(env++));
-}
-
-static char	*minishell_getenvitem(char **env, const char *item)
-{
-	const size_t	len = ft_strlen(item);
-
-	while (*env)
-	{
-		if (!ft_memcmp(*env, item, len))
-			return (*env);
-		env++;
-	}
-	return (NULL);
-}
-
-static int	minishell_exec(const char *cmd, char **env)
-{
-	
+	(void)env;
+	(void)cmd;
 	return (-1);
 }
 
@@ -55,6 +33,7 @@ int			main(int ac, char **av, char **env)
 
 	(void)av;
 	(void)ac;
+	minishell_envload(&environement, env);
 	while (42)
 	{
 		ft_putstr("$> ");
@@ -62,13 +41,14 @@ int			main(int ac, char **av, char **env)
 		{
 			buff[ret - 1] = '\0';
 			if (!ft_strcmp(buff, "env"))
-				minishell_showenv(env);
+				minishell_envshow(environement);
 			else if (!ft_strcmp(buff, "exit"))
-				return (0);
-			else if (minishell_exec(buff, env) < 0)
+				break ;
+			else if (minishell_exec(buff, environement) < 0)
 				minishell_error_notfound(buff);
 		}
 		usleep(42);
 	}
+	minishell_envfree(environement);
 	return (0);
 }
