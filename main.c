@@ -6,10 +6,11 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/03 18:57:21 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/03 21:16:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "libft.h"
 #include <unistd.h>
 #include <sys/types.h>
@@ -18,30 +19,37 @@
 #define STDIN 1
 
 /*
-** print the environement to the stdout
-** return: pretty much as john snow knows...
+** return: pretty much as jon snow knows...
 */
 
-void	minishell_showenv(char **env)
+static void	minishell_showenv(char **env)
 {
 	while (*env)
 		ft_putendl(*(env++));
 }
 
-int		minishell_exec(int ac, char **av, char **env)
+static char	*minishell_getenvitem(char **env, const char *item)
 {
-	pid_t	child;
+	const size_t	len = ft_strlen(item);
 
-	(void)minishell_exec;
-	(void)ac;
-	(void)env;
-	(void)av;
-	(void)child;
-	return (0);
+	while (*env)
+	{
+		if (!ft_memcmp(*env, item, len))
+			return (*env);
+		env++;
+	}
+	return (NULL);
 }
 
-int		main(int ac, char **av, char **env)
+static int	minishell_exec(const char *cmd, char **env)
 {
+	
+	return (-1);
+}
+
+int			main(int ac, char **av, char **env)
+{
+	t_list	*environement;
 	char	buff[BUFF_SIZE];
 	ssize_t	ret;
 
@@ -57,6 +65,8 @@ int		main(int ac, char **av, char **env)
 				minishell_showenv(env);
 			else if (!ft_strcmp(buff, "exit"))
 				return (0);
+			else if (minishell_exec(buff, env) < 0)
+				minishell_error_notfound(buff);
 		}
 		usleep(42);
 	}

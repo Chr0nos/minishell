@@ -6,7 +6,7 @@
 #    By: snicolet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/05/03 17:26:33 by snicolet          #+#    #+#              #
-#    Updated: 2016/05/03 17:35:50 by snicolet         ###   ########.fr        #
+#    Updated: 2016/05/03 21:16:38 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME=minishell
 INC=-I./libft -I./headers
 CFLAGS=-Wall -Wextra -Werror -Weverything
 CC=clang
-OBJ=main.o
+OBJ=main.o errors.o
 
 all: $(NAME)
 
