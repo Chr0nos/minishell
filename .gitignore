@@ -1,0 +1,4 @@
+./minishell
+*.a
+*.o
+*.swp
