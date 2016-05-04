@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:14:07 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/04 18:42:50 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/04 18:55:31 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	minishell_error_notfound(const char *buff)
 
 int		minishell_error_custom(const char *buff, const int ret)
 {
-	
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(buff, 2);
 	write(2, "\n", 1);

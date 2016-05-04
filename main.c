@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/04 18:47:53 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/04 18:54:15 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	char			*app;
 	char			*pathlist;
 	char			*fullpath;
-	struct stat 	st;
+	struct stat		st;
 	int				ret;
 
 	ret = 0;
@@ -114,8 +114,7 @@ int			main(int ac, char **av, char **env)
 	char	buff[BUFF_SIZE];
 	ssize_t	ret;
 
-	(void)av;
-	(void)ac;
+	(void)av[ac - 1];
 	minishell_envload(&environement, env);
 	while (42)
 	{
