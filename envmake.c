@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 20:01:56 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/04 20:16:09 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/04 21:50:41 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ char	**minishell_envmake(t_list *env)
 		x[0] = item->name;
 		x[1] = item->value;
 		e[p] = ft_strunsplit(x, '=');
+		env = env->next;
 		p++;
 	}
 	e[size] = NULL;

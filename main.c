@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/04 20:54:16 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/04 21:49:39 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ static int	minishell_exec_real(const char *app, const char *cmd,
 
 	args = NULL;
 	environement = NULL;
-	if (ft_strcmp(app, "/usr/bin/emacs") == 0)
-		ft_putendl("it's not gonna happen !");
-	else if ((pid = fork()) == 0)
+	if ((pid = fork()) == 0)
 	{
 		args = minishell_arguments_parse(cmd, app);
 		environement = minishell_envmake(env);
