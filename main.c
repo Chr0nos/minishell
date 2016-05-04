@@ -17,6 +17,7 @@
 #include <sys/uio.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <stdlib.h>
 #define BUFF_SIZE 4096
 #define STDIN 1
 
@@ -24,6 +25,7 @@ static int	minishell_exec_real(const char *app, char *args, struct stat *st)
 {
 	pid_t	pid;
 
+	ft_printf("real run: %s\n", app);
 	if ((pid = fork()) == 0)
 	{
 		ft_putendl("CHILD OK");
@@ -32,13 +34,57 @@ static int	minishell_exec_real(const char *app, char *args, struct stat *st)
 	(void)app;
 	(void)args;
 	(void)st;
-	return (-3);
+	return (0);
+}
+
+static char	*minishell_mkpath(const char *root, const char *app, size_t lenapp)
+{
+	size_t	len_root = ft_strlen(root);
+	char	*fullpath;
+
+	if (!(fullpath = malloc(sizeof(char) * (lenapp + len_root + 2))))
+		return (NULL);
+	ft_memcpy(fullpath, root, len_root);
+	fullpath[len_root] = '/';
+	ft_memcpy(fullpath + len_root + 1, app, lenapp + 1);
+	ft_printf("mkpath: %s\n", fullpath);
+	return (fullpath);
+
+}
+
+static char	*minishell_getapp_path(const char *app, char *pathlist)
+{
+	char			*fullpath;
+	struct stat		st;
+	char			**paths;
+	char			*ptr;
+	size_t			applen;
+
+	ptr = NULL;
+	applen = ft_strlen(app);
+	paths = ft_strsplit(pathlist, ':');
+	while (*paths)
+	{
+		fullpath = minishell_mkpath(*paths, app, applen);
+		if ((!ptr) && (lstat(fullpath, &st)))
+		{
+			ft_printf("found app at: %s\n", fullpath);
+			ptr = fullpath;
+		}
+		else
+			free(fullpath);
+		free(*paths);
+		paths++;
+	}
+	//free(paths);
+	return (ptr);
 }
 
 static int	minishell_exec(const char *cmd, t_list *env)
 {
 	char			*app;
 	char			*pathlist;
+	char			*fullpath;
 	struct stat 	st;
 	int				ret;
 
@@ -52,10 +98,16 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	}
 	else
 	{
-		//set the path search method over here
-		ret = -1;
+		fullpath = minishell_getapp_path(app, pathlist);
+		if (fullpath != NULL)
+		{
+			ret = minishell_exec_real(fullpath, NULL, &st);
+			free(fullpath);
+		}
+		else
+			ret = -1;
 	}
-	ft_mfree(1, app);
+	free(app);
 	return (ret);
 }
 
