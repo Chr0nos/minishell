@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 00:45:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 01:23:28 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ enum			e_errors
 	ERR_NOTFOUND = -1,
 	ERR_PERMS = -2,
 	ERR_NOPATH = -3,
-	ERR_EXEC = -4
+	ERR_EXEC = -4,
+	ERR_EXIT = -5
 };
 
 int				main(int ac, char **av, char **env);
@@ -42,5 +43,7 @@ void			minishell_arguments_show(char **args);
 
 char			**minishell_envmake(t_list *env);
 void			minishell_envtabfree(char **env);
+
+int				minishell_builtin(const char *cmd, t_list *evironement);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 00:46:36 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 01:25:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,12 +125,11 @@ int			main(int ac, char **av, char **env)
 		if ((ret = read(STDIN, buff, BUFF_SIZE)) > 1)
 		{
 			buff[ret - 1] = '\0';
-			if (!ft_strcmp(buff, "."))
-				minishell_error(ERR_NOTFOUND, ".", 0);
-			else if (!ft_strcmp(buff, "env"))
-				minishell_envshow(environement);
-			else if (!ft_strcmp(buff, "exit"))
-				return (minishell_envfree(environement));
+			if ((ret = minishell_builtin(buff, environement)) < 0)
+			{
+				if (ret == ERR_EXIT)
+					return (minishell_envfree(environement));
+			}
 			else if (minishell_exec(buff, environement) == ERR_NOTFOUND)
 				minishell_error(ERR_NOTFOUND,
 						ft_strndup(buff, ft_strsublen(buff, ' ')), 1);
