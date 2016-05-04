@@ -19,11 +19,11 @@ OBJ=main.o errors.o environement.o
 all: $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(INC) -c $<
+	$(CC) $(CFLAGS) -c $< $(INC)
 
 $(NAME): $(OBJ)
 	make -C ./libft
-	$(CC) $(CFLAGS) -L ./libft -lft $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(INC) -L ./libft -lft 
 
 clean:
 	$(RM) $(OBJ)
