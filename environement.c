@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:20:13 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/03 22:50:56 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/04 16:42:47 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,13 @@ void		minishell_envload(t_list **lst, char **env)
 	while (*env)
 	{
 		pos = ft_strsublen(*env, '=');
-		x.name = ft_memdup(*env, pos);
-		x.name[pos] = '\0';
-		x.value = ft_strdup(*env + pos + 1);
-		ft_lstpush_sort(lst, ft_lstnew(&x, sizeof(t_env)), minishell_esort);
+		if (pos > 0)
+		{
+			x.name = ft_memdup(*env, pos);
+			x.name[pos] = '\0';
+			x.value = ft_strdup(*env + pos + 1);
+			ft_lstpush_sort(lst, ft_lstnew(&x, sizeof(t_env)), minishell_esort);
+		}
 		env++;
 	}
 }
