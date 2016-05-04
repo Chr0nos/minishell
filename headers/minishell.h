@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/04 20:15:31 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 00:45:11 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,16 @@ typedef struct	s_env
 	char		*value;
 }				t_env;
 
+enum			e_errors
+{
+	ERR_NOTFOUND = -1,
+	ERR_PERMS = -2,
+	ERR_NOPATH = -3,
+	ERR_EXEC = -4
+};
+
 int				main(int ac, char **av, char **env);
-int				minishell_error_custom(const char *buff, const int ret);
-void			minishell_error_notfound(const char *buff);
+int				minishell_error(int errorn, char *suffix, int delsuffix);
 void			minishell_envload(t_list **lst, char **env);
 void			minishell_envshow(t_list *env);
 int				minishell_envfree(t_list *env);

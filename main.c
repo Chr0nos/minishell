@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/04 21:49:39 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 00:46:36 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@
 #define BUFF_SIZE 4096
 #define STDIN 1
 
-static int	minishell_exec_real(const char *app, const char *cmd,
-		struct stat *st, t_list *env)
+static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
 {
 	char	**args;
 	char	**environement;
@@ -34,7 +33,8 @@ static int	minishell_exec_real(const char *app, const char *cmd,
 	{
 		args = minishell_arguments_parse(cmd, app);
 		environement = minishell_envmake(env);
-		execve(app, args, environement);
+		if (execve(app, args, environement) == -1)
+			minishell_error(ERR_EXEC, NULL, 0);
 	}
 	else
 	{
@@ -42,7 +42,6 @@ static int	minishell_exec_real(const char *app, const char *cmd,
 		minishell_arguments_free(args);
 		minishell_envtabfree(environement);
 	}
-	(void)st;
 	return (0);
 }
 
@@ -73,7 +72,7 @@ static char	*minishell_getapp_path(const char *app, char *pathlist)
 	while (paths[p])
 	{
 		fullpath = minishell_mkpath(paths[p], app, ft_strlen(app));
-		if ((!ptr) && (lstat(fullpath, &st) >= 0))
+		if ((!ptr) && (lstat(fullpath, &st) >= 0) && (st.st_mode & X_OK))
 			ptr = fullpath;
 		else
 			free(fullpath);
@@ -95,13 +94,16 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	ret = 0;
 	app = ft_strndup(cmd, ft_strsublen(cmd, ' '));
 	if (lstat(app, &st) >= 0)
-		return (minishell_exec_real(app, cmd, &st, env) + ft_mfree(1, app) - 1);
+	{
+		if (!(st.st_mode & X_OK))
+			return (minishell_error(ERR_PERMS, app, 0));
+		return (minishell_exec_real(app, cmd, env) + ft_mfree(1, app) - 1);
+	}
 	if ((!(pathlist = minishell_envval(env, "PATH"))) && (ft_mfree(1, app)))
-		return (minishell_error_custom(
-					"warning: no PATH environement variable found.", -2));
+		return (minishell_error(ERR_NOPATH, NULL, 0));
 	if ((fullpath = minishell_getapp_path(app, pathlist)) != NULL)
 	{
-		ret = minishell_exec_real(fullpath, cmd, &st, env);
+		ret = minishell_exec_real(fullpath, cmd, env);
 		free(fullpath);
 	}
 	else if (ft_mfree(1, app))
@@ -118,18 +120,20 @@ int			main(int ac, char **av, char **env)
 
 	(void)av[ac - 1];
 	minishell_envload(&environement, env);
-	while (42)
+	while (write(1, "$> ", 4))
 	{
-		ft_putstr("$> ");
 		if ((ret = read(STDIN, buff, BUFF_SIZE)) > 1)
 		{
 			buff[ret - 1] = '\0';
-			if (!ft_strcmp(buff, "env"))
+			if (!ft_strcmp(buff, "."))
+				minishell_error(ERR_NOTFOUND, ".", 0);
+			else if (!ft_strcmp(buff, "env"))
 				minishell_envshow(environement);
 			else if (!ft_strcmp(buff, "exit"))
 				return (minishell_envfree(environement));
-			else if (minishell_exec(buff, environement) < 0)
-				minishell_error_notfound(buff);
+			else if (minishell_exec(buff, environement) == ERR_NOTFOUND)
+				minishell_error(ERR_NOTFOUND,
+						ft_strndup(buff, ft_strsublen(buff, ' ')), 1);
 		}
 		else if (ret <= 0)
 			break ;
