@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/04 18:54:15 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/04 20:54:16 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,28 @@
 #define STDIN 1
 
 static int	minishell_exec_real(const char *app, const char *cmd,
-		struct stat *st)
+		struct stat *st, t_list *env)
 {
 	char	**args;
+	char	**environement;
 	int		ret;
 	pid_t	pid;
 
-	args = minishell_arguments_parse(cmd, app);
-	if ((pid = fork()) == 0)
+	args = NULL;
+	environement = NULL;
+	if (ft_strcmp(app, "/usr/bin/emacs") == 0)
+		ft_putendl("it's not gonna happen !");
+	else if ((pid = fork()) == 0)
 	{
-		execve(app, args, NULL);
+		args = minishell_arguments_parse(cmd, app);
+		environement = minishell_envmake(env);
+		execve(app, args, environement);
 	}
 	else
 	{
 		wait(&ret);
 		minishell_arguments_free(args);
+		minishell_envtabfree(environement);
 	}
 	(void)st;
 	return (0);
@@ -90,20 +97,17 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	ret = 0;
 	app = ft_strndup(cmd, ft_strsublen(cmd, ' '));
 	if (lstat(app, &st) >= 0)
-		ret = minishell_exec_real(app, cmd, &st);
+		return (minishell_exec_real(app, cmd, &st, env) + ft_mfree(1, app) - 1);
 	if ((!(pathlist = minishell_envval(env, "PATH"))) && (ft_mfree(1, app)))
 		return (minishell_error_custom(
 					"warning: no PATH environement variable found.", -2));
-	else
+	if ((fullpath = minishell_getapp_path(app, pathlist)) != NULL)
 	{
-		if ((fullpath = minishell_getapp_path(app, pathlist)) != NULL)
-		{
-			ret = minishell_exec_real(fullpath, cmd, &st);
-			free(fullpath);
-		}
-		else if (ft_mfree(1, app))
-			return (-1);
+		ret = minishell_exec_real(fullpath, cmd, &st, env);
+		free(fullpath);
 	}
+	else if (ft_mfree(1, app))
+		return (-1);
 	free(app);
 	return (ret);
 }
@@ -125,14 +129,12 @@ int			main(int ac, char **av, char **env)
 			if (!ft_strcmp(buff, "env"))
 				minishell_envshow(environement);
 			else if (!ft_strcmp(buff, "exit"))
-				break ;
+				return (minishell_envfree(environement));
 			else if (minishell_exec(buff, environement) < 0)
 				minishell_error_notfound(buff);
 		}
 		else if (ret <= 0)
 			break ;
-		usleep(42);
 	}
-	minishell_envfree(environement);
-	return (0);
+	return (minishell_envfree(environement));
 }

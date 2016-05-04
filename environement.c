@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:20:13 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/04 16:42:47 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/04 19:34:08 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		minishell_envload(t_list **lst, char **env)
 	}
 }
 
-void		minishell_envfree(t_list *env)
+int			minishell_envfree(t_list *env)
 {
 	if (env)
 	{
@@ -70,4 +70,5 @@ void		minishell_envfree(t_list *env)
 		minishell_envfree(env->next);
 		free(env);
 	}
+	return (0);
 }
