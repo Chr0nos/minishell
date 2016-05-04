@@ -15,14 +15,48 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/uio.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
 #define BUFF_SIZE 4096
 #define STDIN 1
 
+static int	minishell_exec_real(const char *app, char *args, struct stat *st)
+{
+	pid_t	pid;
+
+	if ((pid = fork()) == 0)
+	{
+		ft_putendl("CHILD OK");
+	}
+	//wait(-1);
+	(void)app;
+	(void)args;
+	(void)st;
+	return (-3);
+}
+
 static int	minishell_exec(const char *cmd, t_list *env)
 {
-	(void)env;
-	(void)cmd;
-	return (-1);
+	char			*app;
+	char			*pathlist;
+	struct stat 	st;
+	int				ret;
+
+	app = ft_strndup(cmd, ft_strsublen(cmd, ' '));
+	if (lstat(app, &st) >= 0)
+		ret = minishell_exec_real(app, NULL, &st);
+	if (!(pathlist = minishell_envval(env, "PATH")))
+	{
+		ft_putendl("warning: no PATH environement variable found.");
+		ret = -2;
+	}
+	else
+	{
+		//set the path search method over here
+		ret = -1;
+	}
+	ft_mfree(1, app);
+	return (ret);
 }
 
 int			main(int ac, char **av, char **env)
@@ -47,6 +81,8 @@ int			main(int ac, char **av, char **env)
 			else if (minishell_exec(buff, environement) < 0)
 				minishell_error_notfound(buff);
 		}
+		else
+			break ;
 		usleep(42);
 	}
 	minishell_envfree(environement);
