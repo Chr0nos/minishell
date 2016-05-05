@@ -6,11 +6,18 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 03:20:45 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 16:35:52 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+** returns:
+** -1 if the runned function is a builtin
+** 0 if not
+** ERR_EXIT to request the minishell to quit properly
+*/
 
 int		minishell_builtin(const char *cmd, t_list *environement)
 {
@@ -18,6 +25,8 @@ int		minishell_builtin(const char *cmd, t_list *environement)
 		return (minishell_error(ERR_NOTFOUND, ".", 0));
 	else if (!ft_strcmp(cmd, "env"))
 		return (minishell_envshow(environement));
+	else if (!ft_memcmp(cmd, "env", 4))
+		return (minishell_envcmd(cmd, environement));
 	else if (!ft_strcmp(cmd, "exit"))
 		return (ERR_EXIT);
 	return (0);
