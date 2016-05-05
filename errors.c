@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:14:07 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 00:46:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 17:19:00 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int		minishell_error(int errorn, char *suffix, int delsuffix)
+static const char	*minishell_error_str(int errorn)
 {
 	const char	*str;
 
-	str = NULL;
 	if (errorn == ERR_NOTFOUND)
 		str = "command not found";
 	else if (errorn == ERR_PERMS)
@@ -28,8 +27,17 @@ int		minishell_error(int errorn, char *suffix, int delsuffix)
 		str = "no PATH environement variable found";
 	else if (errorn == ERR_EXEC)
 		str = "child process has returned an error";
-	if (!str)
+	else if (errorn == ERR_ENVPARSE_UNKNOW)
+		str = "env: unknow argument";
+	else
 		str = "unknow error";
+	return (str);
+}
+
+int					minishell_error(int errorn, char *suffix, int delsuffix)
+{
+	const char	*str = minishell_error_str(errorn);
+
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(str, 2);
 	if (suffix)

@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 16:45:16 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 16:58:26 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ enum			e_errors
 	ERR_PERMS = -2,
 	ERR_NOPATH = -3,
 	ERR_EXEC = -4,
-	ERR_EXIT = -5
+	ERR_EXIT = -5,
+	ERR_ENVPARSE_UNKNOW = -6
 };
 
 const char		*minishell_strchr(const char *str, const char c);
