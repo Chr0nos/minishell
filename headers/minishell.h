@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 02:02:27 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 03:23:26 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ enum			e_errors
 int				main(int ac, char **av, char **env);
 int				minishell_error(int errorn, char *suffix, int delsuffix);
 void			minishell_envload(t_list **lst, char **env);
-void			minishell_envshow(t_list *env);
+int				minishell_envshow(t_list *env);
 int				minishell_envfree(t_list *env);
 char			*minishell_envval(t_list *env, const char *key);
 

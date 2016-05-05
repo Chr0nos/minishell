@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:20:13 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/04 19:34:08 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 03:23:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char		*minishell_envval(t_list *env, const char *key)
 	return (NULL);
 }
 
-void		minishell_envshow(t_list *env)
+int			minishell_envshow(t_list *env)
 {
 	t_env	*e;
 
@@ -34,6 +34,7 @@ void		minishell_envshow(t_list *env)
 		ft_printf("%s=%s\n", e->name, e->value);
 		env = env->next;
 	}
+	return (-1);
 }
 
 static int	minishell_esort(t_list *a, t_list *b)
