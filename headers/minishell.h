@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 03:23:26 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 13:57:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ enum			e_errors
 	ERR_EXIT = -5
 };
 
+int				minishell_runcmd(const char *cmd, t_list *environement);
 int				main(int ac, char **av, char **env);
 int				minishell_error(int errorn, char *suffix, int delsuffix);
 void			minishell_envload(t_list **lst, char **env);

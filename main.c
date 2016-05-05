@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 02:01:01 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 14:01:26 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,21 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	return (ret);
 }
 
+int			minishell_runcmd(const char *cmd, t_list *environement)
+{
+	int	ret;
+
+	if ((ret = minishell_builtin(cmd, environement)) < 0)
+	{
+		if (ret == ERR_EXIT)
+			return (ERR_EXIT);
+	}
+	else if (minishell_exec(cmd, environement) == ERR_NOTFOUND)
+		minishell_error(ERR_NOTFOUND,
+				ft_strndup(cmd, ft_strsublen(cmd, ' ')), 1);
+	return (0);
+}
+
 int			main(int ac, char **av, char **env)
 {
 	t_list	*environement;
@@ -87,14 +102,8 @@ int			main(int ac, char **av, char **env)
 		if ((ret = read(STDIN, buff, BUFF_SIZE)) > 1)
 		{
 			buff[ret - 1] = '\0';
-			if ((ret = minishell_builtin(buff, environement)) < 0)
-			{
-				if (ret == ERR_EXIT)
-					return (minishell_envfree(environement));
-			}
-			else if (minishell_exec(buff, environement) == ERR_NOTFOUND)
-				minishell_error(ERR_NOTFOUND,
-						ft_strndup(buff, ft_strsublen(buff, ' ')), 1);
+			if (minishell_runcmd(buff, environement) == ERR_EXIT)
+				break ;
 		}
 		else if (ret <= 0)
 			break ;
