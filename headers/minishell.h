@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 16:58:26 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 17:58:37 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ enum			e_errors
 };
 
 const char		*minishell_strchr(const char *str, const char c);
-int				minishell_runcmd(const char *cmd, t_list *environement);
+int				minishell_runcmd(const char *cmd, t_list **environement);
 int				main(int ac, char **av, char **env);
 int				minishell_error(int errorn, char *suffix, int delsuffix);
 void			minishell_envload(t_list **lst, char **env);
@@ -46,8 +46,8 @@ void			minishell_arguments_show(char **args);
 char			*minishell_getapp_path(const char *app, char *pathlist);
 char			**minishell_envmake(t_list *env);
 void			minishell_envtabfree(char **env);
-int				minishell_envcmd(const char *cmd, t_list *env);
+int				minishell_envcmd(const char *cmd, t_list **env);
 
-int				minishell_builtin(const char *cmd, t_list *evironement);
+int				minishell_builtin(const char *cmd, t_list **evironement);
 
 #endif

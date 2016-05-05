@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 17:39:10 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 17:57:51 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	return (ret);
 }
 
-int			minishell_runcmd(const char *cmd, t_list *environement)
+int			minishell_runcmd(const char *cmd, t_list **environement)
 {
 	int	ret;
 
@@ -83,7 +83,7 @@ int			minishell_runcmd(const char *cmd, t_list *environement)
 		if (ret == ERR_EXIT)
 			return (ERR_EXIT);
 	}
-	else if (minishell_exec(cmd, environement) == ERR_NOTFOUND)
+	else if (minishell_exec(cmd, *environement) == ERR_NOTFOUND)
 		minishell_error(ERR_NOTFOUND,
 				ft_strndup(cmd, ft_strsublen(cmd, ' ')), 1);
 	return (0);
@@ -102,7 +102,7 @@ int			main(int ac, char **av, char **env)
 		if (ret > 1)
 		{
 			buff[ret - 1] = '\0';
-			if (minishell_runcmd(buff, environement) == ERR_EXIT)
+			if (minishell_runcmd(buff, &environement) == ERR_EXIT)
 				break ;
 		}
 	}
