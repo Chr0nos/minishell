@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 01:23:28 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 02:02:27 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char			**minishell_arguments_parse(const char *cmd,
 		const char *bin_path);
 void			minishell_arguments_free(char **args);
 void			minishell_arguments_show(char **args);
-
+char			*minishell_getapp_path(const char *app, char *pathlist);
 char			**minishell_envmake(t_list *env);
 void			minishell_envtabfree(char **env);
 
