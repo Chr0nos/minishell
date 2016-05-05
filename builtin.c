@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 17:59:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 19:25:34 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,13 @@ int		minishell_builtin(const char *cmd, t_list **environement)
 		return (minishell_error(ERR_NOTFOUND, ".", 0));
 	else if (!ft_strcmp(cmd, "env"))
 		return (minishell_envshow(*environement));
-	else if (ft_strncmp(cmd, "env", 3) == 0)
+	else if (ft_strncmp(cmd, "env ", 4) == 0)
 		return (minishell_envcmd(cmd, environement));
 	else if (!ft_strcmp(cmd, "unsetenv"))
 		return (minishell_unsetenv(environement));
 	else if (!ft_strcmp(cmd, "exit"))
 		return (ERR_EXIT);
+	else if (!(ft_strcmp(cmd, "cd")))
+		minishell_cd_home(*environement);
 	return (0);
 }
