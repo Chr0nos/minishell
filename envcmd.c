@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 17:22:37 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 17:41:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static const char	*minishell_strnchr(const char *str, const char c, size_t n)
 		if ((*(str++) == c) && (!--n))
 			return (str);
 	return (NULL);
-
 }
 
 /*
@@ -33,7 +32,7 @@ static const char	*minishell_strnchr(const char *str, const char c, size_t n)
 ** return : -1 in any case
 */
 
-int			minishell_envcmd(const char *cmd, t_list *env)
+int					minishell_envcmd(const char *cmd, t_list *env)
 {
 	char	**av;
 	size_t	ac;
