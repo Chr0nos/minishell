@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:20:13 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 16:44:20 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 16:52:30 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,4 @@ int			minishell_envfree(t_list *env)
 		free(env);
 	}
 	return (0);
-}
-
-int			minishell_envcmd(const char *cmd, t_list *env)
-{
-	char	**av;
-	size_t	ac;
-
-	(void)env;
-	av = ft_strsplit(cmd, ' ');
-	ac = ft_tabcount((void**)av);
-	if (ft_strcmp(av[1], "-i"))
-		minishell_runcmd(minishell_strchr(cmd, ' '), NULL);
-	ft_free_tab(av, (unsigned int)ac);
-	free(av);
-	return (-1);
 }

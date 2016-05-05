@@ -6,14 +6,14 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 12:45:25 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 16:42:30 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 16:53:26 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-const char		*minishell_strchr(const char *str, const char c)
+const char			*minishell_strchr(const char *str, const char c)
 {
 	while ((*str) && (*str != c))
 		str++;
