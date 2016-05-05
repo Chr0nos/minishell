@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 19:25:34 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/05 19:28:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int		minishell_unsetenv(t_list **env)
 ** ERR_EXIT to request the minishell to quit properly
 */
 
-int		minishell_builtin(const char *cmd, t_list **environement)
+int				minishell_builtin(const char *cmd, t_list **environement)
 {
 	if (!ft_strcmp(cmd, "."))
 		return (minishell_error(ERR_NOTFOUND, ".", 0));
