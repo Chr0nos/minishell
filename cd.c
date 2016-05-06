@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 18:59:20 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/06 22:54:57 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/06 22:56:08 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int			minishell_cd(int ac, char **av, t_list **env, const char *cmd)
 		return (-1);
 	if ((!minishell_cd_trydir(av[1])) && (chdir(av[1]) != 0))
 		ft_putendl_fd("minishell: error: cd: failed to change directory", 2);
-	//else if (!ft_strcmp(av[1], ".."))
 	(void)cmd;
 	(void)env;
 	(void)av;
