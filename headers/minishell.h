@@ -6,13 +6,17 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/06 18:00:57 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/06 20:20:20 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-#include "libft.h"
+# include "libft.h"
+# define MINISHELL_PATH1 "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:"
+# define MINISHELL_PATH2 "/opt/X11/bin:/usr/local/go/bin:/usr/local/munki:"
+# define MINISHELL_PATH3 "/Library/TeX/texbin"
+# define MINISHELL_PATH_DEFAULT MINISHELL_PATH1 MINISHELL_PATH2 MINISHELL_PATH3
 
 typedef struct	s_env
 {
@@ -43,13 +47,13 @@ char			**minishell_arguments_parse(const char *cmd,
 		const char *bin_path);
 void			minishell_arguments_free(char **args);
 void			minishell_arguments_show(char **args);
-char			*minishell_getapp_path(const char *app, char *pathlist);
+char			*minishell_getapp_path(const char *app, const char *pathlist);
 char			**minishell_envmake(t_list *env);
 void			minishell_envtabfree(char **env);
 int				minishell_envcmd(const char *cmd, t_list **env);
 
 int				minishell_builtin(const char *cmd, t_list **evironement);
-int				minishell_cd(const char *cmd, t_list **env);
+int				minishell_cd(int ac, char **av, t_list **env, const char *cmd);
 int				minishell_cd_home(t_list *env);
 int				minishell_spliter(const char *cmd, t_list **env,
 		int (*f)(int, char **, t_list **, const char *));

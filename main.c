@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/06 18:27:44 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/06 20:04:38 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
 static int	minishell_exec(const char *cmd, t_list *env)
 {
 	char			*app;
-	char			*pathlist;
+	const char		*pathlist;
 	char			*fullpath;
 	struct stat		st;
 	int				ret;
@@ -61,8 +61,8 @@ static int	minishell_exec(const char *cmd, t_list *env)
 			return (minishell_error(ERR_PERMS, app, 0));
 		return (minishell_exec_real(app, cmd, env) + ft_mfree(1, app) - 1);
 	}
-	if ((!(pathlist = minishell_envval(env, "PATH"))) && (ft_mfree(1, app)))
-		return (minishell_error(ERR_NOPATH, NULL, 0));
+	if (!(pathlist = minishell_envval(env, "PATH")))
+		pathlist = MINISHELL_PATH_DEFAULT;
 	if ((fullpath = minishell_getapp_path(app, pathlist)) != NULL)
 	{
 		ret = minishell_exec_real(fullpath, cmd, env);

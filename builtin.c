@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/06 18:22:39 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/06 20:42:28 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void		minishell_unsetenv_cb(void *content, size_t size)
 
 	e = (t_env*)content;
 	(void)size;
-	ft_mfree(2, e->name, e->value);
+	ft_mfree(3, e->name, e->value, e);
 }
 
 static int		minishell_unsetenv(t_list **env)
@@ -39,12 +39,7 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env,
 		return (-1);
 	}
 	if (!ft_strcmp(av[0], "cd"))
-	{
-		if (ac == 1)
-			return (minishell_cd_home(*env));
-		ft_putendl("unsuported yet");
-		return (-1);
-	}
+		return (minishell_cd(ac, av, env, cmd));
 	if (!ft_strcmp(av[0], "env"))
 	{
 		if (ac == 1)
@@ -59,6 +54,14 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env,
 ** -1 if the runned function is a builtin
 ** 0 if not
 ** ERR_EXIT to request the minishell to quit properly
+** hey dude, let's have a little word about minishell_spliter
+** this thing is not here to make coffe or something, it's my super main's like
+** environement preparator, it call the minishell_builtin_parse but it may
+** call any other function BUT thoses MUST return -1 in any cases, the -1
+** is just here to say "ok i found the command do not report an error"
+** the only valid other case is ERR_EXIT to request to the main a complete exit
+** in case of 0 return: the called function DONT KNOWS the requested command
+** deal with it !
 */
 
 int				minishell_builtin(const char *cmd, t_list **environement)

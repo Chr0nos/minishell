@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 01:58:41 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 02:04:33 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/06 20:04:13 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static char	*minishell_mkpath(const char *root, const char *app, size_t lenapp)
 	return (fullpath);
 }
 
-char		*minishell_getapp_path(const char *app, char *pathlist)
+char		*minishell_getapp_path(const char *app, const char *pathlist)
 {
 	char			*fullpath;
 	struct stat		st;
