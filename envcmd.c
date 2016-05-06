@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 17:58:44 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/06 16:16:47 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int					minishell_envcmd(const char *cmd, t_list **env)
 	char	**av;
 	size_t	ac;
 
+	if ((!env) || (!*env))
+		return (-1);
 	(void)env;
 	av = ft_strsplit(cmd, ' ');
 	ac = ft_tabcount((void**)av);
