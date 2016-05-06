@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/07 00:45:24 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 01:52:33 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/07 01:55:01 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ void	minishell_addenv(t_list **env, const char *name, const char *value)
 
 	if (!(e = malloc(sizeof(t_env*))))
 		return ;
-	e->name = ft_strdup(name);
-	e->value = ft_strdup(value);
+	if ((!(e->name = ft_strdup(name))) && (ft_mfree(1, e)))
+		return ;
+	if ((!(e->value = ft_strdup(value))) && (ft_mfree(2, e->name, e)))
+		return ;
 	ft_lstpush_sort(env, ft_lstnewlink(e, sizeof(t_env)), &minishell_esort);
 }
 
