@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/06 16:16:47 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/06 18:22:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int					minishell_envcmd(const char *cmd, t_list **env)
 {
 	char	**av;
 	size_t	ac;
+	t_list	*fakeenv;
 
 	if ((!env) || (!*env))
 		return (-1);
@@ -44,10 +45,11 @@ int					minishell_envcmd(const char *cmd, t_list **env)
 	ac = ft_tabcount((void**)av);
 	if (!ft_strcmp(av[1], "-i"))
 	{
+		fakeenv = NULL;
 		if (ac < 4)
 			ft_putendl_fd("minishell: error: env: missing parameter", 2);
 		else
-			minishell_runcmd(minishell_strnchr(cmd, ' ', 2), NULL);
+			minishell_runcmd(minishell_strnchr(cmd, ' ', 2), &fakeenv);
 	}
 	else
 		minishell_error(ERR_ENVPARSE_UNKNOW, av[1], 0);

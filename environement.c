@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:20:13 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/06 17:12:58 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/06 17:24:57 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ int			minishell_envfree(t_list *env)
 {
 	if (env)
 	{
-		ft_mfree(2, ((t_env*)env->content)->name,
-				((t_env*)env->content)->value);
+		ft_mfree(3, ((t_env*)env->content)->name,
+				((t_env*)env->content)->value, env->content);
 		minishell_envfree(env->next);
 		free(env);
 	}

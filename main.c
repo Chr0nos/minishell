@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 17:57:51 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/06 18:27:44 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,10 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	free(app);
 	return (ret);
 }
+
+/*
+** called by: main() / minishell_envcmd()
+*/
 
 int			minishell_runcmd(const char *cmd, t_list **environement)
 {

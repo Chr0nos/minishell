@@ -6,7 +6,7 @@
 #    By: snicolet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/05/03 17:26:33 by snicolet          #+#    #+#              #
-#    Updated: 2016/05/05 19:04:43 by snicolet         ###   ########.fr        #
+#    Updated: 2016/05/06 17:39:21 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ INC=-I./libft -I./headers
 CFLAGS=-Wall -Wextra -Werror -Weverything
 CC=clang
 OBJ=main.o errors.o environement.o arguments.o envmake.o builtin.o path.o \
-	envcmd.o cd.o
+	envcmd.o cd.o spliter.o
 
 all: $(NAME)
 
