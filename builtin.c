@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/06 20:42:28 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/07 01:00:09 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env,
 			return ((env) ? minishell_envshow(*env) : -1);
 		return (minishell_envcmd(cmd, env));
 	}
+	else if (!ft_strcmp(av[0], "setenv"))
+		return (minishell_setenv(ac, av, env));
 	return (0);
 }
 

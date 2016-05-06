@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 18:59:20 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 00:21:12 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/07 00:27:57 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	minishell_cd_trydir(const char *dir)
 
 	if (lstat(dir, &st) == 0)
 	{
-		if (!(st.st_mode & S_IFDIR))
+		if (!(st.st_mode & (S_IFDIR | S_IFLNK)))
 			return (minishell_cd_error("not a directory", -1));
 		else if (!(st.st_mode & X_OK))
 			return (minishell_cd_error("permission denied", -2));
