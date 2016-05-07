@@ -16,6 +16,7 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <stdlib.h>
 #define BUFF_SIZE 4096
 #define STDIN 1
