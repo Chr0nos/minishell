@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/07 00:45:24 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 01:55:01 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/07 02:11:17 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,24 @@ t_env		*minishell_getenv_byname(t_list *env, const char *key)
 	return (NULL);
 }
 
-void	minishell_editenv(t_env *e, const char *val)
+void	minishell_editenv(t_env *e, char *val)
 {
 	free(e->value);
-	e->value = ft_strdup(val);
+	e->value = val;
 }
 
-void	minishell_addenv(t_list **env, const char *name, const char *value)
+void	minishell_addenv(t_list **env, const char *name, char *value)
 {
 	t_env	*e;
 
 	if (!(e = malloc(sizeof(t_env*))))
+	{
+		free(value);
 		return ;
-	if ((!(e->name = ft_strdup(name))) && (ft_mfree(1, e)))
+	}
+	if ((!(e->name = ft_strdup(name))) && (ft_mfree(2, e, value)))
 		return ;
-	if ((!(e->value = ft_strdup(value))) && (ft_mfree(2, e->name, e)))
-		return ;
+	e->value = value;
 	ft_lstpush_sort(env, ft_lstnewlink(e, sizeof(t_env)), &minishell_esort);
 }
 

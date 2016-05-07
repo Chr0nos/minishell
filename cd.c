@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 18:59:20 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 01:50:32 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/07 02:11:47 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ void		minishell_cd_real(t_list **env, const char *dir)
 	{
 		e = minishell_getenv_byname(*env, "PWD");
 		if (e)
-			minishell_editenv(e, dir);
+			minishell_editenv(e, ft_strdup(dir));
 		else
-			minishell_addenv(env, "PWD", getcwd(NULL, 4096));
+			minishell_addenv(env, "PWD", ft_strdup(getcwd(NULL, 4096)));
 	}
 }
 
