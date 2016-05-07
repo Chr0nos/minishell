@@ -6,14 +6,14 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/07 00:45:24 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 02:11:17 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/07 03:06:00 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-t_env		*minishell_getenv_byname(t_list *env, const char *key)
+t_env	*minishell_getenv_byname(t_list *env, const char *key)
 {
 	while (env)
 	{

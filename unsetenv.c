@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/07 02:42:51 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 02:57:42 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/07 03:06:23 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	minishell_unsetenv_lst(t_env *e)
 	ft_mfree(3, e->name, e->value, e);
 }
 
-int		minishell_unsetenv(int ac, char **av, t_list **env)
+int			minishell_unsetenv(int ac, char **av, t_list **env)
 {
 	t_list	*lst;
 
