@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/06 20:04:38 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/07 02:39:41 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int			minishell_runcmd(const char *cmd, t_list **environement)
 {
 	int	ret;
 
+	while ((*cmd) && ((*cmd == ' ') || (*cmd == '\t')))
+		cmd++;
 	if ((ret = minishell_builtin(cmd, environement)) < 0)
 	{
 		if (ret == ERR_EXIT)

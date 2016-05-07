@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 01:48:40 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/07 02:38:00 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ static int		minishell_unsetenv(t_list **env)
 static int		minishell_builtin_parse(int ac, char **av, t_list **env,
 		const char *cmd)
 {
-	(void)cmd;
+	if ((!av) || (!av[0]))
+		return (-1);
 	if (!ft_strcmp(av[0], "exit"))
 		return (ERR_EXIT);
 	if (!env)
