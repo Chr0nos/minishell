@@ -6,13 +6,13 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 02:38:00 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/07 02:59:14 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void		minishell_unsetenv_cb(void *content, size_t size)
+static void		minishell_purgeenv_cb(void *content, size_t size)
 {
 	t_env	*e;
 
@@ -21,10 +21,10 @@ static void		minishell_unsetenv_cb(void *content, size_t size)
 	ft_mfree(3, e->name, e->value, e);
 }
 
-static int		minishell_unsetenv(t_list **env)
+static int		minishell_purgeenv(t_list **env)
 {
 	if (env)
-		ft_lstdel(env, minishell_unsetenv_cb);
+		ft_lstdel(env, minishell_purgeenv_cb);
 	return (-1);
 }
 
@@ -48,8 +48,12 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env,
 			return ((env) ? minishell_envshow(*env) : -1);
 		return (minishell_envcmd(cmd, env));
 	}
-	else if (!ft_strcmp(av[0], "setenv"))
+	else if ((!ft_strcmp(av[0], "setenv")) || (!ft_strcmp(av[0], "export")))
 		return (minishell_setenv(ac, av, env));
+	else if (!ft_strcmp(av[0], "unsetenv"))
+		return (minishell_unsetenv(ac, av, env));
+	else if (!ft_strcmp(av[0], "purgeenv"))
+		return (minishell_purgeenv(env));
 	return (0);
 }
 
@@ -74,7 +78,5 @@ int				minishell_builtin(const char *cmd, t_list **environement)
 		return (-1);
 	if (!ft_strcmp(cmd, "."))
 		return (minishell_error(ERR_NOTFOUND, ".", 0));
-	else if (!ft_strcmp(cmd, "unsetenv"))
-		return (minishell_unsetenv(environement));
 	return (minishell_spliter(cmd, environement, &minishell_builtin_parse));
 }
