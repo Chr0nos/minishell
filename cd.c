@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 18:59:20 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/08 12:59:00 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/08 13:12:58 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int			minishell_cd(int ac, char **av, t_list **env)
 		ft_putendl_fd("minishell: error: cd: too many parameters", 2);
 		return (-1);
 	}
+	else if (!ft_strcmp(av[1], "~"))
+		return (minishell_cd_home(env));
 	minishell_cd_real(env, av[1]);
 	return (-1);
 }
