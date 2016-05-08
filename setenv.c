@@ -34,7 +34,7 @@ void	minishell_addenv(t_list **env, const char *name, char *value)
 {
 	t_env	*e;
 
-	if (!(e = malloc(sizeof(t_env*))))
+	if (!(e = malloc(sizeof(t_env))))
 	{
 		free(value);
 		return ;
