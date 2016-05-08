@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 02:59:14 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/08 14:53:42 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void		minishell_purgeenv_cb(void *content, size_t size)
 	ft_mfree(3, e->name, e->value, e);
 }
 
-static int		minishell_purgeenv(t_list **env)
+int				minishell_purgeenv(t_list **env)
 {
 	if (env)
 		ft_lstdel(env, minishell_purgeenv_cb);

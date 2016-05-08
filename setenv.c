@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/07 00:45:24 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 03:06:00 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/08 17:30:50 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,19 @@ void	minishell_addenv(t_list **env, const char *name, char *value)
 	ft_lstpush_sort(env, ft_lstnewlink(e, sizeof(t_env)), &minishell_esort);
 }
 
-int		minishell_setenv(int ac, char **av, t_list **env)
+void	minishell_setenvval(const char *name, char *value, t_list **env)
 {
 	t_env	*e;
+
+	e = minishell_getenv_byname(*env, name);
+	if (!e)
+		minishell_addenv(env, name, value);
+	else
+		minishell_editenv(e, value);
+}
+
+int		minishell_setenv(int ac, char **av, t_list **env)
+{
 	char	*value;
 
 	if (ac < 2)
@@ -59,9 +69,6 @@ int		minishell_setenv(int ac, char **av, t_list **env)
 		value = ft_strunsplit((const char **)(unsigned long)&av[2], ' ');
 	else
 		value = ft_strdup("");
-	if (!(e = minishell_getenv_byname(*env, av[1])))
-		minishell_addenv(env, av[1], value);
-	else
-		minishell_editenv(e, value);
+	minishell_setenvval(av[1], value, env);
 	return (-1);
 }
