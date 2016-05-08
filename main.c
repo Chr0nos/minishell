@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 02:39:41 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/08 19:52:38 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
 		args = minishell_arguments_parse(cmd, app);
 		environement = minishell_envmake(env);
 		if (execve(app, args, environement) == -1)
+		{
 			minishell_error(ERR_EXEC, NULL, 0);
+			exit(0);
+		}
 	}
 	else
 	{
