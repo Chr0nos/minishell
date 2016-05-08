@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/08 17:39:05 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/08 18:38:30 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int					minishell_envcmd(const char *cmd, t_list **env)
 
 	if ((!env) || (!*env))
 		return (-1);
-	(void)env;
 	av = ft_strsplit(cmd, ' ');
 	ac = ft_tabcount((void**)av);
 	if (!ft_strcmp(av[1], "-i"))
@@ -80,6 +79,8 @@ int					minishell_envcmd(const char *cmd, t_list **env)
 	}
 	else if (av[1][0] != '-')
 		minishell_envcmdset((int)ac, av, *env, minishell_strnchr(cmd, ' ', 2));
+	else if (!ft_strcmp(av[1], "-u"))
+		minishell_unsetenv((int)ac - 1, &av[1], env);
 	else
 		minishell_error(ERR_ENVPARSE_UNKNOW, av[1], 0);
 	ft_free_tab(av, (unsigned int)ac);

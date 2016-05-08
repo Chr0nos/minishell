@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/08 14:53:42 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/08 18:58:36 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ int				minishell_purgeenv(t_list **env)
 	if (env)
 		ft_lstdel(env, minishell_purgeenv_cb);
 	return (-1);
+}
+
+static int		minishell_builtin_parse2(int ac, char **av, t_list **env)
+{
+	if (!ft_strcmp(av[0], "help"))
+		return (minishell_help(ac, av, env));
+	return (0);
 }
 
 static int		minishell_builtin_parse(int ac, char **av, t_list **env,
@@ -54,7 +61,7 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env,
 		return (minishell_unsetenv(ac, av, env));
 	else if (!ft_strcmp(av[0], "purgeenv"))
 		return (minishell_purgeenv(env));
-	return (0);
+	return (minishell_builtin_parse2(ac, av, env));
 }
 
 /*

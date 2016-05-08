@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/08 17:15:38 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/08 18:56:16 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ void			*minishell_envdup(void *content);
 int				minishell_purgeenv(t_list **env);
 void			minishell_setenvval(const char *name, char *value,
 		t_list **env);
+int				minishell_help(int ac, char **av, t_list **env);
 
 #endif
