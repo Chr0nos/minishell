@@ -13,7 +13,7 @@
 #include "minishell.h"
 #include "libft.h"
 #include <unistd.h>
-#include <sys/types.h>
+#include <signal.h>
 #include <stdlib.h>
 #define BUFF_SIZE 4096
 
