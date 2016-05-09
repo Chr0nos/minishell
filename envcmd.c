@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/09 15:39:02 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/09 17:59:01 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,21 +75,18 @@ static void			minishell_envcmdset(int ac, char **av, t_list *env)
 ** return : -1 in any case
 */
 
-int					minishell_envcmd(const char *cmd, t_list **env)
+int					minishell_envcmd(int ac, char **av, t_list **env,
+		const char *cmd)
 {
-	char	**av;
-	size_t	ac;
 	t_list	*fakeenv;
 
 	if ((!env) || (!*env))
 		return (-1);
-	av = ft_strsplit(cmd, ' ');
-	ac = ft_tabcount((void**)av);
 	if (!ft_strcmp(av[1], "-i"))
 	{
 		fakeenv = NULL;
-		if (ac < 4)
-			ft_putendl_fd("minishell: error: env: missing parameter", 2);
+		if (ac < 3)
+			return (-1);
 		else
 			minishell_runcmd(minishell_strnchr(cmd, ' ', 2), &fakeenv);
 	}
@@ -99,7 +96,5 @@ int					minishell_envcmd(const char *cmd, t_list **env)
 		minishell_unsetenv((int)ac - 1, &av[1], env);
 	else
 		minishell_error(ERR_ENVPARSE_UNKNOW, av[1], 0);
-	ft_free_tab(av, (unsigned int)ac);
-	free(av);
 	return (-1);
 }
