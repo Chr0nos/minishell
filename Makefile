@@ -6,7 +6,7 @@
 #    By: snicolet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/05/03 17:26:33 by snicolet          #+#    #+#              #
-#    Updated: 2016/05/08 23:55:42 by snicolet         ###   ########.fr        #
+#    Updated: 2016/05/09 23:31:16 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,13 +31,9 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
+	make -C ./libft fclean
 
 re: fclean all
 
 libft/libft.a:
 	make -j -C./libft
-
-fcleanlibs: fclean
-	make -C libft fclean
-
-relibs: fcleanlibs all
