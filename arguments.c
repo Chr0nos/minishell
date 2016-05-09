@@ -6,16 +6,16 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 12:45:25 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/05 16:53:26 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/09 18:45:39 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-const char			*minishell_strchr(const char *str, const char c)
+const char			*minishell_strchr(const char *str, const char *separators)
 {
-	while ((*str) && (*str != c))
+	while ((*str) && (!ft_strany(*str, separators)))
 		str++;
 	if (*str)
 		return (str);
@@ -29,21 +29,21 @@ char				**minishell_arguments_parse(const char *cmd,
 	size_t		len;
 	size_t		space;
 
-	len = ft_strsplit_count(cmd, ' ');
+	len = ft_strsplitstr_count(cmd, SEPARATORS);
 	if (!(arglist = malloc(sizeof(char*) * len + 2)))
 		return (NULL);
 	arglist[0] = ft_strdup(bin_path);
-	cmd = minishell_strchr(cmd, ' ');
+	cmd = minishell_strchr(cmd, SEPARATORS);
 	if ((!cmd) && (!(arglist[1] = NULL)))
 		return (arglist);
 	space = 1;
 	while (*cmd)
 	{
-		while (*cmd == ' ')
+		while (ft_strany(*cmd, SEPARATORS))
 			cmd++;
 		if (*cmd)
 		{
-			len = ft_strsublen(cmd, ' ');
+			len = ft_strsublenstr(cmd, SEPARATORS);
 			arglist[space++] = ft_strndup(cmd, len);
 			cmd += len;
 		}
