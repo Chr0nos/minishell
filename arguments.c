@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 12:45:25 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/09 18:45:39 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/09 19:17:00 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char				**minishell_arguments_parse(const char *cmd,
 	size_t		space;
 
 	len = ft_strsplitstr_count(cmd, SEPARATORS);
-	if (!(arglist = malloc(sizeof(char*) * len + 2)))
+	if (!(arglist = malloc(sizeof(char*) * (len + 2))))
 		return (NULL);
 	arglist[0] = ft_strdup(bin_path);
 	cmd = minishell_strchr(cmd, SEPARATORS);
@@ -39,7 +39,7 @@ char				**minishell_arguments_parse(const char *cmd,
 	space = 1;
 	while (*cmd)
 	{
-		while (ft_strany(*cmd, SEPARATORS))
+		while ((*cmd) && (ft_strany(*cmd, SEPARATORS)))
 			cmd++;
 		if (*cmd)
 		{
