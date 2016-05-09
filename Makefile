@@ -22,7 +22,7 @@ all: $(NAME)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< $(INC)
 
-$(NAME): $(OBJ)
+$(NAME): libft/libft.a $(OBJ)
 	make -C ./libft
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(INC) -L ./libft -lft 
 
@@ -34,3 +34,10 @@ fclean: clean
 
 re: fclean all
 
+libft/libft.a:
+	make -j -C./libft
+
+fcleanlibs: fclean
+	make -C libft fclean
+
+relibs: fcleanlibs all
