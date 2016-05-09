@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/08 18:38:30 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/09 15:39:02 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,31 +27,47 @@ static const char	*minishell_strnchr(const char *str, const char c, size_t n)
 	return (NULL);
 }
 
-static void			minishell_envcmdset(int ac, char **av, t_list *env,
-		const char *cmd)
+static void			minishell_envcmdsetval(t_list **subenv, char *str)
 {
-	t_list	*subenv;
+	size_t	seek;
 	char	*name;
 	char	*value;
-	size_t	seek;
 
-	if ((!cmd) || (ac < 2) || (!(subenv = ft_lstdup(env, &minishell_envdup))))
-		return ;
-	seek = ft_strsublen(av[1], '=');
-	if (av[1][seek] != '\0')
+	seek = ft_strsublen(str, '=');
+	if (str[seek] != '\0')
 	{
-		name = ft_strndup(av[1], seek);
-		value = ft_strdup(&av[1][seek + 1]);
+		name = ft_strndup(str, seek);
+		value = ft_strdup(&str[seek + 1]);
 	}
 	else
 	{
-		name = ft_memdup(av[1], seek + 1);
+		name = ft_memdup(str, seek + 1);
 		value = ft_strdup("");
 	}
-	minishell_setenvval(name, value, &subenv);
-	minishell_runcmd(cmd, &subenv);
-	minishell_purgeenv(&subenv);
+	minishell_setenvval(name, value, subenv);
 	free(name);
+}
+
+static void			minishell_envcmdset(int ac, char **av, t_list *env)
+{
+	t_list		*subenv;
+	size_t		p;
+	char		*cmd;
+
+	if ((ac < 2) || (!(subenv = ft_lstdup(env, &minishell_envdup))))
+		return ;
+	p = 1;
+	while ((av[p]) && (ft_strany('=', av[p])))
+		minishell_envcmdsetval(&subenv, av[p++]);
+	if (av[p])
+	{
+		cmd = ft_strunsplit((const char**)(unsigned long)&av[p], ' ');
+		minishell_runcmd(cmd, &subenv);
+		free(cmd);
+	}
+	else
+		minishell_envshow(subenv);
+	minishell_purgeenv(&subenv);
 }
 
 /*
@@ -78,7 +94,7 @@ int					minishell_envcmd(const char *cmd, t_list **env)
 			minishell_runcmd(minishell_strnchr(cmd, ' ', 2), &fakeenv);
 	}
 	else if (av[1][0] != '-')
-		minishell_envcmdset((int)ac, av, *env, minishell_strnchr(cmd, ' ', 2));
+		minishell_envcmdset((int)ac, av, *env);
 	else if (!ft_strcmp(av[1], "-u"))
 		minishell_unsetenv((int)ac - 1, &av[1], env);
 	else
