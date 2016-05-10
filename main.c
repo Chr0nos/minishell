@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/10 19:47:32 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/10 20:38:59 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ static int	minishell_exec_params(int ac, char **av, t_list **env)
 
 	if (ac < 2)
 		return (0);
-	cmd = ft_strunsplit((const char **)(unsigned long)&av[1], ' ');
+	if (!(cmd = ft_strunsplit((const char **)(unsigned long)&av[1], ' ')))
+		return (ERR_EXIT);
 	ret = minishell_runmulticmd(cmd, env);
 	free(cmd);
 	return (ret);
