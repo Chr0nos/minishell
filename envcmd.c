@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/09 17:59:01 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/10 15:51:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int					minishell_envcmd(int ac, char **av, t_list **env,
 		fakeenv = NULL;
 		if (ac < 3)
 			return (-1);
-		else
-			minishell_runcmd(minishell_strnchr(cmd, ' ', 2), &fakeenv);
+		cmd = minishell_strnchr(cmd, ' ', 2);
+		minishell_runcmd(cmd, &fakeenv);
 	}
 	else if (av[1][0] != '-')
 		minishell_envcmdset((int)ac, av, *env);

@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/10 14:16:01 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/10 18:09:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,17 @@ static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
 	return (0);
 }
 
+static int	minishell_execpath(char *app, t_list *env, const char *cmd)
+{
+	int		ret;
+
+	if (((access(app, X_OK) < 0)) && (ft_mfree(1, app)))
+		return (minishell_error(ERR_PERMS, app, 0));
+	ret = minishell_exec_real(app, cmd, env);
+	free(app);
+	return (ret);
+}
+
 static int	minishell_exec(const char *cmd, t_list *env)
 {
 	char			*app;
@@ -58,11 +69,7 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	ret = 0;
 	app = ft_strndup(cmd, ft_strsublenstr(cmd, SEPARATORS));
 	if (lstat(app, &st) >= 0)
-	{
-		if (!(access(app, X_OK)))
-			return (minishell_error(ERR_PERMS, app, 0));
-		return (minishell_exec_real(app, cmd, env) + ft_mfree(1, app) - 1);
-	}
+		return (minishell_execpath(app, env, cmd));
 	if (!(pathlist = minishell_envval(env, "PATH")))
 		pathlist = MINISHELL_PATH_DEFAULT;
 	if ((fullpath = minishell_getapp_path(app, pathlist)) != NULL)

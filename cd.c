@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 18:59:20 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/09 19:18:50 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/10 17:38:45 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,16 @@ void		minishell_cd_real(t_list **env, const char *dir)
 		ft_putendl_fd("minishell: error: cd: failed to change directory", 2);
 	else
 	{
-		e = minishell_getenv_byname(*env, "PWD");
-		if (e)
-			minishell_editenv(e, getcwd(NULL, 4096));
-		else
-			minishell_addenv(env, "PWD", getcwd(NULL, 4096));
+		if ((e = minishell_getenv_byname(*env, "PWD")))
+			minishell_setenvval("OLDPWD", ft_strdup(e->value), env);
+		minishell_setenvval("PWD", getcwd(NULL, 4096), env);
 	}
 }
 
 int			minishell_cd(int ac, char **av, t_list **env)
 {
+	t_env	*e;
+
 	if (ac == 1)
 		return (minishell_cd_home(env));
 	else if (ac > 2)
@@ -86,6 +86,15 @@ int			minishell_cd(int ac, char **av, t_list **env)
 	}
 	else if (!ft_strcmp(av[1], "~"))
 		return (minishell_cd_home(env));
-	minishell_cd_real(env, av[1]);
+	else if (!ft_strcmp(av[1], "-"))
+	{
+		e = minishell_getenv_byname(*env, "OLDPWD");
+		if ((e) && (ft_strcmp(e->value, "-")))
+			minishell_cd_real(env, e->value);
+		else
+			ft_putendl("No valid parent available");
+	}
+	else
+		minishell_cd_real(env, av[1]);
 	return (-1);
 }
