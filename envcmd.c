@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/10 15:51:25 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/10 19:26:16 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,13 @@ static void			minishell_envcmdset(int ac, char **av, t_list *env)
 	size_t		p;
 	char		*cmd;
 
-	if ((ac < 2) || (!(subenv = ft_lstdup(env, &minishell_envdup))))
-		return ;
+	if (env)
+	{
+		if ((ac < 2) || (!(subenv = ft_lstdup(env, &minishell_envdup))))
+			return ;
+	}
+	else
+		subenv = NULL;
 	p = 1;
 	while ((av[p]) && (ft_strany('=', av[p])))
 		minishell_envcmdsetval(&subenv, av[p++]);
@@ -80,7 +85,7 @@ int					minishell_envcmd(int ac, char **av, t_list **env,
 {
 	t_list	*fakeenv;
 
-	if ((!env) || (!*env))
+	if (!env)
 		return (-1);
 	if (!ft_strcmp(av[1], "-i"))
 	{

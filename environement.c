@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:20:13 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/07 00:53:13 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/10 19:38:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 
 char		*minishell_envval(t_list *env, const char *key)
 {
+	if (!key)
+		return (NULL);
 	while (env)
 	{
-		if (!ft_strcmp(((t_env*)env->content)->name, key))
+		if ((env->content) && (!ft_strcmp(((t_env*)env->content)->name, key)))
 			return ((char*)((t_env*)env->content)->value);
 		env = env->next;
 	}

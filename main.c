@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/09 14:49:57 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/10 19:47:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,19 @@ static int	minishell_runmulticmd(const char *cmd, t_list **env)
 	return (ret);
 }
 
+static int	minishell_exec_params(int ac, char **av, t_list **env)
+{
+	int		ret;
+	char	*cmd;
+
+	if (ac < 2)
+		return (0);
+	cmd = ft_strunsplit((const char **)(unsigned long)&av[1], ' ');
+	ret = minishell_runmulticmd(cmd, env);
+	free(cmd);
+	return (ret);
+}
+
 int			main(int ac, char **av, char **env)
 {
 	t_list	*environement;
@@ -54,8 +67,9 @@ int			main(int ac, char **av, char **env)
 	ssize_t	ret;
 
 	signal(SIGINT, &minishell_nope);
-	(void)av[ac - 1];
 	minishell_envload(&environement, env);
+	if (minishell_exec_params(ac, av, &environement) == ERR_EXIT)
+		return (minishell_envfree(environement));
 	while ((write(1, "$> ", 4)) && ((ret = read(STDIN, buff, BUFF_SIZE)) >= 0))
 	{
 		if (ret > 1)
