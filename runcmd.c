@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/09 21:59:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/10 14:16:01 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	app = ft_strndup(cmd, ft_strsublenstr(cmd, SEPARATORS));
 	if (lstat(app, &st) >= 0)
 	{
-		if (!(st.st_mode & X_OK))
+		if (!(access(app, X_OK)))
 			return (minishell_error(ERR_PERMS, app, 0));
 		return (minishell_exec_real(app, cmd, env) + ft_mfree(1, app) - 1);
 	}
