@@ -6,7 +6,7 @@
 #    By: snicolet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/05/03 17:26:33 by snicolet          #+#    #+#              #
-#    Updated: 2016/05/11 17:13:05 by snicolet         ###   ########.fr        #
+#    Updated: 2016/05/11 17:52:24 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ all: $(NAME)
 
 $(NAME): libft/libft.a $(OBJ)
 	make -C ./libft
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(INC) -L ./libft -lft 
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(INC) -L ./libft -lft -lcurses
 
 clean:
 	$(RM) $(OBJ)
