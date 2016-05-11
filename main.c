@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 12:06:17 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 12:35:59 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <unistd.h>
 #include <signal.h>
 #include <stdlib.h>
-#define BUFF_SIZE 4096
 
 static void	minishell_nope(int num)
 {
@@ -83,7 +82,7 @@ int			main(int ac, char **av, char **env)
 	minishell_set_shell_level(environement);
 	if (minishell_exec_params(ac, av, &environement) == ERR_EXIT)
 		return (minishell_envfree(environement));
-	while ((write(1, "$> ", 4)) && ((ret = read(STDIN, buff, BUFF_SIZE)) >= 0))
+	while ((ret = minishell_prompt(buff)) >= 0)
 	{
 		if (ret > 1)
 		{

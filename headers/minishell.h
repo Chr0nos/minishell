@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/09 18:44:43 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 12:37:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # define MINISHELL_PATH2 "/opt/X11/bin:/usr/local/go/bin:/usr/local/munki:"
 # define MINISHELL_PATH3 "/Library/TeX/texbin"
 # define MINISHELL_PATH_DEFAULT MINISHELL_PATH1 MINISHELL_PATH2 MINISHELL_PATH3
+# define BUFF_SIZE 4096
 # define SEPARATORS " \t"
 # define STDIN 1
 
@@ -72,5 +73,6 @@ int				minishell_purgeenv(t_list **env);
 void			minishell_setenvval(const char *name, char *value,
 		t_list **env);
 int				minishell_help(int ac, char **av, t_list **env);
+ssize_t			minishell_prompt(char *buff);
 
 #endif
