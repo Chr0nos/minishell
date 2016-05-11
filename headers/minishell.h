@@ -75,6 +75,6 @@ int				minishell_purgeenv(t_list **env);
 void			minishell_setenvval(const char *name, char *value,
 		t_list **env);
 int				minishell_help(int ac, char **av, t_list **env);
-ssize_t			minishell_prompt(char *buff);
+int				minishell_prompt(char *buff);
 
 #endif

@@ -76,16 +76,16 @@ static void	minishell_set_shell_level(t_list **env)
 
 int			main(int ac, char **av, char **env)
 {
-	t_list	*environement;
-	char	buff[BUFF_SIZE];
-	ssize_t	ret;
+	t_list		*environement;
+	char		buff[BUFF_SIZE];
+	int			ret;
 
 	signal(SIGINT, &minishell_nope);
 	minishell_envload(&environement, env);
 	minishell_set_shell_level(&environement);
 	if (minishell_exec_params(ac, av, &environement) == ERR_EXIT)
 		return (minishell_envfree(environement));
-	while ((ret = minishell_prompt(buff)) >= 0)
+	while ((ret = (int)minishell_prompt(buff)) >= 0)
 	{
 		if (ret > 1)
 		{

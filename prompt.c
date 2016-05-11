@@ -13,8 +13,8 @@
 #include "minishell.h"
 #include <unistd.h>
 
-ssize_t		minishell_prompt(char *buff)
+int		minishell_prompt(char *buff)
 {
 	write(1, "$> ", 4);
-	return (read(STDIN, buff, BUFF_SIZE));
+	return ((int)read(STDIN, buff, BUFF_SIZE));
 }
