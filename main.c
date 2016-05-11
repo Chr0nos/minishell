@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 12:35:59 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 13:57:06 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,18 @@ static int	minishell_exec_params(int ac, char **av, t_list **env)
 	return (ret);
 }
 
-static void	minishell_set_shell_level(t_list *env)
+static void	minishell_set_shell_level(t_list **env)
 {
 	t_env	*e;
 	int		val;
 
-	if (!(e = minishell_getenv_byname(env, "SHLVL")))
-		return ;
-	val = ft_atoi(e->value);
-	minishell_editenv(e, ft_itoa(val + 1));
+	if ((e = minishell_getenv_byname(*env, "SHLVL")))
+	{
+		val = ft_atoi(e->value);
+		minishell_editenv(e, ft_itoa(val + 1));
+	}
+	else if (CFG_SETSHLVL)
+		minishell_addenv(env, "SHLVL", ft_strdup("1"));
 }
 
 int			main(int ac, char **av, char **env)
@@ -79,7 +82,7 @@ int			main(int ac, char **av, char **env)
 
 	signal(SIGINT, &minishell_nope);
 	minishell_envload(&environement, env);
-	minishell_set_shell_level(environement);
+	minishell_set_shell_level(&environement);
 	if (minishell_exec_params(ac, av, &environement) == ERR_EXIT)
 		return (minishell_envfree(environement));
 	while ((ret = minishell_prompt(buff)) >= 0)
