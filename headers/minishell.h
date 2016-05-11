@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 17:38:32 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 20:33:51 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define MINISHELL_PATH3 "/Library/TeX/texbin"
 # define MINISHELL_PATH_DEFAULT MINISHELL_PATH1 MINISHELL_PATH2 MINISHELL_PATH3
 # define BUFF_SIZE _POSIX_ARG_MAX
+# define DEFAULT_TERM "xterm-256color"
 # define SEPARATORS " \t"
 # define STDIN 0
 # define CFG_SETSHLVL 1

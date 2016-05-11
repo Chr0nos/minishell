@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 18:00:15 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 20:34:58 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,15 @@
 
 int		minishell_init(t_list **env, struct termios term)
 {
-	char	*nameterm;
+	t_env		*e;
+	const char	*nameterm;
 
-	nameterm = getenv("TERM");
+	nameterm = NULL;
+	e = minishell_getenv_byname(*env, "TERM");
+	if ((e) && (e->value))
+		nameterm = (const char*)e->name;
+	else
+		nameterm = DEFAULT_TERM;
 	if (tgetent(NULL, nameterm) == ERR)
 	{
 		ft_putstr_fd("minishell: error: failed to init termcaps\n", 2);
