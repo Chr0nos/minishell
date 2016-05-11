@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 18:59:20 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/10 17:38:45 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 16:52:44 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int			minishell_cd_home(t_list **env)
 	if (!home)
 		ft_putendl_fd("minishell: cd: error: no HOME environement variable", 2);
 	else
+	{
 		minishell_cd_real(env, home);
+		return (0);
+	}
 	return (-1);
 }
 
@@ -60,6 +63,7 @@ static int	minishell_cd_trydir(const char *dir)
 void		minishell_cd_real(t_list **env, const char *dir)
 {
 	t_env	*e;
+	char	*cwd;
 
 	if (!ft_strcmp(dir, "."))
 		return ;
@@ -67,9 +71,13 @@ void		minishell_cd_real(t_list **env, const char *dir)
 		ft_putendl_fd("minishell: error: cd: failed to change directory", 2);
 	else
 	{
-		if ((e = minishell_getenv_byname(*env, "PWD")))
+		if (((e = minishell_getenv_byname(*env, "PWD"))) && (e->value))
 			minishell_setenvval("OLDPWD", ft_strdup(e->value), env);
-		minishell_setenvval("PWD", getcwd(NULL, 4096), env);
+		cwd = getcwd(NULL, 4096);
+		if (cwd)
+			minishell_setenvval("PWD", cwd, env);
+		else if (minishell_cd_home(env) == 0)
+			;
 	}
 }
 

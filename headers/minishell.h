@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 13:21:13 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 16:15:52 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 # include "libft.h"
 # include "limits.h"
+# include <termios.h>
 # define MINISHELL_PATH1 "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:"
 # define MINISHELL_PATH2 "/opt/X11/bin:/usr/local/go/bin:/usr/local/munki:"
 # define MINISHELL_PATH3 "/Library/TeX/texbin"
@@ -76,5 +77,6 @@ void			minishell_setenvval(const char *name, char *value,
 		t_list **env);
 int				minishell_help(int ac, char **av, t_list **env);
 int				minishell_prompt(char *buff);
+int				minishell_quit(t_list *env, struct termios *term);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 13:57:06 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 15:52:59 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <termios.h>
 
 static void	minishell_nope(int num)
 {
@@ -76,10 +77,13 @@ static void	minishell_set_shell_level(t_list **env)
 
 int			main(int ac, char **av, char **env)
 {
-	t_list		*environement;
-	char		buff[BUFF_SIZE];
-	int			ret;
+	struct termios	term;
+	t_list			*environement;
+	char			buff[BUFF_SIZE];
+	int				ret;
 
+	(void)term;
+	//term.cflag |= ICANON;
 	signal(SIGINT, &minishell_nope);
 	minishell_envload(&environement, env);
 	minishell_set_shell_level(&environement);
