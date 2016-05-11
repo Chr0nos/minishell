@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 12:12:25 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 12:28:15 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ static int	minishell_exec(const char *cmd, t_list *env)
 		ret = minishell_exec_real(fullpath, cmd, env);
 		free(fullpath);
 	}
-	else if (ft_mfree(1, app))
-		return (-1);
+	else
+		ret = -1;
 	free(app);
 	return (ret);
 }
