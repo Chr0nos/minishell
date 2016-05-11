@@ -1,34 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   shlvl.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 17:11:51 by snicolet         ###   ########.fr       */
+/*   Created: 2016/05/11 17:09:37 by snicolet          #+#    #+#             */
+/*   Updated: 2016/05/11 17:09:57 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <unistd.h>
-#include <termios.h>
 
-int		minishell_init(t_list **env, struct termios term)
+void	minishell_set_shell_level(t_list **env)
 {
-	minishell_set_shell_level(env);
-	term.c_lflag |= ICANON;
-	return (1);
-}
+	t_env	*e;
+	int		val;
 
-int		minishell_quit(t_list *env, struct termios *term)
-{
-	(void)term;
-	return (minishell_envfree(env));
-}
-
-int		minishell_prompt(char *buff)
-{
-	write(1, "$> ", 4);
-	return ((int)read(STDIN, buff, BUFF_SIZE));
+	if ((e = minishell_getenv_byname(*env, "SHLVL")))
+	{
+		val = ft_atoi(e->value);
+		minishell_editenv(e, ft_itoa(val + 1));
+	}
+	else if (CFG_SETSHLVL)
+		minishell_addenv(env, "SHLVL", ft_strdup("1"));
 }

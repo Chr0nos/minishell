@@ -6,7 +6,7 @@
 #    By: snicolet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/05/03 17:26:33 by snicolet          #+#    #+#              #
-#    Updated: 2016/05/11 12:36:49 by snicolet         ###   ########.fr        #
+#    Updated: 2016/05/11 17:13:05 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS=-Wall -Wextra -Werror -Weverything -pipe
 CC=clang
 OBJ=main.o errors.o environement.o arguments.o envmake.o builtin.o path.o \
 	envcmd.o cd.o spliter.o setenv.o unsetenv.o envdup.o help.o runcmd.o \
-   	prompt.o
+   	prompt.o shlvl.o
 
 all: $(NAME)
 
