@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 20:54:50 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 21:04:15 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 #include <stdlib.h>
 #include <term.h>
 #include <curses.h>
+
+/*
+** for the termcaps: the structure is volutary not pointed but copied
+** because the main still keep the original environement for the cleanup stage
+*/
 
 int		minishell_init(t_list **env, struct termios term)
 {
@@ -39,11 +44,27 @@ int		minishell_init(t_list **env, struct termios term)
 	return (1);
 }
 
+/*
+** actualy quit the minishell, properly
+** only used by main (and should not be used by any other function)
+** jobs: re-configure the terminal to disable termcaps
+** (if they where not enabled)
+*/
+
 int		minishell_quit(t_list *env, struct termios *term)
 {
-	(void)term;
+	if (ENABLE_TERMCAPS)
+		tcsetattr(STDIN, 0, term);
 	return (minishell_envfree(env));
 }
+
+/*
+** this function should not return anything until a new line was made
+** in non termcaps mode it's waiting for read() to return
+** in the termcaps mode: sleep is used to prevent cpu to boil eggs util the line
+** is done
+** return: the size of the line
+*/
 
 int		minishell_prompt(char *buff)
 {
