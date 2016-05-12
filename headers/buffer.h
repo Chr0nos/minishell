@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 20:42:55 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 20:53:04 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/12 14:08:04 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ typedef struct	s_buffer
 
 t_buffer		*minishell_buffer_make(size_t size);
 void			minishell_buffer_free(t_buffer *buff);
+t_buffer		*minishell_buffer_resize(t_buffer **buffer, size_t newsize);
 
 #endif

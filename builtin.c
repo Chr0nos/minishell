@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/09 23:37:52 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/12 14:45:23 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ static int		minishell_builtin_parse2(int ac, char **av, t_list **env)
 	return (0);
 }
 
-static int		minishell_builtin_parse(int ac, char **av, t_list **env,
-		const char *cmd)
+static int		minishell_builtin_parse(int ac, char **av, t_list **env)
 {
 	if ((!av) || (!av[0]))
 		return (-1);
@@ -55,7 +54,7 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env,
 	{
 		if (ac == 1)
 			return ((env) ? minishell_envshow(*env) : -1);
-		return (minishell_envcmd(ac, av, env, cmd));
+		return (minishell_envcmd(ac, av, env));
 	}
 	else if ((!ft_strcmp(av[0], "setenv")) || (!ft_strcmp(av[0], "export")))
 		return (minishell_setenv(ac, av, env));

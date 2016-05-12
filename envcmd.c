@@ -6,28 +6,14 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/10 19:26:16 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/12 14:56:28 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-static const char	*minishell_strnchr(const char *str, const char c, size_t n)
-{
-	if (c == '\0')
-	{
-		while (*str)
-			str++;
-		return (str);
-	}
-	while (*str)
-		if ((*(str++) == c) && (!--n))
-			return (str);
-	return (NULL);
-}
-
-static void			minishell_envcmdsetval(t_list **subenv, char *str)
+static void		minishell_envcmdsetval(t_list **subenv, char *str)
 {
 	size_t	seek;
 	char	*name;
@@ -48,7 +34,7 @@ static void			minishell_envcmdsetval(t_list **subenv, char *str)
 	free(name);
 }
 
-static void			minishell_envcmdset(int ac, char **av, t_list *env)
+static void		minishell_envcmdset(int ac, char **av, t_list *env)
 {
 	t_list		*subenv;
 	size_t		p;
@@ -75,26 +61,41 @@ static void			minishell_envcmdset(int ac, char **av, t_list *env)
 	minishell_purgeenv(&subenv);
 }
 
+static int		minishell_envlessi(int ac, char **av)
+{
+	char	*subcmd;
+	int		p;
+	t_list	*fakeenv;
+
+	if (ac < 3)
+		return (-1);
+	p = 2;
+	fakeenv = NULL;
+	subcmd = NULL;
+	while ((av[p]) && (ft_strany('=', av[p])))
+		minishell_envcmdsetval(&fakeenv, av[p++]);
+	if (av[p])
+	{
+		subcmd = ft_strunsplit((const char **)(unsigned long)&av[p], ' ');
+		minishell_runcmd(subcmd, &fakeenv);
+		free(subcmd);
+	}
+	else
+		minishell_envshow(fakeenv);
+	return (-1);
+}
+
 /*
 ** called by: minishell_builtin
 ** return : -1 in any case
 */
 
-int					minishell_envcmd(int ac, char **av, t_list **env,
-		const char *cmd)
+int				minishell_envcmd(int ac, char **av, t_list **env)
 {
-	t_list	*fakeenv;
-
 	if (!env)
 		return (-1);
 	if (!ft_strcmp(av[1], "-i"))
-	{
-		fakeenv = NULL;
-		if (ac < 3)
-			return (-1);
-		cmd = minishell_strnchr(cmd, ' ', 2);
-		minishell_runcmd(cmd, &fakeenv);
-	}
+		return (minishell_envlessi(ac, av));
 	else if (av[1][0] != '-')
 		minishell_envcmdset((int)ac, av, *env);
 	else if (!ft_strcmp(av[1], "-u"))

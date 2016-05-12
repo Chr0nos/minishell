@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 21:02:32 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/12 14:46:00 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,14 @@ void			minishell_arguments_show(char **args);
 char			*minishell_getapp_path(const char *app, const char *pathlist);
 char			**minishell_envmake(t_list *env);
 void			minishell_envtabfree(char **env);
-int				minishell_envcmd(int ac, char **av, t_list **env,
-		const char *cmd);
+int				minishell_envcmd(int ac, char **av, t_list **env);
 int				minishell_unsetenv(int ac, char **av, t_list **env);
 int				minishell_builtin(const char *cmd, t_list **evironement);
 void			minishell_cd_real(t_list **env, const char *dir);
 int				minishell_cd(int ac, char **av, t_list **env);
 int				minishell_cd_home(t_list **env);
 int				minishell_spliter(const char *cmd, t_list **env,
-		int (*f)(int, char **, t_list **, const char *));
+		int (*f)(int, char **, t_list **));
 int				minishell_setenv(int ac, char **av, t_list **env);
 void			minishell_setenv_val(t_list **env, t_env *e);
 void			minishell_addenv(t_list **env, const char *name, char *value);
