@@ -29,6 +29,7 @@ $(NAME): libft/libft.a $(OBJ)
 
 clean:
 	$(RM) $(OBJ)
+	make -C ./libft clean
 
 fclean: clean
 	$(RM) $(NAME)
