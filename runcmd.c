@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/12 14:22:42 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/12 17:01:24 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,22 @@ static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
 static int	minishell_execpath(char *app, t_list *env, const char *cmd)
 {
 	int		ret;
+	char	*fullpath;
+	char	*cwd;
 
-	if (((access(app, X_OK) < 0)) && (ft_mfree(1, app)))
+	if (app[0] != '/')
+	{
+		cwd = getcwd(NULL, 4096);
+		fullpath = ft_strmjoin(3, cwd, "/", app);
+		free(cwd);
+	}
+	else
+		fullpath = ft_strdup(app);
+	if (((access(fullpath, X_OK) < 0)) && (ft_mfree(2, app, fullpath)))
 		return (minishell_error(ERR_PERMS, app, 0));
 	ret = minishell_exec_real(app, cmd, env);
 	free(app);
+	free(fullpath);
 	return (ret);
 }
 
@@ -69,7 +80,7 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	ret = 0;
 	if (!(app = ft_strndup(cmd, ft_strsublenstr(cmd, SEPARATORS))))
 		return (ERR_EXIT);
-	if (((!ft_strncmp(app, "./", 2)) || (app[0] == '/')) &&
+	if (((app[0] == '/') || (app[0] == '.')) &&
 			(lstat(app, &st) >= 0))
 		return (minishell_execpath(app, env, cmd));
 	if ((!env) || (!(pathlist = minishell_envval(env, "PATH"))))

@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 21:04:15 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/12 15:33:30 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,14 @@ int		minishell_quit(t_list *env, struct termios *term)
 
 int		minishell_prompt(char *buff)
 {
+	int		ret;
+
 	write(1, "$> ", 4);
-	return ((int)read(STDIN, buff, BUFF_SIZE));
+	ret = (int)read(STDIN, buff, BUFF_SIZE);
+	if (ret == 0)
+	{
+		write(1, "\n", 1);
+		return (ERR_EXIT);
+	}
+	return (ret);
 }
