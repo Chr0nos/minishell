@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/12 14:56:28 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/12 17:10:56 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ static int		minishell_envlessi(int ac, char **av)
 	{
 		subcmd = ft_strunsplit((const char **)(unsigned long)&av[p], ' ');
 		minishell_runcmd(subcmd, &fakeenv);
+		minishell_envfree(fakeenv);
 		free(subcmd);
 	}
 	else
