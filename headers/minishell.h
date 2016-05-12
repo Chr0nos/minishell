@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/11 20:33:51 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/11 21:02:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@
 # define BUFF_SIZE _POSIX_ARG_MAX
 # define DEFAULT_TERM "xterm-256color"
 # define SEPARATORS " \t"
-# define STDIN 0
+# define STDIN STDIN_FILENO
 # define CFG_SETSHLVL 1
+# define ENABLE_TERMCAPS 1
 
 typedef struct	s_env
 {
