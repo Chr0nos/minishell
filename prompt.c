@@ -6,11 +6,12 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/12 15:33:30 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/13 14:41:46 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "keycodes.h"
 #include <unistd.h>
 #include <termios.h>
 #include <stdlib.h>
@@ -22,7 +23,7 @@
 ** because the main still keep the original environement for the cleanup stage
 */
 
-int		minishell_init(t_list **env, struct termios term)
+int			minishell_init(t_list **env, struct termios term)
 {
 	t_env		*e;
 	const char	*nameterm;
@@ -39,7 +40,7 @@ int		minishell_init(t_list **env, struct termios term)
 		ft_printf("shell name: %s\n", nameterm);
 		return (ERR_EXIT);
 	}
-	//term.c_lflag &= ~((unsigned long)ICANON);
+	term.c_lflag &= ~((unsigned long)ICANON);
 	tcsetattr(STDIN, 0, &term);
 	return (1);
 }
@@ -51,11 +52,37 @@ int		minishell_init(t_list **env, struct termios term)
 ** (if they where not enabled)
 */
 
-int		minishell_quit(t_list *env, struct termios *term)
+int			minishell_quit(t_list *env, struct termios *term)
 {
 	if (ENABLE_TERMCAPS)
 		tcsetattr(STDIN, 0, term);
 	return (minishell_envfree(env));
+}
+
+static int	minishell_prompt_cbc(char *buff)
+{
+	int		pos;
+
+	pos = 0;
+	while ((pos < BUFF_SIZE) && (read(STDIN_FILENO, &buff[pos], 1) > 0))
+	{
+		//ft_printf(" key: %d\n", (int)buff[pos]);
+		if (buff[pos] == (char)KEY_CTRL_D)
+			return (0);
+		else if (buff[pos] == (char)KEY_BACKSPACE)
+		{
+			if (pos > 1)
+				pos -= 2;
+		}
+		else if (buff[pos++] == '\n')
+		{
+			buff[pos] = '\0';
+			return (pos);
+		}
+	}
+	if (pos >= BUFF_SIZE)
+		ft_putendl_fd("minishell: error: line is too long", 2);
+	return (-1);
 }
 
 /*
@@ -66,12 +93,15 @@ int		minishell_quit(t_list *env, struct termios *term)
 ** return: the size of the line
 */
 
-int		minishell_prompt(char *buff)
+int			minishell_prompt(char *buff)
 {
 	int		ret;
 
 	write(1, "$> ", 4);
-	ret = (int)read(STDIN, buff, BUFF_SIZE);
+	if (ENABLE_TERMCAPS)
+		ret = minishell_prompt_cbc(buff);
+	else
+		ret = (int)read(STDIN, buff, BUFF_SIZE);
 	if (ret == 0)
 	{
 		write(1, "\n", 1);

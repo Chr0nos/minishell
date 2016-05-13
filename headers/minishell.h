@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/12 15:49:14 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/13 14:11:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define SEPARATORS " \t"
 # define STDIN STDIN_FILENO
 # define CFG_SETSHLVL 1
-# define ENABLE_TERMCAPS 0
+# define ENABLE_TERMCAPS 1
 
 typedef struct	s_env
 {
