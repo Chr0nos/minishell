@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/13 14:41:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/13 21:32:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int			minishell_init(t_list **env, struct termios term)
 		return (ERR_EXIT);
 	}
 	term.c_lflag &= ~((unsigned long)ICANON);
-	tcsetattr(STDIN, 0, &term);
+	term.c_lflag &= ~((unsigned long)ECHO);
+	tcsetattr(STDIN, TCSANOW, &term);
 	return (1);
 }
 
@@ -67,18 +68,26 @@ static int	minishell_prompt_cbc(char *buff)
 	while ((pos < BUFF_SIZE) && (read(STDIN_FILENO, &buff[pos], 1) > 0))
 	{
 		//ft_printf(" key: %d\n", (int)buff[pos]);
-		if (buff[pos] == (char)KEY_CTRL_D)
+		if (buff[pos] == MKEY_CTRL_D)
 			return (0);
-		else if (buff[pos] == (char)KEY_BACKSPACE)
+		else if (buff[pos] == MKEY_CLEAR)
+			minishell_termcaps_key(MKEY_CLEAR);
+		else if (buff[pos] == MKEY_BACKSPACE)
 		{
-			if (pos > 1)
-				pos -= 2;
+			if (pos > 0)
+			{
+				pos -= 1;
+				minishell_termcaps_key(MKEY_BACKSPACE);
+			}
 		}
 		else if (buff[pos++] == '\n')
 		{
 			buff[pos] = '\0';
+			write(1, "\n", 1);
 			return (pos);
 		}
+		else
+			write(1, &buff[pos - 1], 1);
 	}
 	if (pos >= BUFF_SIZE)
 		ft_putendl_fd("minishell: error: line is too long", 2);
@@ -97,7 +106,7 @@ int			minishell_prompt(char *buff)
 {
 	int		ret;
 
-	write(1, "$> ", 4);
+	minishell_showprompt();
 	if (ENABLE_TERMCAPS)
 		ret = minishell_prompt_cbc(buff);
 	else
@@ -108,4 +117,25 @@ int			minishell_prompt(char *buff)
 		return (ERR_EXIT);
 	}
 	return (ret);
+}
+
+int			minishell_showprompt(void)
+{
+	char	*cwd;
+	char	*dir;
+	char	*path;
+
+	if (!(cwd = getcwd(NULL, 4096)))
+	{
+		write(1, "$> ", 4);
+		return (1);
+	}
+	dir = ft_strrchr(cwd, '/') + 1;
+	if (*dir == '\0')
+		dir--;
+	path = ft_strmjoin(2, dir, " $> ");
+	ft_putstr(path);
+	free(cwd);
+	free(path);
+	return (1);
 }

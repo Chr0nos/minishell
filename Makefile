@@ -16,7 +16,7 @@ CFLAGS=-Wall -Wextra -Werror -Weverything -pipe
 CC=clang
 OBJ=main.o errors.o environement.o arguments.o envmake.o builtin.o path.o \
 	envcmd.o cd.o spliter.o setenv.o unsetenv.o envdup.o help.o runcmd.o \
-	prompt.o shlvl.o buffer.o
+	prompt.o shlvl.o buffer.o termcaps.o
 
 all: $(NAME)
 
