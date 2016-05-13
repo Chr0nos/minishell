@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/13 21:25:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/13 23:24:15 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define SEPARATORS " \t"
 # define STDIN STDIN_FILENO
 # define CFG_SETSHLVL 1
-# define ENABLE_TERMCAPS 0
+# define ENABLE_TERMCAPS 1
 
 typedef struct	s_env
 {
@@ -84,5 +84,6 @@ void			minishell_set_shell_level(t_list **env);
 void			minishell_termcaps_clear(void);
 void			minishell_termcaps_key(int key);
 int				minishell_showprompt(void);
+void			minishell_nope(int num);
 
 #endif

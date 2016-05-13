@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/12 17:01:24 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/13 23:36:14 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
 	environement = NULL;
 	if ((pid = fork()) == 0)
 	{
+		signal(SIGINT, SIG_DFL);
 		args = minishell_arguments_parse(cmd, app);
 		environement = minishell_envmake(env);
-		signal(SIGINT, SIG_DFL);
 		if (execve(app, args, environement) == -1)
 		{
 			minishell_error(ERR_EXEC, NULL, 0);
@@ -43,6 +43,7 @@ static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
 		wait(&ret);
 		minishell_arguments_free(args);
 		minishell_envtabfree(environement);
+		return (ret);
 	}
 	return (0);
 }

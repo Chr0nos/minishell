@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/12 15:53:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/13 23:29:51 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 #include <stdlib.h>
 #include <termios.h>
 
-static void	minishell_nope(int num)
+void	minishell_nope(int num)
 {
 	(void)num;
-	write(1, "\n$> ", 4);
+	write(1, "\n", 1);
+	minishell_showprompt();
 }
 
 static int	minishell_runmulticmd(const char *cmd, t_list **env)
