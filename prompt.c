@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/13 21:32:07 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/13 22:39:46 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ static int	minishell_prompt_cbc(char *buff)
 	pos = 0;
 	while ((pos < BUFF_SIZE) && (read(STDIN_FILENO, &buff[pos], 1) > 0))
 	{
-		//ft_printf(" key: %d\n", (int)buff[pos]);
 		if (buff[pos] == MKEY_CTRL_D)
 			return (0);
 		else if (buff[pos] == MKEY_CLEAR)
