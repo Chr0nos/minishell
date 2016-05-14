@@ -24,7 +24,6 @@ all: $(NAME)
 	$(CC) $(CFLAGS) -c $< $(INC)
 
 $(NAME): libft/libft.a $(OBJ)
-	make -C ./libft
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(INC) -L ./libft -lft -lcurses
 
 clean:
