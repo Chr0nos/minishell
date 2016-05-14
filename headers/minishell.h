@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/13 23:24:15 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/14 15:02:11 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 # define BUFF_SIZE _POSIX_ARG_MAX
 # define DEFAULT_TERM "xterm-256color"
 # define SEPARATORS " \t"
+# define DQUOTE (char)34
 # define STDIN STDIN_FILENO
 # define CFG_SETSHLVL 1
-# define ENABLE_TERMCAPS 1
+# define ENABLE_TERMCAPS 0
 
 typedef struct	s_env
 {
@@ -85,5 +86,6 @@ void			minishell_termcaps_clear(void);
 void			minishell_termcaps_key(int key);
 int				minishell_showprompt(void);
 void			minishell_nope(int num);
+char			**minishell_split(const char *cmd);
 
 #endif

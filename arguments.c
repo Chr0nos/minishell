@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 12:45:25 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/09 19:17:00 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/14 16:56:05 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,38 +17,34 @@ const char			*minishell_strchr(const char *str, const char *separators)
 {
 	while ((*str) && (!ft_strany(*str, separators)))
 		str++;
-	if (*str)
-		return (str);
-	return (NULL);
+	return (str);
 }
 
 char				**minishell_arguments_parse(const char *cmd,
 		const char *bin_path)
 {
-	char		**arglist;
-	size_t		len;
-	size_t		space;
+	size_t	size;
+	size_t	p;
+	char	**split;
+	char	**arglist;
 
-	len = ft_strsplitstr_count(cmd, SEPARATORS);
-	if (!(arglist = malloc(sizeof(char*) * (len + 2))))
+	if (!(split = minishell_split(minishell_strchr(cmd, SEPARATORS))))
 		return (NULL);
-	arglist[0] = ft_strdup(bin_path);
-	cmd = minishell_strchr(cmd, SEPARATORS);
-	if ((!cmd) && (!(arglist[1] = NULL)))
-		return (arglist);
-	space = 1;
-	while (*cmd)
+	size = ft_tabcount((void**)split);
+	if (!(arglist = malloc(sizeof(char*) * (size + 1))))
 	{
-		while ((*cmd) && (ft_strany(*cmd, SEPARATORS)))
-			cmd++;
-		if (*cmd)
-		{
-			len = ft_strsublenstr(cmd, SEPARATORS);
-			arglist[space++] = ft_strndup(cmd, len);
-			cmd += len;
-		}
+		free(split);
+		return (NULL);
 	}
-	arglist[space] = NULL;
+	arglist[0] = ft_strdup(bin_path);
+	p = 0;
+	while (split[p])
+	{
+		arglist[p + 1] = split[p];
+		p++;
+	}
+	arglist[p + 1] = NULL;
+	free(split);
 	return (arglist);
 }
 
@@ -56,9 +52,9 @@ void				minishell_arguments_show(char **args)
 {
 	ft_putendl("arguments:");
 	if (!args)
-		ft_putendl("no arguments... at all");
+		ft_putendl("no argument... at all");
 	else if (!*args)
-		ft_putendl("no arguments");
+		ft_putendl("no argument");
 	else
 		while (*args)
 			ft_putendl(*(args++));

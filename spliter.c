@@ -6,12 +6,66 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/06 17:28:50 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/12 14:46:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/14 17:00:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
+
+static char		*minishell_strfix(const char *str, size_t end)
+{
+	char	*x;
+
+	if (!(x = malloc(sizeof(char) * (end + 1))))
+		return (NULL);
+	if (end > 0)
+		ft_memcpy(x, str, end);
+	x[end] = '\0';
+	return (x);
+}
+
+static t_list	*minishell_lstadd(t_list **lst, const char *str, size_t end)
+{
+	t_list	*item;
+
+	item = ft_lstnewlink(minishell_strfix(str, end), end);
+	ft_lstpush_back(lst, item);
+	return (item);
+}
+
+char	**minishell_split(const char *cmd)
+{
+	char		**split;
+	size_t		pos;
+	const char	*seps = " \t\"";
+	t_list		*lst;
+
+	lst = NULL;
+	while (*cmd)
+	{
+		while ((*cmd) && (ft_strany(*cmd, SEPARATORS)))
+			cmd++;
+		if (!*cmd)
+			break ;
+		else if (*cmd == DQUOTE)
+		{
+			cmd++;
+			pos = ft_strsublen(cmd, DQUOTE);
+			minishell_lstadd(&lst, cmd, pos);
+			cmd += pos + 1;
+		}
+		else
+		{
+			pos = ft_strsublenstr(cmd, seps);
+			minishell_lstadd(&lst, cmd, pos);
+			cmd += pos;
+		}
+	}
+	split = ft_lststrtotab(lst);
+	ft_lstdel(&lst, NULL);
+	return (split);
+}
 
 int		minishell_spliter(const char *cmd, t_list **env,
 		int (*f)(int, char **, t_list **))
@@ -20,8 +74,10 @@ int		minishell_spliter(const char *cmd, t_list **env,
 	size_t	size;
 	int		ret;
 
-	if (!(av = ft_strsplitstr(cmd, SEPARATORS)))
+	if (!(av = minishell_split(cmd)))
+	//if (!(av = ft_strsplitstr(cmd, SEPARATORS)))
 		return (1);
+	//ft_puttab((const char **)(unsigned long)av);
 	size = ft_tabcount((void**)av);
 	ret = f((int)(size) - 1, av, env);
 	ft_free_tab(av, (unsigned int)size);
