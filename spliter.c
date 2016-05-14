@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/06 17:28:50 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/14 17:00:07 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/14 17:59:17 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static t_list	*minishell_lstadd(t_list **lst, const char *str, size_t end)
 	return (item);
 }
 
-char	**minishell_split(const char *cmd)
+char			**minishell_split(const char *cmd)
 {
 	char		**split;
 	size_t		pos;
@@ -67,7 +67,7 @@ char	**minishell_split(const char *cmd)
 	return (split);
 }
 
-int		minishell_spliter(const char *cmd, t_list **env,
+int				minishell_spliter(const char *cmd, t_list **env,
 		int (*f)(int, char **, t_list **))
 {
 	char	**av;
@@ -75,9 +75,7 @@ int		minishell_spliter(const char *cmd, t_list **env,
 	int		ret;
 
 	if (!(av = minishell_split(cmd)))
-	//if (!(av = ft_strsplitstr(cmd, SEPARATORS)))
 		return (1);
-	//ft_puttab((const char **)(unsigned long)av);
 	size = ft_tabcount((void**)av);
 	ret = f((int)(size) - 1, av, env);
 	ft_free_tab(av, (unsigned int)size);

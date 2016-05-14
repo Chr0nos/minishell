@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/13 23:36:14 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/14 18:03:44 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,20 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
+static int	minishell_exec_result(char **args, char **environement)
+{
+	int		ret;
+
+	wait(&ret);
+	minishell_arguments_free(args);
+	minishell_envtabfree(environement);
+	return (ret);
+}
+
 static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
 {
 	char	**args;
 	char	**environement;
-	int		ret;
 	pid_t	pid;
 
 	args = NULL;
@@ -39,12 +48,7 @@ static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
 		}
 	}
 	else
-	{
-		wait(&ret);
-		minishell_arguments_free(args);
-		minishell_envtabfree(environement);
-		return (ret);
-	}
+		return (minishell_exec_result(args, environement));
 	return (0);
 }
 
