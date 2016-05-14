@@ -32,8 +32,6 @@ static int		minishell_builtin_parse2(int ac, char **av, t_list **env)
 {
 	if (!ft_strcmp(av[0], "help"))
 		return (minishell_help(ac, av, env));
-	else if (!ft_strcmp(av[0], "test"))
-		return (-1);
 	return (0);
 }
 
