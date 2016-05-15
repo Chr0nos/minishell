@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/14 15:02:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/15 16:21:57 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void			minishell_set_shell_level(t_list **env);
 void			minishell_termcaps_clear(void);
 void			minishell_termcaps_key(int key);
 int				minishell_showprompt(void);
-void			minishell_nope(int num);
+void			minishell_signal(int num);
 char			**minishell_split(const char *cmd);
 
 #endif

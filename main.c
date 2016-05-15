@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/14 17:58:54 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/15 16:22:50 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,6 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <termios.h>
-
-void		minishell_nope(int num)
-{
-	(void)num;
-	write(1, "\n", 1);
-	minishell_showprompt();
-}
 
 static int	minishell_runmulticmd(const char *cmd, t_list **env)
 {
@@ -70,7 +63,7 @@ int			main(int ac, char **av, char **env)
 	int				ret;
 
 	tcgetattr(0, &term);
-	signal(SIGINT, &minishell_nope);
+	signal(SIGINT, &minishell_signal);
 	minishell_envload(&environement, env);
 	minishell_init(&environement, term);
 	if (minishell_exec_params(ac, av, &environement) == ERR_EXIT)
