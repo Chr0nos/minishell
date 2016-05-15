@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/15 16:22:50 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/15 17:37:31 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int			main(int ac, char **av, char **env)
 	minishell_init(&environement, term);
 	if (minishell_exec_params(ac, av, &environement) == ERR_EXIT)
 		return (minishell_quit(environement, &term));
-	while ((ret = (int)minishell_prompt(buff)) >= 0)
+	while ((ret = (int)minishell_prompt(buff, environement)) >= 0)
 	{
 		if (ret > 1)
 		{

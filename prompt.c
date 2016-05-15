@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/15 16:12:06 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/15 18:01:49 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@
 #include <termios.h>
 #include <stdlib.h>
 
-static void	minishell_prompt_cbc_backspace(int *pos)
+static void	minishell_prompt_cbc_backspace(int *pos, t_list *env)
 {
 	if (*pos > 0)
 	{
 		(*pos)--;
-		minishell_termcaps_key(MKEY_BACKSPACE);
+		minishell_termcaps_key(MKEY_BACKSPACE, env);
 	}
 }
 
-static int	minishell_prompt_cbc(char *buff)
+static int	minishell_prompt_cbc(char *buff, t_list *env)
 {
-	int		pos;
+	int			pos;
 
 	pos = 0;
 	while ((pos < BUFF_SIZE) && (read(STDIN_FILENO, &buff[pos], 1) > 0))
@@ -35,9 +35,9 @@ static int	minishell_prompt_cbc(char *buff)
 		if (buff[pos] == MKEY_CTRL_D)
 			return (0);
 		else if (buff[pos] == MKEY_CLEAR)
-			minishell_termcaps_key(MKEY_CLEAR);
+			minishell_termcaps_key(MKEY_CLEAR, env);
 		else if (buff[pos] == MKEY_BACKSPACE)
-			minishell_prompt_cbc_backspace(&pos);
+			minishell_prompt_cbc_backspace(&pos, env);
 		else if (buff[pos++] == '\n')
 		{
 			buff[pos] = '\0';
@@ -60,13 +60,13 @@ static int	minishell_prompt_cbc(char *buff)
 ** return: the size of the line
 */
 
-int			minishell_prompt(char *buff)
+int			minishell_prompt(char *buff, t_list *env)
 {
 	int		ret;
 
 	minishell_showprompt();
 	if (ENABLE_TERMCAPS)
-		ret = minishell_prompt_cbc(buff);
+		ret = minishell_prompt_cbc(buff, env);
 	else
 		ret = (int)read(STDIN, buff, BUFF_SIZE);
 	if (ret == 0)

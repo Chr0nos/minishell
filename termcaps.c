@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 19:47:07 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/13 22:50:06 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/15 17:44:08 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,15 @@ static int	minishell_termcaps_cb(int x)
 	return (0);
 }
 
-void		minishell_termcaps_key(int key)
+void		minishell_termcaps_key(int key, t_list *env)
 {
 	char	*res;
 
 	if (key == MKEY_BACKSPACE)
+	{
+		tgetent(NULL, minishell_getterm(env));
 		res = tgetstr("dc", NULL);
+	}
 	else if (key == MKEY_CLEAR)
 		res = tgetstr("cl", NULL);
 	else
