@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/13 22:39:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/15 16:12:06 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,49 +15,14 @@
 #include <unistd.h>
 #include <termios.h>
 #include <stdlib.h>
-#include <term.h>
-#include <curses.h>
 
-/*
-** for the termcaps: the structure is volutary not pointed but copied
-** because the main still keep the original environement for the cleanup stage
-*/
-
-int			minishell_init(t_list **env, struct termios term)
+static void	minishell_prompt_cbc_backspace(int *pos)
 {
-	t_env		*e;
-	const char	*nameterm;
-
-	minishell_set_shell_level(env);
-	if (!ENABLE_TERMCAPS)
-		return (1);
-	nameterm = NULL;
-	e = minishell_getenv_byname(*env, "TERM");
-	nameterm = ((e) && (e->value)) ? (const char*)e->value : DEFAULT_TERM;
-	if (tgetent(NULL, nameterm) == ERR)
+	if (*pos > 0)
 	{
-		ft_putstr_fd("minishell: error: failed to init termcaps\n", 2);
-		ft_printf("shell name: %s\n", nameterm);
-		return (ERR_EXIT);
+		(*pos)--;
+		minishell_termcaps_key(MKEY_BACKSPACE);
 	}
-	term.c_lflag &= ~((unsigned long)ICANON);
-	term.c_lflag &= ~((unsigned long)ECHO);
-	tcsetattr(STDIN, TCSANOW, &term);
-	return (1);
-}
-
-/*
-** actualy quit the minishell, properly
-** only used by main (and should not be used by any other function)
-** jobs: re-configure the terminal to disable termcaps
-** (if they where not enabled)
-*/
-
-int			minishell_quit(t_list *env, struct termios *term)
-{
-	if (ENABLE_TERMCAPS)
-		tcsetattr(STDIN, 0, term);
-	return (minishell_envfree(env));
 }
 
 static int	minishell_prompt_cbc(char *buff)
@@ -72,13 +37,7 @@ static int	minishell_prompt_cbc(char *buff)
 		else if (buff[pos] == MKEY_CLEAR)
 			minishell_termcaps_key(MKEY_CLEAR);
 		else if (buff[pos] == MKEY_BACKSPACE)
-		{
-			if (pos > 0)
-			{
-				pos -= 1;
-				minishell_termcaps_key(MKEY_BACKSPACE);
-			}
-		}
+			minishell_prompt_cbc_backspace(&pos);
 		else if (buff[pos++] == '\n')
 		{
 			buff[pos] = '\0';

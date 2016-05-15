@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 12:45:25 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/14 16:56:05 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/15 16:06:48 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 /*
-** copy the pointers int tab "src" into tab dest 
+** copy the pointers int tab "src" into tab dest
 */
 
 static void			minishell_strtabcpy(char **dest, char **src, size_t size)
@@ -46,7 +46,7 @@ char				**minishell_arguments_parse(const char *cmd,
 		return (NULL);
 	}
 	arglist[0] = ft_strdup(bin_path);
-	minishell_strtabcpy(&arglist[1], split, size);	
+	minishell_strtabcpy(&arglist[1], split, size);
 	free(split);
 	return (arglist);
 }

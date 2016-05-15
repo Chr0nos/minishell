@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/06 17:28:50 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/14 17:59:17 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/15 16:05:46 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,29 @@ static t_list	*minishell_lstadd(t_list **lst, const char *str, size_t end)
 	return (item);
 }
 
+static void		minishell_split_while(const char **cmd, t_list **lst)
+{
+	size_t		pos;
+	const char	*seps = " \t\"";
+
+	if (**cmd == DQUOTE)
+	{
+		(*cmd)++;
+		pos = ft_strsublen(*cmd, DQUOTE);
+		minishell_lstadd(lst, *cmd, pos);
+		*cmd += pos + 1;
+	}
+	else
+	{
+		pos = ft_strsublenstr(*cmd, seps);
+		minishell_lstadd(lst, *cmd, pos);
+		*cmd += pos;
+	}
+}
+
 char			**minishell_split(const char *cmd)
 {
 	char		**split;
-	size_t		pos;
-	const char	*seps = " \t\"";
 	t_list		*lst;
 
 	lst = NULL;
@@ -46,21 +64,8 @@ char			**minishell_split(const char *cmd)
 	{
 		while ((*cmd) && (ft_strany(*cmd, SEPARATORS)))
 			cmd++;
-		if (!*cmd)
-			break ;
-		else if (*cmd == DQUOTE)
-		{
-			cmd++;
-			pos = ft_strsublen(cmd, DQUOTE);
-			minishell_lstadd(&lst, cmd, pos);
-			cmd += pos + 1;
-		}
-		else
-		{
-			pos = ft_strsublenstr(cmd, seps);
-			minishell_lstadd(&lst, cmd, pos);
-			cmd += pos;
-		}
+		if (*cmd)
+			minishell_split_while(&cmd, &lst);
 	}
 	split = ft_lststrtotab(lst);
 	ft_lstdel(&lst, NULL);
