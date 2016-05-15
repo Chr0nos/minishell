@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/06 17:28:50 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/15 16:05:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 01:18:37 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ static void		minishell_split_while(const char **cmd, t_list **lst)
 		(*cmd)++;
 		pos = ft_strsublen(*cmd, DQUOTE);
 		minishell_lstadd(lst, *cmd, pos);
-		*cmd += pos + 1;
+		if ((*cmd)[pos])
+			*cmd += pos + 1;
+		else
+			*cmd += pos;
 	}
 	else
 	{
