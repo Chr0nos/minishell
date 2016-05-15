@@ -13,6 +13,16 @@
 #include "minishell.h"
 #include <stdlib.h>
 
+/*
+** copy the pointers int tab "src" into tab dest 
+*/
+
+static void			minishell_strtabcpy(char **dest, char **src, size_t size)
+{
+	while (size--)
+		dest[size] = src[size];
+}
+
 const char			*minishell_strchr(const char *str, const char *separators)
 {
 	while ((*str) && (!ft_strany(*str, separators)))
@@ -24,7 +34,6 @@ char				**minishell_arguments_parse(const char *cmd,
 		const char *bin_path)
 {
 	size_t	size;
-	size_t	p;
 	char	**split;
 	char	**arglist;
 
@@ -37,13 +46,7 @@ char				**minishell_arguments_parse(const char *cmd,
 		return (NULL);
 	}
 	arglist[0] = ft_strdup(bin_path);
-	p = 0;
-	while (split[p])
-	{
-		arglist[p + 1] = split[p];
-		p++;
-	}
-	arglist[p + 1] = NULL;
+	minishell_strtabcpy(&arglist[1], split, size);	
 	free(split);
 	return (arglist);
 }
