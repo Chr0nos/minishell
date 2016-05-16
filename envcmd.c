@@ -6,14 +6,14 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 03:09:53 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 04:37:09 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-static void		minishell_envcmdsetval(t_list **subenv, char *str)
+void			minishell_envcmdsetval(t_list **subenv, char *str)
 {
 	size_t	seek;
 	char	*name;

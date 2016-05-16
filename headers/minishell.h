@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 02:52:47 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 04:37:42 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,7 @@ int				minishell_showprompt(void);
 void			minishell_signal(int num);
 char			**minishell_split(const char *cmd);
 const char		*minishell_getterm(t_list *env);
+int				minishell_export(int ac, char **av, t_list **env);
+void			minishell_envcmdsetval(t_list **subenv, char *str);
 
 #endif
