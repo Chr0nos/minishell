@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/15 17:52:59 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 02:19:51 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,10 @@ int			minishell_init(t_list **env, struct termios term)
 ** (if they where not enabled)
 */
 
-int			minishell_quit(t_list *env, struct termios *term)
+int			minishell_quit(t_list *env, struct termios *term, int result)
 {
 	if (ENABLE_TERMCAPS)
 		tcsetattr(STDIN, 0, term);
-	return (minishell_envfree(env));
+	minishell_envfree(env);
+	return (result);
 }

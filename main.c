@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/15 17:37:31 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 02:19:11 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,21 +61,23 @@ int			main(int ac, char **av, char **env)
 	t_list			*environement;
 	char			buff[BUFF_SIZE];
 	int				ret;
+	int				result;
 
 	tcgetattr(0, &term);
 	signal(SIGINT, &minishell_signal);
 	minishell_envload(&environement, env);
 	minishell_init(&environement, term);
-	if (minishell_exec_params(ac, av, &environement) == ERR_EXIT)
-		return (minishell_quit(environement, &term));
+	if ((result = minishell_exec_params(ac, av, &environement)) == ERR_EXIT)
+		return (minishell_quit(environement, &term, result));
 	while ((ret = (int)minishell_prompt(buff, environement)) >= 0)
 	{
 		if (ret > 1)
 		{
 			buff[ret - 1] = '\0';
-			if (minishell_runmulticmd(buff, &environement) == ERR_EXIT)
+			result = minishell_runmulticmd(buff, &environement);
+			if (result == ERR_EXIT)
 				break ;
 		}
 	}
-	return (minishell_quit(environement, &term));
+	return (minishell_quit(environement, &term, result));
 }

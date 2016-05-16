@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/15 18:51:43 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 02:19:28 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void			minishell_setenvval(const char *name, char *value,
 		t_list **env);
 int				minishell_help(int ac, char **av, t_list **env);
 int				minishell_prompt(char *buff, t_list *env);
-int				minishell_quit(t_list *env, struct termios *term);
+int				minishell_quit(t_list *env, struct termios *term, int result);
 int				minishell_init(t_list **env, struct termios term);
 void			minishell_set_shell_level(t_list **env);
 void			minishell_termcaps_clear(void);
