@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 12:31:35 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 15:57:22 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static int		minishell_builtin_parse2(int ac, char **av, t_list **env)
 		return (minishell_help(ac, av, env));
 	else if (!ft_strcmp(av[0], "nope"))
 		return (FLAG_BUILTIN);
+	else if (!ft_strcmp(av[0], "match"))
+		return (minishell_match(ac, av, env));
 	return (0);
 }
 

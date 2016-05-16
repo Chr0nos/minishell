@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 13:59:07 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 16:00:16 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,7 @@ const char		*minishell_getterm(t_list *env);
 int				minishell_export(int ac, char **av, t_list **env);
 void			minishell_envcmdsetval(t_list **subenv, char *str);
 int				minishell_exit(int ac, char **av, t_list **env);
+char			**minishell_completion(const char *match);
+int				minishell_match(int ac, char **av, t_list **env);
 
 #endif
