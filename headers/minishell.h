@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 12:31:05 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 13:59:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # define STDIN STDIN_FILENO
 # define CFG_SETSHLVL 1
 # define ENABLE_TERMCAPS 0
+# define FLAG_NOTFOUND 1 << 26
+# define FLAG_UNKNOW 1 << 27
+# define FLAG_ERROR 1 << 28
 # define FLAG_BUILTIN 1 << 29
 # define FLAG_QUIT 1 << 30
 # define MASK_RET 255

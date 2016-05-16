@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 02:37:49 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 14:03:00 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int	minishell_exec(const char *cmd, t_list *env)
 
 	ret = 0;
 	if (!(app = ft_strndup(cmd, ft_strsublenstr(cmd, SEPARATORS))))
-		return (ERR_EXIT);
+		return (FLAG_QUIT | FLAG_ERROR);
 	if (((app[0] == '/') || (app[0] == '.')) &&
 			(lstat(app, &st) >= 0))
 		return (minishell_execpath(app, env, cmd));
@@ -96,7 +96,7 @@ static int	minishell_exec(const char *cmd, t_list *env)
 		free(fullpath);
 	}
 	else
-		ret = -1;
+		ret = FLAG_ERROR | FLAG_NOTFOUND;
 	free(app);
 	return (ret);
 }
@@ -114,8 +114,8 @@ int			minishell_runcmd(const char *cmd, t_list **environement)
 	ret = minishell_builtin(cmd, environement);
 	if ((ret & FLAG_QUIT) || (ret & FLAG_BUILTIN))
 		return (ret);
-	else if (minishell_exec(cmd, *environement) == ERR_NOTFOUND)
+	else if ((ret = minishell_exec(cmd, *environement)) & FLAG_NOTFOUND)
 		minishell_error(ERR_NOTFOUND,
 				ft_strndup(cmd, ft_strsublenstr(cmd, SEPARATORS)), 1);
-	return (0);
+	return (ret & MASK_RET);
 }
