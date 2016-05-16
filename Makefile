@@ -6,7 +6,7 @@
 #    By: snicolet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/05/03 17:26:33 by snicolet          #+#    #+#              #
-#*   Updated: 2016/05/16 15:52:30 by snicolet         ###   ########.fr       *#
+#*   Updated: 2016/05/16 18:38:50 by snicolet         ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CC=clang
 OBJ=main.o errors.o environement.o arguments.o envmake.o builtin.o path.o \
 	envcmd.o cd.o spliter.o setenv.o unsetenv.o envdup.o help.o runcmd.o \
 	prompt.o shlvl.o buffer.o termcaps.o init.o signal.o export.o exit.o \
-	completion.o
+	completion.o match.o
 
 all: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 15:44:05 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 16:09:56 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 18:38:39 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,4 @@ char	**minishell_completion(const char *match)
 	split = ft_lststrtotab(lst);
 	ft_lstdel(&lst, NULL);
 	return (split);
-}
-
-int		minishell_match(int ac, char **av, t_list **env)
-{
-	char	**tab;
-	int		p;
-
-	(void)env;
-	if (ac < 2)
-		return (FLAG_BUILTIN);
-	tab = minishell_completion(av[1]);
-	p = 0;
-	while (tab[p])
-	{
-		ft_putendl(tab[p]);
-		free(tab[p]);
-		p++;
-	}
-	free(tab);
-	return (FLAG_BUILTIN);
 }
