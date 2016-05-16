@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 15:44:05 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 18:38:39 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 21:10:45 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,14 @@
 #include <dirent.h>
 #include <stdlib.h>
 
-char	**minishell_completion(const char *match)
+char	**minishell_completion(const char *match, const char *path)
 {
-	char			*cwd;
 	t_list			*lst;
 	DIR				*dir;
 	struct dirent	*ent;
 	char			**split;
 
-	if (!(cwd = getcwd(NULL, 4096)))
-		return (NULL);
-	if ((!(dir = opendir(cwd))) && (ft_mfree(1, cwd)))
+	if (!(dir = opendir(path)))
 		return (NULL);
 	lst = NULL;
 	while ((ent = readdir(dir)))
@@ -37,7 +34,6 @@ char	**minishell_completion(const char *match)
 					&ft_lststrcmp);
 	}
 	closedir(dir);
-	free(cwd);
 	split = ft_lststrtotab(lst);
 	ft_lstdel(&lst, NULL);
 	return (split);
