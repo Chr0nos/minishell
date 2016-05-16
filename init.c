@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 02:19:51 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 21:20:40 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ const char	*minishell_getterm(t_list *env)
 	t_env		*e;
 
 	e = minishell_getenv_byname(env, "TERM");
-	if  (!e)
+	if (!e)
 		return (DEFAULT_TERM);
 	return ((const char*)e->value);
 }
