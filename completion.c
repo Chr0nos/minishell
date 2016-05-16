@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 15:44:05 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 16:00:45 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 16:08:19 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	**minishell_completion(const char *match)
 	{
 		if (ft_match(ent->d_name, match))
 			ft_lstpush_back(&lst,
-					ft_lstnew(ent->d_name, (size_t)ent->d_namlen));
+					ft_lstnew(ent->d_name, (size_t)ent->d_namlen + 1));
 	}
 	closedir(dir);
 	free(cwd);
