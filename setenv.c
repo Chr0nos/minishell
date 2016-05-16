@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/07 00:45:24 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/08 17:30:50 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 02:46:34 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ int		minishell_setenv(int ac, char **av, t_list **env)
 	if (ac < 2)
 	{
 		ft_putendl_fd("minishell: error: unsetenv: invalid parameters num", 2);
-		return (-1);
+		return (FLAG_BUILTIN);
 	}
 	if (ac >= 3)
 		value = ft_strunsplit((const char **)(unsigned long)&av[2], ' ');
 	else
 		value = ft_strdup("");
 	minishell_setenvval(av[1], value, env);
-	return (-1);
+	return (FLAG_BUILTIN);
 }

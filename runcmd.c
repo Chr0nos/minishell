@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/14 18:03:44 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 02:37:49 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,9 @@ int			minishell_runcmd(const char *cmd, t_list **environement)
 
 	while ((*cmd) && (ft_strany(*cmd, SEPARATORS)))
 		cmd++;
-	if ((ret = minishell_builtin(cmd, environement)) < 0)
-	{
-		if (ret == ERR_EXIT)
-			return (ERR_EXIT);
-	}
+	ret = minishell_builtin(cmd, environement);
+	if ((ret & FLAG_QUIT) || (ret & FLAG_BUILTIN))
+		return (ret);
 	else if (minishell_exec(cmd, *environement) == ERR_NOTFOUND)
 		minishell_error(ERR_NOTFOUND,
 				ft_strndup(cmd, ft_strsublenstr(cmd, SEPARATORS)), 1);

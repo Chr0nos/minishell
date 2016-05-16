@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 02:19:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 02:52:28 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ static int	minishell_runmulticmd(const char *cmd, t_list **env)
 	commands = ft_strsplit(cmd, ';');
 	while (commands[p])
 	{
-		if ((ret = minishell_runcmd(commands[p], env)) == ERR_EXIT)
+		if ((ret = minishell_runcmd(commands[p], env)) & FLAG_QUIT)
 		{
 			ft_free_tab(commands, (unsigned int)ft_tabcount((void**)commands));
 			free(commands);
-			return (ERR_EXIT);
+			return (ret);
 		}
 		p++;
 	}
@@ -49,7 +49,7 @@ static int	minishell_exec_params(int ac, char **av, t_list **env)
 	if (ac < 2)
 		return (0);
 	if (!(cmd = ft_strunsplit((const char **)(unsigned long)&av[1], ' ')))
-		return (ERR_EXIT);
+		return (FLAG_QUIT);
 	ret = minishell_runmulticmd(cmd, env);
 	free(cmd);
 	return (ret);
@@ -67,17 +67,17 @@ int			main(int ac, char **av, char **env)
 	signal(SIGINT, &minishell_signal);
 	minishell_envload(&environement, env);
 	minishell_init(&environement, term);
-	if ((result = minishell_exec_params(ac, av, &environement)) == ERR_EXIT)
-		return (minishell_quit(environement, &term, result));
+	if ((result = minishell_exec_params(ac, av, &environement)) & FLAG_QUIT)
+		return (minishell_quit(environement, &term, result & MASK_RET));
 	while ((ret = (int)minishell_prompt(buff, environement)) >= 0)
 	{
 		if (ret > 1)
 		{
 			buff[ret - 1] = '\0';
 			result = minishell_runmulticmd(buff, &environement);
-			if (result == ERR_EXIT)
+			if (result & FLAG_QUIT)
 				break ;
 		}
 	}
-	return (minishell_quit(environement, &term, result));
+	return (minishell_quit(environement, &term, result & MASK_RET));
 }

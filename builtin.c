@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/14 18:04:21 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 03:10:06 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,35 +25,33 @@ int				minishell_purgeenv(t_list **env)
 {
 	if (env)
 		ft_lstdel(env, minishell_purgeenv_cb);
-	return (-1);
+	return (FLAG_BUILTIN);
 }
 
 static int		minishell_builtin_parse2(int ac, char **av, t_list **env)
 {
 	if (!ft_strcmp(av[0], "help"))
 		return (minishell_help(ac, av, env));
+	else if (!ft_strcmp(av[0], "nope"))
+		return (FLAG_BUILTIN);
 	return (0);
 }
 
 static int		minishell_builtin_parse(int ac, char **av, t_list **env)
 {
 	if ((!av) || (!av[0]))
-		return (-1);
+		return (FLAG_BUILTIN);
 	if (!ft_strcmp(av[0], "exit"))
-		return (ERR_EXIT);
+		return (FLAG_QUIT);
 	if (!env)
 	{
 		minishell_error(-999, "no environement address", 0);
-		return (-1);
+		return (FLAG_BUILTIN);
 	}
 	if (!ft_strcmp(av[0], "cd"))
 		return (minishell_cd(ac, av, env));
 	if (!ft_strcmp(av[0], "env"))
-	{
-		if (ac == 1)
-			return ((env) ? minishell_envshow(*env) : -1);
 		return (minishell_envcmd(ac, av, env));
-	}
 	else if ((!ft_strcmp(av[0], "setenv")) || (!ft_strcmp(av[0], "export")))
 		return (minishell_setenv(ac, av, env));
 	else if (!ft_strcmp(av[0], "unsetenv"))
@@ -81,8 +79,11 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env)
 int				minishell_builtin(const char *cmd, t_list **environement)
 {
 	if (!cmd)
-		return (-1);
-	if (!ft_strcmp(cmd, "."))
-		return (minishell_error(ERR_NOTFOUND, ".", 0));
+		return (FLAG_BUILTIN);
+	if ((!ft_strcmp(cmd, ".")) || (!ft_strcmp(cmd, "..")))
+	{
+		minishell_error(ERR_NOTFOUND, ft_strdup(cmd), 1);
+		return (FLAG_BUILTIN);
+	}
 	return (minishell_spliter(cmd, environement, &minishell_builtin_parse));
 }

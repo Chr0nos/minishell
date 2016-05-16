@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/12 17:10:56 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 03:09:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int		minishell_envlessi(int ac, char **av)
 	t_list	*fakeenv;
 
 	if (ac < 3)
-		return (-1);
+		return (FLAG_BUILTIN);
 	p = 2;
 	fakeenv = NULL;
 	subcmd = NULL;
@@ -83,7 +83,7 @@ static int		minishell_envlessi(int ac, char **av)
 	}
 	else
 		minishell_envshow(fakeenv);
-	return (-1);
+	return (FLAG_BUILTIN);
 }
 
 /*
@@ -94,8 +94,10 @@ static int		minishell_envlessi(int ac, char **av)
 int				minishell_envcmd(int ac, char **av, t_list **env)
 {
 	if (!env)
-		return (-1);
-	if (!ft_strcmp(av[1], "-i"))
+		return (FLAG_BUILTIN);
+	if (ac == 1)
+		return (minishell_envshow(*env) | FLAG_BUILTIN);
+	else if (!ft_strcmp(av[1], "-i"))
 		return (minishell_envlessi(ac, av));
 	else if (av[1][0] != '-')
 		minishell_envcmdset((int)ac, av, *env);
@@ -103,5 +105,5 @@ int				minishell_envcmd(int ac, char **av, t_list **env)
 		minishell_unsetenv((int)ac - 1, &av[1], env);
 	else
 		minishell_error(ERR_ENVPARSE_UNKNOW, av[1], 0);
-	return (-1);
+	return (FLAG_BUILTIN);
 }

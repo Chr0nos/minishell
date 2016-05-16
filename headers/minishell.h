@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 02:19:28 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 02:52:47 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # define STDIN STDIN_FILENO
 # define CFG_SETSHLVL 1
 # define ENABLE_TERMCAPS 0
+# define FLAG_BUILTIN 1 << 29
+# define FLAG_QUIT 1 << 30
+# define MASK_RET 255
 
 typedef struct	s_env
 {
