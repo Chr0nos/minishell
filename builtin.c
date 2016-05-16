@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 04:35:32 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/16 12:31:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env)
 	if ((!av) || (!av[0]))
 		return (FLAG_BUILTIN);
 	if (!ft_strcmp(av[0], "exit"))
-		return (FLAG_QUIT);
+		return (minishell_exit(ac, av, env));
 	if (!env)
 	{
 		minishell_error(-999, "no environement address", 0);
