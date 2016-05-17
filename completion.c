@@ -30,7 +30,7 @@ char	**minishell_completion(const char *match, const char *path)
 	{
 		if (ft_match(ent->d_name, match))
 			ft_lstpush_sort(&lst,
-					ft_lstnew(ent->d_name, (size_t)ent->d_namlen + 1),
+					ft_lstnew(ent->d_name, ft_strlen(ent->d_name) + 1),
 					&ft_lststrcmp);
 	}
 	closedir(dir);
