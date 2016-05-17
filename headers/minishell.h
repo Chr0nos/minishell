@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 14:46:35 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 18:13:11 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,8 @@ void			minishell_envcmdsetval(t_list **subenv, char *str);
 int				minishell_exit(int ac, char **av, t_list **env);
 char			**minishell_completion(const char *match, const char *path);
 int				minishell_match(int ac, char **av, t_list **env);
+int				minishell_prompt_skip(char *buff, int *pos, int x);
+int				minishell_termcap_read(t_list *env, char *buff, int *pos,
+		int x);
 
 #endif

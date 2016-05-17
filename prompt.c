@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 17:17:43 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 18:26:46 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,6 @@
 #include <unistd.h>
 #include <termios.h>
 #include <stdlib.h>
-
-static void	minishell_prompt_cbc_backspace(int *pos, t_list *env, char *buff)
-{
-	if (*pos > 0)
-	{
-		*pos -= 1;
-		minishell_termcaps_key(MKEY_BACKSPACE, env);
-		write(1, "\b \b", 3);
-	}
-	buff[*pos] = '\0';
-	(*pos)--;
-}
 
 static int	minishell_prompt_line(char *buff, int pos)
 {
@@ -40,25 +28,21 @@ static int	minishell_prompt_cbc(char *buff, t_list *env)
 	int			pos;
 	ssize_t		ret;
 	char		key[2];
+	int			x;
 
 	ret = 0;
 	pos = 0;
+	ft_bzero(key, 2);
 	while ((pos < BUFF_SIZE) && ((ret = read(STDIN_FILENO, key, 2)) > 0))
 	{
+		x = (int)(*(unsigned short*)(unsigned long)key);
 		buff[pos] = key[0];
-		if ((buff[pos] == 65) || (buff[pos] == 66) || buff[pos] == 27)
-			buff[pos--] = '\0';
-		else if (buff[pos] == MKEY_CTRL_D)
-			return (0);
-		else if (buff[pos] == MKEY_CLEAR)
-			minishell_termcaps_key(MKEY_CLEAR, env);
-		else if (buff[pos] == MKEY_BACKSPACE)
-			minishell_prompt_cbc_backspace(&pos, env, buff);
-		else if (buff[pos] == '\n')
+		if (x == '\n')
 			return (minishell_prompt_line(buff, pos));
-		else
-			write(1, &buff[pos], 1);
+		else if (minishell_termcap_read(env, buff, &pos, x) == 0)
+			return (0);
 		pos++;
+		key[1] = '\0';
 	}
 	if (pos >= BUFF_SIZE)
 		ft_putendl_fd("minishell: error: line is too long", 2);

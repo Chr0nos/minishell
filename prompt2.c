@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keycodes.h                                         :+:      :+:    :+:   */
+/*   prompt2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/05/13 14:33:14 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 17:53:34 by snicolet         ###   ########.fr       */
+/*   Created: 2016/05/17 17:58:08 by snicolet          #+#    #+#             */
+/*   Updated: 2016/05/17 18:01:37 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef KEYCODES_H
-# define KEYCODES_H
+#include "minishell.h"
+#include "keycodes.h"
 
-enum	e_keycodes
+int		minishell_prompt_skip(char *buff, int *pos, int x)
 {
-	MKEY_CTRL_D = 4,
-	MKEY_TAB = 9,
-	MKEY_BACKSPACE = 127,
-	MKEY_CLEAR = 12,
-	MKEY_LEFT = 23364,
-	MKEY_RIGHT = 23363
-};
-
-#endif
+	if ((buff[*pos] == 65) || (buff[*pos] == 66) || buff[*pos] == 27 ||
+			x == MKEY_LEFT || x == MKEY_RIGHT)
+	{
+		buff[(*pos)--] = '\0';
+		return (1);
+	}
+	return (0);
+}

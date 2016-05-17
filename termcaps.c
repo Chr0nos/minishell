@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 19:47:07 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/15 17:44:08 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 18:26:30 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "keycodes.h"
 #include <term.h>
 #include <curses.h>
+#include <unistd.h>
 
 static int	minishell_termcaps_cb(int x)
 {
@@ -39,4 +40,31 @@ void		minishell_termcaps_key(int key, t_list *env)
 		tputs(res, 0, &minishell_termcaps_cb);
 	if (key == MKEY_CLEAR)
 		minishell_showprompt();
+}
+
+static void	minishell_prompt_cbc_backspace(int *pos, t_list *env, char *buff)
+{
+	if (*pos > 0)
+	{
+		*pos -= 1;
+		minishell_termcaps_key(MKEY_BACKSPACE, env);
+		write(1, "\b \b", 3);
+	}
+	buff[*pos] = '\0';
+	(*pos)--;
+}
+
+int			minishell_termcap_read(t_list *env, char *buff, int *pos, int x)
+{
+	if (minishell_prompt_skip(buff, pos, x))
+		;
+	else if (x == MKEY_CTRL_D)
+		return (0);
+	else if (x == MKEY_CLEAR)
+		minishell_termcaps_key(MKEY_CLEAR, env);
+	else if (x == MKEY_BACKSPACE)
+		minishell_prompt_cbc_backspace(pos, env, buff);
+	else
+		write(1, &buff[*pos], 1);
+	return (1);
 }
