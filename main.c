@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:19:14 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 20:48:05 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int			main(int ac, char **av, char **env)
 	{
 		if (ret & FLAG_QUIT)
 			break ;
-		if (ret > 1)
+		if ((ret > 1) && (ret < BUFF_SIZE))
 		{
 			buff[ret - 1] = '\0';
 			r = minishell_runmulticmd(buff, &environement);
