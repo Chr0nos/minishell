@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 19:27:04 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:11:40 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 20:26:59 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,3 @@ void		minishell_disable_termcaps(void)
 	term.c_lflag ^= (unsigned long)(ICANON | ECHO);
 	tcsetattr(STDIN, 0, &term);
 }
-
-
