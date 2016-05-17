@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 21:09:29 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 14:46:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define DQUOTE (char)34
 # define STDIN STDIN_FILENO
 # define CFG_SETSHLVL 1
-# define ENABLE_TERMCAPS 0
+# define ENABLE_TERMCAPS 1
 # define FLAG_NOTFOUND 1 << 26
 # define FLAG_UNKNOW 1 << 27
 # define FLAG_ERROR 1 << 28

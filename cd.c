@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 18:59:20 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 02:40:49 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 14:49:45 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ int			minishell_cd_home(t_list **env)
 	else
 	{
 		minishell_cd_real(env, home);
-		return (0);
+		return (FLAG_BUILTIN);
 	}
-	return (FLAG_BUILTIN);
+	return (FLAG_BUILTIN | 1);
 }
 
 static int	minishell_cd_error(const char *str, int ret)

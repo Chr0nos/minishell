@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 02:52:28 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 15:33:56 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int			main(int ac, char **av, char **env)
 		return (minishell_quit(environement, &term, result & MASK_RET));
 	while ((ret = (int)minishell_prompt(buff, environement)) >= 0)
 	{
+		if (ret & FLAG_QUIT)
+			break ;
 		if (ret > 1)
 		{
 			buff[ret - 1] = '\0';
