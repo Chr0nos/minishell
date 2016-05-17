@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 18:13:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 20:11:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 # include "libft.h"
 # include "limits.h"
+# include "tterm.h"
 # include <termios.h>
 # define MINISHELL_PATH1 "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:"
 # define MINISHELL_PATH2 "/opt/X11/bin:/usr/local/go/bin:/usr/local/munki:"
@@ -25,7 +26,7 @@
 # define DQUOTE (char)34
 # define STDIN STDIN_FILENO
 # define CFG_SETSHLVL 1
-# define ENABLE_TERMCAPS 1
+# define ENABLE_TERMCAPS 0
 # define FLAG_NOTFOUND 1 << 26
 # define FLAG_UNKNOW 1 << 27
 # define FLAG_ERROR 1 << 28
@@ -102,5 +103,6 @@ int				minishell_match(int ac, char **av, t_list **env);
 int				minishell_prompt_skip(char *buff, int *pos, int x);
 int				minishell_termcap_read(t_list *env, char *buff, int *pos,
 		int x);
+void			minishell_disable_termcaps(void);
 
 #endif

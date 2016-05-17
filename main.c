@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 15:33:56 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 20:02:41 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,18 @@ static int	minishell_exec_params(int ac, char **av, t_list **env)
 
 int			main(int ac, char **av, char **env)
 {
-	struct termios	term;
+	t_term			term;
 	t_list			*environement;
 	char			buff[BUFF_SIZE];
 	int				ret;
-	int				result;
+	int				r;
 
-	tcgetattr(0, &term);
 	signal(SIGINT, &minishell_signal);
+	tcgetattr(0, &term);
 	minishell_envload(&environement, env);
 	minishell_init(&environement, term);
-	if ((result = minishell_exec_params(ac, av, &environement)) & FLAG_QUIT)
-		return (minishell_quit(environement, &term, result & MASK_RET));
+	if ((r = minishell_exec_params(ac, av, &environement)) & FLAG_QUIT)
+		return (minishell_quit(environement, &term, r & MASK_RET));
 	while ((ret = (int)minishell_prompt(buff, environement)) >= 0)
 	{
 		if (ret & FLAG_QUIT)
@@ -76,10 +76,10 @@ int			main(int ac, char **av, char **env)
 		if (ret > 1)
 		{
 			buff[ret - 1] = '\0';
-			result = minishell_runmulticmd(buff, &environement);
-			if (result & FLAG_QUIT)
+			r = minishell_runmulticmd(buff, &environement);
+			if (r & FLAG_QUIT)
 				break ;
 		}
 	}
-	return (minishell_quit(environement, &term, result & MASK_RET));
+	return (minishell_quit(environement, &term, r & MASK_RET));
 }

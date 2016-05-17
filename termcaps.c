@@ -5,16 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/05/13 19:47:07 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 19:02:03 by snicolet         ###   ########.fr       */
+/*   Created: 2016/05/17 19:27:04 by snicolet          #+#    #+#             */
+/*   Updated: 2016/05/17 20:11:40 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include "keycodes.h"
-#include <term.h>
 #include <curses.h>
+#include <term.h>
 #include <unistd.h>
 
 static int	minishell_termcaps_cb(int x)
@@ -68,3 +68,14 @@ int			minishell_termcap_read(t_list *env, char *buff, int *pos, int x)
 		minishell_prompt_cbc_backspace(pos, env, buff);
 	return (1);
 }
+
+void		minishell_disable_termcaps(void)
+{
+	t_term	term;
+
+	tcgetattr(0, &term);
+	term.c_lflag ^= (unsigned long)(ICANON | ECHO);
+	tcsetattr(STDIN, 0, &term);
+}
+
+
