@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 18:26:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 18:58:20 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,33 @@ static int	minishell_prompt_line(char *buff, int pos)
 	return (pos);
 }
 
+static void	minishell_prompt_cbc_init(int *ret, int *pos, char *key)
+{
+	*ret = 0;
+	*pos = 0;
+	ft_bzero(key, 2);
+}
+
 static int	minishell_prompt_cbc(char *buff, t_list *env)
 {
 	int			pos;
-	ssize_t		ret;
+	int			ret;
 	char		key[2];
 	int			x;
 
-	ret = 0;
-	pos = 0;
-	ft_bzero(key, 2);
-	while ((pos < BUFF_SIZE) && ((ret = read(STDIN_FILENO, key, 2)) > 0))
+	minishell_prompt_cbc_init(&ret, &pos, key);
+	while ((pos < BUFF_SIZE) && ((ret = (int)read(STDIN_FILENO, key, 2)) > 0))
 	{
 		x = (int)(*(unsigned short*)(unsigned long)key);
 		buff[pos] = key[0];
-		if (x == '\n')
-			return (minishell_prompt_line(buff, pos));
-		else if (minishell_termcap_read(env, buff, &pos, x) == 0)
+		if (minishell_prompt_skip(buff, &pos, x))
+			;
+		else if (minishell_termcap_read(env, buff, &pos, x) & FLAG_QUIT)
 			return (0);
+		else if (x == '\n')
+			return (minishell_prompt_line(buff, pos));
+		else
+			write(1, &x, 1);
 		pos++;
 		key[1] = '\0';
 	}
