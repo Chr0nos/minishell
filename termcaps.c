@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 19:47:07 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 18:57:23 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/17 19:02:03 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,11 @@ int			minishell_termcap_read(t_list *env, char *buff, int *pos, int x)
 	if (x == MKEY_CTRL_D)
 		return (FLAG_QUIT);
 	else if (x == MKEY_CLEAR)
+	{
 		minishell_termcaps_key(MKEY_CLEAR, env);
+		buff[0] = '\0';
+		*pos = -1;
+	}
 	else if (x == MKEY_BACKSPACE)
 		minishell_prompt_cbc_backspace(pos, env, buff);
 	return (1);
