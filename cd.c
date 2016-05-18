@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 18:59:20 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 14:49:45 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/18 16:28:52 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,10 @@ int			minishell_cd(int ac, char **av, t_list **env)
 	{
 		e = minishell_getenv_byname(*env, "OLDPWD");
 		if ((e) && (ft_strcmp(e->value, "-")))
+		{
 			minishell_cd_real(env, e->value);
+			minishell_pwd();
+		}
 		else
 			ft_putendl("No valid parent available");
 	}

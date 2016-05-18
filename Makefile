@@ -13,11 +13,11 @@
 NAME=minishell
 INC=-I./libft -I./headers
 CFLAGS=-Wall -Wextra -Werror -Weverything -pipe
-CC=clang -g3
+CC=clang
 OBJ=main.o errors.o environement.o arguments.o envmake.o builtin.o path.o \
 	envcmd.o cd.o spliter.o setenv.o unsetenv.o envdup.o help.o runcmd.o \
 	prompt.o shlvl.o buffer.o termcaps.o init.o signal.o export.o exit.o \
-	completion.o match.o prompt2.o
+	completion.o match.o prompt2.o pwd.o
 
 all: $(NAME)
 

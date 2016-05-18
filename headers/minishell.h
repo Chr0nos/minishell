@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:48:36 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/18 16:25:47 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,6 @@ int				minishell_prompt_skip(char *buff, int *pos, int x);
 int				minishell_termcap_read(t_list *env, char *buff, int *pos,
 		int x);
 void			minishell_disable_termcaps(void);
+void			minishell_pwd(void);
 
 #endif
