@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:20:13 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 02:39:23 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 01:34:24 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,19 @@ char		*minishell_envval(t_list *env, const char *key)
 	return (NULL);
 }
 
-int			minishell_envshow(t_list *env)
-{
-	t_env	*e;
-
-	while (env)
-	{
-		e = (t_env*)env->content;
-		ft_printf("%s=%s\n", e->name, e->value);
-		env = env->next;
-	}
-	return (0);
-}
-
 int			minishell_esort(t_list *a, t_list *b)
 {
 	return (ft_strcmp(((t_env*)a->content)->name, ((t_env*)b->content)->name));
+}
+
+
+static void	minishell_envloadpath(t_list **env)
+{
+	t_env	*e;
+
+	e = minishell_getenv_byname(*env, "PATH");
+	if (!e)
+		minishell_addenv(env, "PATH", ft_strdup(MINISHELL_PATH_DEFAULT));
 }
 
 void		minishell_envload(t_list **lst, char **env)
@@ -66,6 +63,7 @@ void		minishell_envload(t_list **lst, char **env)
 		}
 		env++;
 	}
+	minishell_envloadpath(lst);
 }
 
 int			minishell_envfree(t_list *env)

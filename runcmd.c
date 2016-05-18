@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:35:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 01:38:54 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,8 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	if (((app[0] == '/') || (app[0] == '.')) &&
 			(lstat(app, &st) >= 0))
 		return (minishell_execpath(app, env, cmd));
-	if ((!env) || (!(pathlist = minishell_envval(env, "PATH"))))
-		pathlist = MINISHELL_PATH_DEFAULT;
-	if ((fullpath = minishell_getapp_path(app, pathlist)) != NULL)
+	if (((pathlist = minishell_envval(env, "PATH")) != NULL) &&
+			((fullpath = minishell_getapp_path(app, pathlist)) != NULL))
 	{
 		ret = minishell_exec_real(fullpath, cmd, env);
 		free(fullpath);
