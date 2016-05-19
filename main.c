@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/19 17:15:01 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 21:30:00 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <unistd.h>
-#include <signal.h>
 #include <stdlib.h>
 #include <termios.h>
 
@@ -65,9 +64,7 @@ int			main(int ac, char **av, char **env)
 
 	tcgetattr(0, &term);
 	minishell_exec_real(NULL, NULL, (t_list *)(unsigned long)&term);
-	signal(SIGINT, &minishell_signal);
-	minishell_envload(&environement, env);
-	minishell_init(&environement, term);
+	minishell_init(&environement, term, env);
 	if ((r = minishell_exec_params(ac, av, &environement)) & FLAG_QUIT)
 		return (minishell_quit(environement, &term, r & MASK_RET));
 	while ((ret = (int)minishell_prompt(buff, environement)) >= 0)

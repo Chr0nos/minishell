@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   runcmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/19 19:51:20 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 21:54:05 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,28 +42,22 @@ int			minishell_exec_real(const char *app, const char *cmd, t_list *env)
 	pid_t			pid;
 	static t_term	*term = NULL;
 
-	if ((!app) && (!cmd) && (env))
-	{
-		ft_putendl("Setup trigger");
-		term = (t_term*)(unsigned long)env;
+	if ((!app) && (!cmd) && (env) && ((term = (t_term*)(unsigned long)env)))
 		return (0);
-	}
 	args = NULL;
 	environement = NULL;
+	tcsetattr(STDIN, 0, term);
 	if ((pid = fork()) == 0)
 	{
-		//tcsetattr(STDIN, TCSADRAIN, term);
-		signal(SIGINT, SIG_DFL);
 		args = minishell_arguments_parse(cmd, app);
 		environement = minishell_envmake(env);
-		if (execve(app, args, environement) == -1)
-		{
-			minishell_error(ERR_EXEC, NULL, 0);
-			exit(0);
-		}
+		minishell_child(app, args, environement);
 	}
 	else
+	{
+		minishell_termcap_start(*term, env);
 		return (minishell_exec_result(args, environement));
+	}
 	return (0);
 }
 

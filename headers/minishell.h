@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/19 18:35:07 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 21:53:57 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ void			minishell_setenvval(const char *name, char *value,
 int				minishell_help(int ac, char **av, t_list **env);
 int				minishell_prompt(char *buff, t_list *env);
 int				minishell_quit(t_list *env, struct termios *term, int result);
-int				minishell_init(t_list **env, struct termios term);
+int				minishell_init(t_list **env, struct termios term,
+		char **environement);
 void			minishell_set_shell_level(t_list **env);
 void			minishell_termcaps_clear(void);
 void			minishell_termcaps_key(int key, t_list *env);
@@ -107,5 +108,6 @@ void			minishell_pwd(void);
 int				minishell_exec_real(const char *app, const char *cmd,
 		t_list *env);
 int				minishell_termcap_start(t_term term, t_list *env);
+void			minishell_child(const char *app, char **args, char **env);
 
 #endif

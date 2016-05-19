@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/19 18:36:23 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 21:30:04 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <term.h>
 #include <curses.h>
 #include <unistd.h>
+#include <signal.h>
 
 const char	*minishell_getterm(t_list *env)
 {
@@ -30,8 +31,11 @@ const char	*minishell_getterm(t_list *env)
 ** because the main still keep the original environement for the cleanup stage
 */
 
-int			minishell_init(t_list **env, struct termios term)
+int			minishell_init(t_list **env, struct termios term,
+	char **environement)
 {
+	signal(SIGINT, &minishell_signal);
+	minishell_envload(env, environement);
 	minishell_set_shell_level(env);
 	if (!ENABLE_TERMCAPS)
 		return (1);

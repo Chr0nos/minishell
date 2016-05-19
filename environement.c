@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environement.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:20:13 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/19 01:34:24 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 21:31:26 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int			minishell_esort(t_list *a, t_list *b)
 {
 	return (ft_strcmp(((t_env*)a->content)->name, ((t_env*)b->content)->name));
 }
-
 
 static void	minishell_envloadpath(t_list **env)
 {
