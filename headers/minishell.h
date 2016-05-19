@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/18 16:25:47 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 18:35:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define DQUOTE (char)34
 # define STDIN STDIN_FILENO
 # define CFG_SETSHLVL 1
-# define ENABLE_TERMCAPS 0
+# define ENABLE_TERMCAPS 1
 # define FLAG_NOTFOUND 1 << 26
 # define FLAG_UNKNOW 1 << 27
 # define FLAG_ERROR 1 << 28
@@ -103,7 +103,9 @@ int				minishell_match(int ac, char **av, t_list **env);
 int				minishell_prompt_skip(char *buff, int *pos, int x);
 int				minishell_termcap_read(t_list *env, char *buff, int *pos,
 		int x);
-void			minishell_disable_termcaps(void);
 void			minishell_pwd(void);
+int				minishell_exec_real(const char *app, const char *cmd,
+		t_list *env);
+int				minishell_termcap_start(t_term term, t_list *env);
 
 #endif

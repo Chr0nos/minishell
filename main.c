@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:48:05 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 17:15:01 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int			main(int ac, char **av, char **env)
 	int				r;
 
 	tcgetattr(0, &term);
+	minishell_exec_real(NULL, NULL, (t_list *)(unsigned long)&term);
 	signal(SIGINT, &minishell_signal);
 	minishell_envload(&environement, env);
 	minishell_init(&environement, term);

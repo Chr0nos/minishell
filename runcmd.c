@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/19 01:38:54 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 19:51:20 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,30 @@ static int	minishell_exec_result(char **args, char **environement)
 	return (ret);
 }
 
-static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
-{
-	char	**args;
-	char	**environement;
-	pid_t	pid;
+/*
+** singletone setup:
+** call exec real with APP = null , cmd = NULL and env = address of termis
+** this use a very nasty cast, please future me: forgive me...
+*/
 
+int			minishell_exec_real(const char *app, const char *cmd, t_list *env)
+{
+	char			**args;
+	char			**environement;
+	pid_t			pid;
+	static t_term	*term = NULL;
+
+	if ((!app) && (!cmd) && (env))
+	{
+		ft_putendl("Setup trigger");
+		term = (t_term*)(unsigned long)env;
+		return (0);
+	}
 	args = NULL;
 	environement = NULL;
 	if ((pid = fork()) == 0)
 	{
-		minishell_disable_termcaps();
+		//tcsetattr(STDIN, TCSADRAIN, term);
 		signal(SIGINT, SIG_DFL);
 		args = minishell_arguments_parse(cmd, app);
 		environement = minishell_envmake(env);

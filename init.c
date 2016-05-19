@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 19:51:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 18:36:23 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,10 @@ const char	*minishell_getterm(t_list *env)
 
 int			minishell_init(t_list **env, struct termios term)
 {
-	const char	*nameterm;
-
 	minishell_set_shell_level(env);
 	if (!ENABLE_TERMCAPS)
 		return (1);
-	nameterm = minishell_getterm(*env);
-	if (tgetent(NULL, nameterm) == ERR)
-	{
-		ft_putstr_fd("minishell: error: failed to init termcaps\n", 2);
-		ft_printf("shell name: %s\n", nameterm);
-		return (ERR_EXIT);
-	}
-	term.c_lflag &= ~((unsigned long)ICANON);
-	term.c_lflag &= ~((unsigned long)ECHO);
-	tcsetattr(STDIN, TCSANOW, &term);
-	return (1);
+	return (minishell_termcap_start(term, *env));
 }
 
 /*

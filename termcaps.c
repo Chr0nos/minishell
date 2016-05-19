@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 19:27:04 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:41:43 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/19 18:35:46 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,19 @@ int			minishell_termcap_read(t_list *env, char *buff, int *pos, int x)
 	return (1);
 }
 
-void		minishell_disable_termcaps(void)
+int			minishell_termcap_start(t_term term, t_list *env)
 {
-	t_term	term;
+	const char	*nameterm;
 
-	tcgetattr(0, &term);
-	term.c_lflag |= (unsigned long)(ICANON | ECHO);
-	tcsetattr(STDIN, 0, &term);
+	nameterm = minishell_getterm(env);
+	if (tgetent(NULL, nameterm) == ERR)
+	{
+		ft_putstr_fd("minishell: error: failed to init termcaps\n", 2);
+		ft_printf("shell name: %s\n", nameterm);
+		return (ERR_EXIT);
+	}
+	term.c_lflag &= ~((unsigned long)ICANON);
+	term.c_lflag &= ~((unsigned long)ECHO);
+	tcsetattr(STDIN, TCSANOW, &term);
+	return (0);
 }
