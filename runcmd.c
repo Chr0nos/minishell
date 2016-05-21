@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/19 21:54:05 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/21 19:25:31 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
-static int	minishell_exec_result(char **args, char **environement)
+static int	minishell_exec_result(char **args, char **environement,
+		t_term *term, t_list *env)
 {
 	int		ret;
 
 	wait(&ret);
+	minishell_termcap_start(*term, env);
 	minishell_arguments_free(args);
 	minishell_envtabfree(environement);
 	signal(SIGINT, &minishell_signal);
@@ -54,10 +56,7 @@ int			minishell_exec_real(const char *app, const char *cmd, t_list *env)
 		minishell_child(app, args, environement);
 	}
 	else
-	{
-		minishell_termcap_start(*term, env);
-		return (minishell_exec_result(args, environement));
-	}
+		return (minishell_exec_result(args, environement, term, env));
 	return (0);
 }
 
