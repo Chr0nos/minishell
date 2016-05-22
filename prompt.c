@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/19 18:39:22 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/22 03:12:04 by adamaru          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,11 @@ int			minishell_prompt(char *buff, t_list *env)
 {
 	int		ret;
 
+	(void)minishell_prompt_cbc;
 	minishell_showprompt();
 	if (ENABLE_TERMCAPS)
-		ret = minishell_prompt_cbc(buff, env);
+		//ret = minishell_prompt_cbc(buff, env);
+		ret = minishell_termread(buff, env);
 	else
 		ret = (int)read(STDIN, buff, BUFF_SIZE);
 	if (ret == 0)
