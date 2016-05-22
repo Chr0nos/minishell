@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/22 02:49:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/22 16:53:03 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/22 16:56:17 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int				minishell_termread(char *buff, t_list *env)
 
 	pos = 0;
 	minishell_termread_reset(buff, &pos);
-	ft_bzero(key, 4);
+	*(unsigned short*)(unsigned long)key = 0;
 	while ((pos < BUFF_SIZE) && (ret = read(STDIN_FILENO, key, 4) > 0))
 	{
 		keycode = *(unsigned short*)(unsigned long)key;
@@ -97,7 +97,7 @@ int				minishell_termread(char *buff, t_list *env)
 			return (0);
 		if (minishell_termread_char(keycode, env, &pos, buff) == READ_OK)
 			return (pos);
-		ft_bzero(key, 4);
+		*(unsigned short*)(unsigned long)key = 0;
 	}
 	if (pos >= BUFF_SIZE)
 		ft_putendl_fd("minishell: error: line is too long", 2);
