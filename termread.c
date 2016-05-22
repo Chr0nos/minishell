@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/22 02:49:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/22 03:26:53 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/22 03:41:38 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int				minishell_termread(char *buff, t_list *env)
 	while ((pos < BUFF_SIZE) && (ret = read(STDIN_FILENO, key, 2) > 0))
 	{
 		keycode = *(unsigned short*)(unsigned long)key;
+		if (keycode == MKEY_CTRL_D)
+			return (0);
 		if (minishell_termread_char(keycode, env, &pos, buff) == READ_OK)
 			return (pos);
 		ft_bzero(key, 2);
