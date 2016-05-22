@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/22 02:49:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/22 03:54:10 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/22 16:53:03 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 #include <unistd.h>
 #define READ_OK 1
 #define READ_AGAIN 0
+
+static void		minishell_termread_empty(char *buff, int *pos, size_t len)
+{
+	*pos = 0;
+	buff[0] = '\0';
+	while (len--)
+		write(1, "\b \b", 3);
+}
 
 static void		minishell_termread_clear(char *buff, int *pos, t_list *env)
 {
@@ -62,7 +70,6 @@ void			minishell_termread_reset(char *buff, int *pos)
 {
 	static char		*b;
 	static int		*p;
-	size_t			len;
 
 	if ((buff) && (pos))
 	{
@@ -70,33 +77,27 @@ void			minishell_termread_reset(char *buff, int *pos)
 		p = pos;
 	}
 	else
-	{
-		len = ft_strlen(b);
-		while (len--)
-			write(1, "\b \b", 3);
-		b[0] = '\0';
-		*p = 0;
-	}
+		minishell_termread_empty(b, p, ft_strlen(b));
 }
 
 int				minishell_termread(char *buff, t_list *env)
 {
-	char			key[2];
+	char			key[4];
 	int				pos;
 	int				ret;
 	unsigned short	keycode;
 
 	pos = 0;
 	minishell_termread_reset(buff, &pos);
-	ft_bzero(key, 2);
-	while ((pos < BUFF_SIZE) && (ret = read(STDIN_FILENO, key, 2) > 0))
+	ft_bzero(key, 4);
+	while ((pos < BUFF_SIZE) && (ret = read(STDIN_FILENO, key, 4) > 0))
 	{
 		keycode = *(unsigned short*)(unsigned long)key;
 		if (keycode == MKEY_CTRL_D)
 			return (0);
 		if (minishell_termread_char(keycode, env, &pos, buff) == READ_OK)
 			return (pos);
-		ft_bzero(key, 2);
+		ft_bzero(key, 4);
 	}
 	if (pos >= BUFF_SIZE)
 		ft_putendl_fd("minishell: error: line is too long", 2);
