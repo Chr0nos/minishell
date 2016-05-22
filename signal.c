@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:21:07 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/22 03:39:34 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/22 03:50:56 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,5 @@
 void		minishell_signal(int num)
 {
 	(void)num;
-	write(1, "\n", 1);
+	minishell_termread_reset(NULL, NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/22 02:49:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/22 03:41:38 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/22 03:54:10 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,32 @@ static int		minishell_termread_char(unsigned short keycode, t_list *env,
 	return (READ_AGAIN);
 }
 
+/*
+** singleton function needed by minishell_signal
+** purpose: delete the current command line properly
+*/
+
+void			minishell_termread_reset(char *buff, int *pos)
+{
+	static char		*b;
+	static int		*p;
+	size_t			len;
+
+	if ((buff) && (pos))
+	{
+		b = buff;
+		p = pos;
+	}
+	else
+	{
+		len = ft_strlen(b);
+		while (len--)
+			write(1, "\b \b", 3);
+		b[0] = '\0';
+		*p = 0;
+	}
+}
+
 int				minishell_termread(char *buff, t_list *env)
 {
 	char			key[2];
@@ -61,6 +87,7 @@ int				minishell_termread(char *buff, t_list *env)
 	unsigned short	keycode;
 
 	pos = 0;
+	minishell_termread_reset(buff, &pos);
 	ft_bzero(key, 2);
 	while ((pos < BUFF_SIZE) && (ret = read(STDIN_FILENO, key, 2) > 0))
 	{

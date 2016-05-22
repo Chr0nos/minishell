@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/22 03:10:50 by adamaru          ###   ########.fr       */
+/*   Updated: 2016/05/22 03:46:11 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,6 @@ int				minishell_exec_real(const char *app, const char *cmd,
 int				minishell_termcap_start(t_term term, t_list *env);
 void			minishell_child(const char *app, char **args, char **env);
 int				minishell_termread(char *buff, t_list *env);
+void			minishell_termread_reset(char *buff, int *pos);
 
 #endif
