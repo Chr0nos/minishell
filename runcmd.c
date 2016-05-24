@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/24 04:01:32 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/24 04:06:36 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ int			minishell_exec_real(const char *app, const char *cmd, t_list *env)
 		rcmd.environement = minishell_envmake(env);
 		rcmd.child_pid = pid;
 		minishell_child(app, rcmd.args, rcmd.environement);
+	}
+	else if ((pid < 0) && (!minishell_termcap_start(*term, env)))
+	{
+		ft_putendl_fd("minishell: error: failed to fork", 2);
+		return (FLAG_ERROR);
 	}
 	else
 		return (minishell_exec_result(&rcmd));
