@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 19:27:04 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/24 04:15:25 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/24 04:33:09 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,20 @@ int			minishell_termcaps_cb(int x)
 {
 	ft_putchar(x);
 	return (0);
+}
+
+void		minishell_termcap_backspace(void)
+{
+	char	*res;
+
+	res = tgetstr("le", NULL);
+	if (res)
+	{
+		tputs(res, 0, &minishell_termcaps_cb);
+		res = tgetstr("dc", NULL);
+		if (res)
+			tputs(res, 0, &minishell_termcaps_cb);
+	}
 }
 
 int			minishell_termcap_start(t_term term, t_list *env)

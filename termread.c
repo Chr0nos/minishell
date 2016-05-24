@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/22 02:49:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/24 04:17:01 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/24 04:32:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int		minishell_termread_char(unsigned short keycode, t_list *env,
 		if (*pos > 0)
 		{
 			*pos -= 1;
-			write(1, "\b \b", 3);
+			minishell_termcap_backspace();
 		}
 		buff[*pos] = '\0';
 	}
