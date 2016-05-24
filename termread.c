@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/22 02:49:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/22 16:56:17 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/24 04:17:01 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "keycodes.h"
 #include "libft.h"
 #include <unistd.h>
+#include <curses.h>
+#include <term.h>
 #define READ_OK 1
 #define READ_AGAIN 0
 
@@ -27,9 +29,15 @@ static void		minishell_termread_empty(char *buff, int *pos, size_t len)
 
 static void		minishell_termread_clear(char *buff, int *pos, t_list *env)
 {
+	char	*res;
+
+	(void)env;
 	buff[0] = '\0';
 	*pos = 0;
-	minishell_termcaps_key(MKEY_CLEAR, env);
+	if (!(res = tgetstr("cl", NULL)))
+		return ;
+	tputs(res, 0, &minishell_termcaps_cb);
+	minishell_showprompt();
 }
 
 static int		minishell_termread_char(unsigned short keycode, t_list *env,
