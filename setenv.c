@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setenv.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/07 00:45:24 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 02:46:34 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/24 18:39:37 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ t_env	*minishell_getenv_byname(t_list *env, const char *key)
 {
 	while (env)
 	{
-		if (ft_strcmp(((t_env*)env->content)->name, key) == 0)
+		if ((env->content) &&
+		(ft_strcmp(((t_env*)env->content)->name, key) == 0))
 			return ((t_env *)env->content);
 		env = env->next;
 	}

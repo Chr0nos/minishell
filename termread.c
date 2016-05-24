@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/22 02:49:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/24 04:32:35 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/24 19:46:12 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,50 @@ static void		minishell_termread_empty(char *buff, int *pos, size_t len)
 	*pos = 0;
 	buff[0] = '\0';
 	while (len--)
-		write(1, "\b \b", 3);
+		minishell_termcap_backspace();
 }
 
-static void		minishell_termread_clear(char *buff, int *pos, t_list *env)
+static void		minishell_termread_clear(char *buff, int *pos)
 {
 	char	*res;
 
-	(void)env;
 	buff[0] = '\0';
 	*pos = 0;
 	if (!(res = tgetstr("cl", NULL)))
 		return ;
 	tputs(res, 0, &minishell_termcaps_cb);
 	minishell_showprompt();
+}
+
+
+int		minishell_termcap_completion(int keycode, int *pos, char *buff,
+	t_list *env)
+{
+	char	*complete;
+	char	*path;
+	char	*subbuff;
+	size_t	cl;
+
+	(void)env;
+	if (keycode != 9)
+		return (READ_AGAIN);
+	if ((path = getcwd(NULL, 4096)))
+	{
+		buff[*pos] = '\0';
+		subbuff = ft_strrchr(buff, ' ');
+		if ((subbuff) && (*subbuff == ' '))
+			subbuff++;
+		if ((!(complete = minishell_complete(subbuff,
+		path))) && (ft_mfree(1, path)))
+			return (READ_AGAIN);
+		if (!(cl = ft_strlen(complete)))
+			return (READ_AGAIN);
+		write(1, complete, cl);
+		ft_memcpy(&buff[*pos], complete, cl + 1);
+		*pos += (int)cl;
+		ft_mfree(2, path, complete);
+	}
+	return (READ_AGAIN);
 }
 
 static int		minishell_termread_char(unsigned short keycode, t_list *env,
@@ -60,13 +90,13 @@ static int		minishell_termread_char(unsigned short keycode, t_list *env,
 		buff[*pos] = '\0';
 	}
 	else if (keycode == MKEY_CLEAR)
-		minishell_termread_clear(buff, pos, env);
+		minishell_termread_clear(buff, pos);
 	else if ((keycode >= 32) && (keycode <= 127))
 	{
 		buff[(*pos)++] = (char)keycode;
 		write(1, &keycode, 1);
 	}
-	return (READ_AGAIN);
+	return (minishell_termcap_completion(keycode, pos, buff, env));
 }
 
 /*

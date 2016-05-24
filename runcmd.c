@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/24 04:06:36 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/24 18:40:52 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static int	minishell_exec_result(t_runcmd *rcmd)
 int			minishell_exec_real(const char *app, const char *cmd, t_list *env)
 {
 	t_runcmd		rcmd;
-	pid_t			pid;
 	static t_term	*term = NULL;
 
 	if ((!app) && (!cmd) && (env) && ((term = (t_term*)(unsigned long)env)))
@@ -49,15 +48,15 @@ int			minishell_exec_real(const char *app, const char *cmd, t_list *env)
 	rcmd.args = NULL;
 	rcmd.environement = NULL;
 	rcmd.term = term;
+	rcmd.env = env;
 	tcsetattr(STDIN, 0, term);
-	if ((pid = fork()) == 0)
+	if ((rcmd.child_pid = fork()) == 0)
 	{
 		rcmd.args = minishell_arguments_parse(cmd, app);
 		rcmd.environement = minishell_envmake(env);
-		rcmd.child_pid = pid;
 		minishell_child(app, rcmd.args, rcmd.environement);
 	}
-	else if ((pid < 0) && (!minishell_termcap_start(*term, env)))
+	else if ((rcmd.child_pid < 0) && (!minishell_termcap_start(*term, env)))
 	{
 		ft_putendl_fd("minishell: error: failed to fork", 2);
 		return (FLAG_ERROR);
