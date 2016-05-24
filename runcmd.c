@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/21 19:25:31 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/24 04:01:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,17 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
-static int	minishell_exec_result(char **args, char **environement,
-		t_term *term, t_list *env)
+static int	minishell_exec_result(t_runcmd *rcmd)
 {
 	int		ret;
 
-	wait(&ret);
-	minishell_termcap_start(*term, env);
-	minishell_arguments_free(args);
-	minishell_envtabfree(environement);
+	waitpid(rcmd->child_pid, &ret, 0);
+	minishell_termcap_start(*rcmd->term, rcmd->env);
+	minishell_arguments_free(rcmd->args);
+	minishell_envtabfree(rcmd->environement);
 	signal(SIGINT, &minishell_signal);
+	if (WEXITSTATUS(ret))
+		return (FLAG_ERROR | ret);
 	return (ret);
 }
 
@@ -39,24 +40,25 @@ static int	minishell_exec_result(char **args, char **environement,
 
 int			minishell_exec_real(const char *app, const char *cmd, t_list *env)
 {
-	char			**args;
-	char			**environement;
+	t_runcmd		rcmd;
 	pid_t			pid;
 	static t_term	*term = NULL;
 
 	if ((!app) && (!cmd) && (env) && ((term = (t_term*)(unsigned long)env)))
 		return (0);
-	args = NULL;
-	environement = NULL;
+	rcmd.args = NULL;
+	rcmd.environement = NULL;
+	rcmd.term = term;
 	tcsetattr(STDIN, 0, term);
 	if ((pid = fork()) == 0)
 	{
-		args = minishell_arguments_parse(cmd, app);
-		environement = minishell_envmake(env);
-		minishell_child(app, args, environement);
+		rcmd.args = minishell_arguments_parse(cmd, app);
+		rcmd.environement = minishell_envmake(env);
+		rcmd.child_pid = pid;
+		minishell_child(app, rcmd.args, rcmd.environement);
 	}
 	else
-		return (minishell_exec_result(args, environement, term, env));
+		return (minishell_exec_result(&rcmd));
 	return (0);
 }
 

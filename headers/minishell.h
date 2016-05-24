@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/22 03:46:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/24 03:38:58 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,16 @@ typedef struct	s_env
 	char		*name;
 	char		*value;
 }				t_env;
+
+typedef struct	s_runcmd
+{
+	char		**args;
+	char		**environement;
+	t_term		*term;
+	t_list		*env;
+	pid_t		child_pid;
+	int			padding;
+}				t_runcmd;
 
 enum			e_errors
 {
