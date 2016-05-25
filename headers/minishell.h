@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/24 18:30:06 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/25 14:51:40 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ typedef struct	s_runcmd
 	pid_t		child_pid;
 	int			padding;
 }				t_runcmd;
+
+typedef struct	s_builtin
+{
+	const char	*name;
+	int			(*f)(int ac, char **av, t_list **env);
+}				t_builtin;
 
 enum			e_errors
 {
@@ -126,5 +132,6 @@ void			minishell_termcap_backspace(void);
 char			*minishell_complete(const char *buff, const char *path);
 int		minishell_termcap_completion(int keycode, int *pos, char *buff,
 		t_list *env);
+t_list			*minishell_init_builtin(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/19 21:30:04 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/25 15:08:28 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,25 @@ int			minishell_quit(t_list *env, struct termios *term, int result)
 		tcsetattr(STDIN, 0, term);
 	minishell_envfree(env);
 	return (result);
+}
+
+t_list	*minishell_init_builtin(void)
+{
+	t_list			*lst;
+	const size_t	s = sizeof(t_builtin);
+	char			*(*d)(const char *);
+	t_list			*(*add)(t_list **, t_list *);
+
+	lst = NULL;
+	d = &ft_strdup;
+	add = &ft_lstadd;
+	add(&lst, ft_lstnew(&(t_builtin){d("cd"), &minishell_cd}, s));
+	add(&lst, ft_lstnew(&(t_builtin){d("env"), &minishell_envcmd}, s));
+	add(&lst, ft_lstnew(&(t_builtin){d("export"), &minishell_export}, s));
+	add(&lst, ft_lstnew(&(t_builtin){d("setenv"), &minishell_setenv}, s));
+	add(&lst, ft_lstnew(&(t_builtin){d("unsetenv"), &minishell_unsetenv}, s));
+	//add(&lst, ft_lstnew(&(t_builtin){d("purgeenv"), &minishell_purgeenv}, s));
+	add(&lst, ft_lstnew(&(t_builtin){d("match"), &minishell_match}, s));
+	add(&lst, ft_lstnew(&(t_builtin){d("help"), &minishell_help}, s));
+	return (lst);
 }
