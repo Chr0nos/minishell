@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <curses.h>
+#include <term.h>
 
 static void		minishell_purgeenv_cb(void *content, size_t size)
 {
@@ -36,6 +38,8 @@ static int		minishell_builtin_parse2(int ac, char **av, t_list **env)
 		return (FLAG_BUILTIN);
 	else if (!ft_strcmp(av[0], "match"))
 		return (minishell_match(ac, av, env));
+	else if ((ENABLE_TERMCAPS) && (!ft_strcmp(av[0], "clear")))
+		tputs(tgetstr("cl", NULL), 0, minishell_termcaps_cb);
 	return (0);
 }
 
