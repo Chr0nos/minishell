@@ -14,22 +14,6 @@
 #include <curses.h>
 #include <term.h>
 
-static void		minishell_purgeenv_cb(void *content, size_t size)
-{
-	t_env	*e;
-
-	e = (t_env*)content;
-	(void)size;
-	ft_mfree(3, e->name, e->value, e);
-}
-
-int				minishell_purgeenv(t_list **env)
-{
-	if (env)
-		ft_lstdel(env, minishell_purgeenv_cb);
-	return (FLAG_BUILTIN);
-}
-
 static int		minishell_builtin_parse2(int ac, char **av, t_list **env)
 {
 	if (!ft_strcmp(av[0], "help"))
@@ -65,7 +49,7 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env)
 	else if (!ft_strcmp(av[0], "unsetenv"))
 		return (minishell_unsetenv(ac, av, env));
 	else if (!ft_strcmp(av[0], "purgeenv"))
-		return (minishell_purgeenv(env));
+		return (minishell_purgeenv(ac, av, env));
 	return (minishell_builtin_parse2(ac, av, env));
 }
 

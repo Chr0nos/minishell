@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/22 03:48:51 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/25 23:13:33 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,28 +56,28 @@ static int	minishell_exec_params(int ac, char **av, t_list **env)
 
 int			main(int ac, char **av, char **env)
 {
-	t_term			term;
-	t_list			*environement;
+	t_shell			shell;
 	char			buff[BUFF_SIZE];
 	int				ret;
 	int				r;
 
-	tcgetattr(0, &term);
-	minishell_exec_real(NULL, NULL, (t_list *)(unsigned long)&term);
-	minishell_init(&environement, term, env);
-	if ((r = minishell_exec_params(ac, av, &environement)) & FLAG_QUIT)
-		return (minishell_quit(environement, &term, r & MASK_RET));
-	while ((ret = (int)minishell_prompt(buff, environement)) >= 0)
+	shell.buff = (char*)buff;
+	tcgetattr(0, &shell.term);
+	minishell_exec_real(NULL, NULL, (t_list *)(unsigned long)&shell.term);
+	minishell_init(&shell.env, shell.term, env);
+	if ((r = minishell_exec_params(ac, av, &shell.env)) & FLAG_QUIT)
+		return (minishell_quit(shell.env, &shell.term, r & MASK_RET));
+	while ((ret = (int)minishell_prompt(buff, shell.env)) >= 0)
 	{
 		if (ret & FLAG_QUIT)
 			break ;
 		if ((ret > 1) && (ret < BUFF_SIZE))
 		{
 			buff[ret - 1] = '\0';
-			r = minishell_runmulticmd(buff, &environement);
+			r = minishell_runmulticmd(buff, &shell.env);
 			if (r & FLAG_QUIT)
 				break ;
 		}
 	}
-	return (minishell_quit(environement, &term, r & MASK_RET));
+	return (minishell_quit(shell.env, &shell.term, r & MASK_RET));
 }

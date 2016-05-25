@@ -72,7 +72,7 @@ t_list	*minishell_init_builtin(void)
 	add(&lst, ft_lstnew(&(t_builtin){d("export"), &minishell_export}, s));
 	add(&lst, ft_lstnew(&(t_builtin){d("setenv"), &minishell_setenv}, s));
 	add(&lst, ft_lstnew(&(t_builtin){d("unsetenv"), &minishell_unsetenv}, s));
-	//add(&lst, ft_lstnew(&(t_builtin){d("purgeenv"), &minishell_purgeenv}, s));
+	add(&lst, ft_lstnew(&(t_builtin){d("purgeenv"), &minishell_purgeenv}, s));
 	add(&lst, ft_lstnew(&(t_builtin){d("match"), &minishell_match}, s));
 	add(&lst, ft_lstnew(&(t_builtin){d("help"), &minishell_help}, s));
 	return (lst);

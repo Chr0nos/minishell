@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envcmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 04:37:09 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/25 23:09:46 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void		minishell_envcmdset(int ac, char **av, t_list *env)
 	}
 	else
 		minishell_envshow(subenv);
-	minishell_purgeenv(&subenv);
+	minishell_purgeenv(ac, av, &subenv);
 }
 
 static int		minishell_envlessi(int ac, char **av)

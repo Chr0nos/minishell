@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/25 14:51:40 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/25 23:13:02 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ typedef struct	s_builtin
 	int			(*f)(int ac, char **av, t_list **env);
 }				t_builtin;
 
+typedef struct	s_shell
+{
+	t_term		term;
+	int			padding;
+	t_list		*env;
+	t_list		*history;
+	char		*buff;
+}				t_shell;
+
 enum			e_errors
 {
 	ERR_NOTFOUND = -1,
@@ -97,7 +106,7 @@ void			minishell_editenv(t_env *e, char *val);
 int				minishell_esort(t_list *a, t_list *b);
 t_env			*minishell_getenv_byname(t_list *env, const char *key);
 void			*minishell_envdup(void *content);
-int				minishell_purgeenv(t_list **env);
+int				minishell_purgeenv(int ac, char **av, t_list **env);
 void			minishell_setenvval(const char *name, char *value,
 		t_list **env);
 int				minishell_help(int ac, char **av, t_list **env);
