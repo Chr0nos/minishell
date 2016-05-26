@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/22 02:49:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 17:21:56 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 20:54:23 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void		minishell_termread_clear(char *buff, int *pos)
 	minishell_showprompt();
 }
 
-static int		minishell_termread_char(unsigned short keycode, t_list *env,
+static int		minishell_termread_char(unsigned int keycode, t_shell *shell,
 	int *pos, char *buff)
 {
 	if (keycode == '\n')
@@ -63,7 +63,16 @@ static int		minishell_termread_char(unsigned short keycode, t_list *env,
 		buff[(*pos)++] = (char)keycode;
 		write(1, &keycode, 1);
 	}
-	return (minishell_termcap_completion(keycode, pos, buff, env));
+	else if (keycode == MKEY_UP)
+	{
+		shell->history_pos = shell->history;
+		shell->history_pos = shell->history_pos->next;
+		minishell_termread_empty(buff, pos, ft_strlen(buff));
+		ft_strcpy(buff, (char *)shell->history_pos->content);
+		*pos = (int)ft_strlen(buff);
+	}
+	buff[*pos] = '\0';
+	return (minishell_termcap_completion(keycode, pos, buff, shell));
 }
 
 /*
@@ -85,24 +94,24 @@ void			minishell_termread_reset(char *buff, int *pos)
 		minishell_termread_empty(b, p, ft_strlen(b));
 }
 
-int				minishell_termread(char *buff, t_list *env)
+int				minishell_termread(char *buff, t_shell *shell)
 {
 	char			key[4];
 	int				pos;
 	int				ret;
-	unsigned short	keycode;
+	unsigned int	keycode;
 
 	pos = 0;
 	minishell_termread_reset(buff, &pos);
-	*(unsigned short*)(unsigned long)key = 0;
+	*(unsigned int*)(unsigned long)key = 0;
 	while ((pos < BUFF_SIZE) && (ret = read(STDIN_FILENO, key, 4) > 0))
 	{
-		keycode = *(unsigned short*)(unsigned long)key;
+		keycode = *(unsigned int*)(unsigned long)key;
 		if (keycode == MKEY_CTRL_D)
 			return (0);
-		if (minishell_termread_char(keycode, env, &pos, buff) == READ_OK)
+		if (minishell_termread_char(keycode, shell, &pos, buff) == READ_OK)
 			return (pos);
-		*(unsigned short*)(unsigned long)key = 0;
+		*(unsigned int*)(unsigned long)key = 0;
 	}
 	if (pos >= BUFF_SIZE)
 		ft_putendl_fd("minishell: error: line is too long", 2);

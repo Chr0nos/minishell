@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 03:01:19 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 20:13:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int			minishell_runcmd(const char *cmd, t_shell *shell)
 {
 	int	ret;
 
+	ft_lstadd(&shell->history, ft_lstnewstr(cmd));
 	while ((*cmd) && (ft_strany(*cmd, SEPARATORS)))
 		cmd++;
 	ret = minishell_builtin(cmd, shell);

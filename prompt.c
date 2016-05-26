@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/24 03:33:04 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 20:38:45 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@
 ** return: the size of the line
 */
 
-int			minishell_prompt(char *buff, t_list *env)
+int			minishell_prompt(char *buff, t_shell *shell)
 {
 	int		ret;
 
 	minishell_showprompt();
 	if (ENABLE_TERMCAPS)
-		ret = minishell_termread(buff, env);
+		ret = minishell_termread(buff, shell);
 	else
 		ret = (int)read(STDIN, buff, BUFF_SIZE);
 	if (ret == 0)

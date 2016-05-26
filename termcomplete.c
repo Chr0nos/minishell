@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/26 17:21:01 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 17:22:56 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 20:44:20 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 #include "libft.h"
 #include <unistd.h>
 
-int				minishell_termcap_completion(int keycode, int *pos, char *buff,
-	t_list *env)
+int				minishell_termcap_completion(unsigned int keycode,
+	int *pos, char *buff, t_shell *shell)
 {
 	char	*complete;
 	char	*path;
 	char	*subbuff;
 	size_t	cl;
 
-	(void)env;
+	(void)shell;
 	if (keycode != 9)
 		return (READ_AGAIN);
 	if ((path = getcwd(NULL, 4096)))

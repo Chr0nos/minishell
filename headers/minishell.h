@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 17:22:04 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 20:47:26 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 # define MASK_RET 255
 # define READ_OK 1
 # define READ_AGAIN 0
+# define PIPE_IN 1
+# define PIPE_OUT 0
 
 typedef struct	s_env
 {
@@ -58,6 +60,7 @@ typedef struct	s_shell
 	t_list		*env;
 	t_list		*builtins;
 	t_list		*history;
+	t_list		*history_pos;
 	char		*buff;
 }				t_shell;
 
@@ -112,7 +115,7 @@ int				minishell_purgeenv(int ac, char **av, t_shell *shell);
 void			minishell_setenvval(const char *name, char *value,
 		t_list **env);
 int				minishell_help(int ac, char **av, t_shell *shell);
-int				minishell_prompt(char *buff, t_list *env);
+int				minishell_prompt(char *buff, t_shell *shell);
 int				minishell_quit(t_shell *shell, int result);
 int				minishell_init(char **environement, t_shell *shell);
 void			minishell_set_shell_level(t_list **env);
@@ -135,13 +138,13 @@ int				minishell_exec_real(const char *app, const char *cmd,
 		t_list *env);
 int				minishell_termcap_start(t_term term, t_list *env);
 void			minishell_child(const char *app, char **args, char **env);
-int				minishell_termread(char *buff, t_list *env);
+int				minishell_termread(char *buff, t_shell *shell);
 void			minishell_termread_reset(char *buff, int *pos);
 int				minishell_termcaps_cb(int x);
 void			minishell_termcap_backspace(void);
 char			*minishell_complete(const char *buff, const char *path);
-int		minishell_termcap_completion(int keycode, int *pos, char *buff,
-		t_list *env);
+int		minishell_termcap_completion(unsigned int keycode, int *pos,
+		char *buff,	t_shell *shell);
 t_list			*minishell_builtin_init(void);
 void			minishell_builtin_clear(void *content, size_t size);
 int				minishell_clear(int ac, char **av, t_shell *shell);
