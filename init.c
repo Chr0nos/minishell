@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 15:23:23 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 15:40:37 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,7 @@ t_list	*minishell_init_builtin(void)
 	add(&lst, ft_lstnew(&(t_builtin){"match", &minishell_match}, s));
 	add(&lst, ft_lstnew(&(t_builtin){"help", &minishell_help}, s));
 	add(&lst, ft_lstnew(&(t_builtin){"exit", &minishell_exit}, s));
+	if (ENABLE_TERMCAPS)
+		add(&lst, ft_lstnew(&(t_builtin){"clear", &minishell_clear}, s));
 	return (lst);
 }

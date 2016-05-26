@@ -6,13 +6,11 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 15:33:33 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 15:43:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <curses.h>
-#include <term.h>
 #include <stdlib.h>
 
 static int		minishell_builtin_parse2(int ac, char **av, t_shell *shell)
@@ -24,7 +22,7 @@ static int		minishell_builtin_parse2(int ac, char **av, t_shell *shell)
 	else if (!ft_strcmp(av[0], "match"))
 		return (minishell_match(ac, av, shell));
 	else if ((ENABLE_TERMCAPS) && (!ft_strcmp(av[0], "clear")))
-		tputs(tgetstr("cl", NULL), 0, minishell_termcaps_cb);
+		return (minishell_clear(ac, av, shell));
 	return (0);
 }
 
