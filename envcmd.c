@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/25 23:09:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 12:48:39 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,55 +34,59 @@ void			minishell_envcmdsetval(t_list **subenv, char *str)
 	free(name);
 }
 
-static void		minishell_envcmdset(int ac, char **av, t_list *env)
+static void		minishell_envcmdset(int ac, char **av, t_shell *shell)
 {
-	t_list		*subenv;
+	t_shell		subshell;
 	size_t		p;
 	char		*cmd;
 
-	if (env)
+	if (shell->env)
 	{
-		if ((ac < 2) || (!(subenv = ft_lstdup(env, &minishell_envdup))))
+		if ((ac < 2) ||
+				(!(subshell.env = ft_lstdup(shell->env, &minishell_envdup))))
 			return ;
 	}
 	else
-		subenv = NULL;
+		subshell.env = NULL;
 	p = 1;
 	while ((av[p]) && (ft_strany('=', av[p])))
-		minishell_envcmdsetval(&subenv, av[p++]);
+		minishell_envcmdsetval(&subshell.env, av[p++]);
 	if (av[p])
 	{
+		subshell.builtins = shell->builtins;
 		cmd = ft_strunsplit((const char**)(unsigned long)&av[p], ' ');
-		minishell_runcmd(cmd, &subenv);
+		minishell_runcmd(cmd, &subshell);
 		free(cmd);
 	}
 	else
-		minishell_envshow(subenv);
-	minishell_purgeenv(ac, av, &subenv);
+		minishell_envshow(subshell.env);
+	minishell_purgeenv(ac, av, &subshell.env);
 }
 
-static int		minishell_envlessi(int ac, char **av)
+static int		minishell_envlessi(int ac, char **av, t_shell *shell)
 {
-	char	*subcmd;
-	int		p;
-	t_list	*fakeenv;
+	char		*subcmd;
+	int			p;
+	t_shell		fakeshell;
 
 	if (ac < 3)
 		return (FLAG_BUILTIN);
 	p = 2;
-	fakeenv = NULL;
 	subcmd = NULL;
+	fakeshell.env = NULL;
 	while ((av[p]) && (ft_strany('=', av[p])))
-		minishell_envcmdsetval(&fakeenv, av[p++]);
+		minishell_envcmdsetval(&fakeshell.env, av[p++]);
 	if (av[p])
 	{
+		fakeshell.buff = NULL;
+		fakeshell.builtins = shell->builtins;
 		subcmd = ft_strunsplit((const char **)(unsigned long)&av[p], ' ');
-		minishell_runcmd(subcmd, &fakeenv);
-		minishell_envfree(fakeenv);
+		minishell_runcmd(subcmd, &fakeshell);
+		minishell_envfree(fakeshell.env);
 		free(subcmd);
 	}
 	else
-		minishell_envshow(fakeenv);
+		minishell_envshow(fakeshell.env);
 	return (FLAG_BUILTIN);
 }
 
@@ -91,18 +95,18 @@ static int		minishell_envlessi(int ac, char **av)
 ** return : -1 in any case
 */
 
-int				minishell_envcmd(int ac, char **av, t_list **env)
+int				minishell_envcmd(int ac, char **av, t_shell *shell)
 {
-	if (!env)
+	if (!shell->env)
 		return (FLAG_BUILTIN);
 	if (ac == 1)
-		return (minishell_envshow(*env) | FLAG_BUILTIN);
+		return (minishell_envshow(shell->env) | FLAG_BUILTIN);
 	else if (!ft_strcmp(av[1], "-i"))
-		return (minishell_envlessi(ac, av));
+		return (minishell_envlessi(ac, av, shell));
 	else if (av[1][0] != '-')
-		minishell_envcmdset((int)ac, av, *env);
+		minishell_envcmdset((int)ac, av, shell);
 	else if (!ft_strcmp(av[1], "-u"))
-		minishell_unsetenv((int)ac - 1, &av[1], env);
+		minishell_unsetenv((int)ac - 1, &av[1], &shell->env);
 	else
 		minishell_error(ERR_ENVPARSE_UNKNOW, av[1], 0);
 	return (FLAG_BUILTIN);

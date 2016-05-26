@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/25 15:08:28 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 03:16:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ const char	*minishell_getterm(t_list *env)
 ** because the main still keep the original environement for the cleanup stage
 */
 
-int			minishell_init(t_list **env, struct termios term,
-	char **environement)
+int			minishell_init(char **environement, t_shell *shell)
 {
 	signal(SIGINT, &minishell_signal);
-	minishell_envload(env, environement);
-	minishell_set_shell_level(env);
+	shell->builtins = minishell_init_builtin();
+	minishell_envload(&shell->env, environement);
+	minishell_set_shell_level(&shell->env);
 	if (!ENABLE_TERMCAPS)
 		return (1);
-	return (minishell_termcap_start(term, *env));
+	return (minishell_termcap_start(shell->term, shell->env));
 }
 
 /*
@@ -49,11 +49,13 @@ int			minishell_init(t_list **env, struct termios term,
 ** (if they where not enabled)
 */
 
-int			minishell_quit(t_list *env, struct termios *term, int result)
+int			minishell_quit(t_shell *shell, int result)
 {
 	if (ENABLE_TERMCAPS)
-		tcsetattr(STDIN, 0, term);
-	minishell_envfree(env);
+		tcsetattr(STDIN, 0, &shell->term);
+	minishell_envfree(shell->env);
+	if (shell->builtins)
+		ft_lstdel(&shell->builtins, &minishell_builtin_clear);
 	return (result);
 }
 
@@ -61,19 +63,18 @@ t_list	*minishell_init_builtin(void)
 {
 	t_list			*lst;
 	const size_t	s = sizeof(t_builtin);
-	char			*(*d)(const char *);
 	t_list			*(*add)(t_list **, t_list *);
 
 	lst = NULL;
-	d = &ft_strdup;
 	add = &ft_lstadd;
-	add(&lst, ft_lstnew(&(t_builtin){d("cd"), &minishell_cd}, s));
-	add(&lst, ft_lstnew(&(t_builtin){d("env"), &minishell_envcmd}, s));
-	add(&lst, ft_lstnew(&(t_builtin){d("export"), &minishell_export}, s));
-	add(&lst, ft_lstnew(&(t_builtin){d("setenv"), &minishell_setenv}, s));
-	add(&lst, ft_lstnew(&(t_builtin){d("unsetenv"), &minishell_unsetenv}, s));
-	add(&lst, ft_lstnew(&(t_builtin){d("purgeenv"), &minishell_purgeenv}, s));
-	add(&lst, ft_lstnew(&(t_builtin){d("match"), &minishell_match}, s));
-	add(&lst, ft_lstnew(&(t_builtin){d("help"), &minishell_help}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"cd", &minishell_cd}, s));
+	//add(&lst, ft_lstnew(&(t_builtin){"env", &minishell_envcmd}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"export", &minishell_export}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"setenv", &minishell_setenv}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"unsetenv", &minishell_unsetenv}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"purgeenv", &minishell_purgeenv}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"match", &minishell_match}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"help", &minishell_help}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"exit", &minishell_exit}, s));
 	return (lst);
 }

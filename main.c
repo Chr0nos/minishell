@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/25 23:13:33 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 03:03:48 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <termios.h>
 
-static int	minishell_runmulticmd(const char *cmd, t_list **env)
+static int	minishell_runmulticmd(const char *cmd, t_shell *shell)
 {
 	char	**commands;
 	size_t	p;
@@ -27,7 +27,7 @@ static int	minishell_runmulticmd(const char *cmd, t_list **env)
 	commands = ft_strsplit(cmd, ';');
 	while (commands[p])
 	{
-		if ((ret = minishell_runcmd(commands[p], env)) & FLAG_QUIT)
+		if ((ret = minishell_runcmd(commands[p], shell)) & FLAG_QUIT)
 		{
 			ft_free_tab(commands, (unsigned int)ft_tabcount((void**)commands));
 			free(commands);
@@ -40,7 +40,7 @@ static int	minishell_runmulticmd(const char *cmd, t_list **env)
 	return (ret);
 }
 
-static int	minishell_exec_params(int ac, char **av, t_list **env)
+static int	minishell_exec_params(int ac, char **av, t_shell *shell)
 {
 	int		ret;
 	char	*cmd;
@@ -49,7 +49,7 @@ static int	minishell_exec_params(int ac, char **av, t_list **env)
 		return (0);
 	if (!(cmd = ft_strunsplit((const char **)(unsigned long)&av[1], ' ')))
 		return (FLAG_QUIT);
-	ret = minishell_runmulticmd(cmd, env);
+	ret = minishell_runmulticmd(cmd, shell);
 	free(cmd);
 	return (ret);
 }
@@ -64,9 +64,9 @@ int			main(int ac, char **av, char **env)
 	shell.buff = (char*)buff;
 	tcgetattr(0, &shell.term);
 	minishell_exec_real(NULL, NULL, (t_list *)(unsigned long)&shell.term);
-	minishell_init(&shell.env, shell.term, env);
-	if ((r = minishell_exec_params(ac, av, &shell.env)) & FLAG_QUIT)
-		return (minishell_quit(shell.env, &shell.term, r & MASK_RET));
+	minishell_init(env, &shell);
+	if ((r = minishell_exec_params(ac, av, &shell)) & FLAG_QUIT)
+		return (minishell_quit(&shell, r & MASK_RET));
 	while ((ret = (int)minishell_prompt(buff, shell.env)) >= 0)
 	{
 		if (ret & FLAG_QUIT)
@@ -74,10 +74,10 @@ int			main(int ac, char **av, char **env)
 		if ((ret > 1) && (ret < BUFF_SIZE))
 		{
 			buff[ret - 1] = '\0';
-			r = minishell_runmulticmd(buff, &shell.env);
+			r = minishell_runmulticmd(buff, &shell);
 			if (r & FLAG_QUIT)
 				break ;
 		}
 	}
-	return (minishell_quit(shell.env, &shell.term, r & MASK_RET));
+	return (minishell_quit(&shell, r & MASK_RET));
 }

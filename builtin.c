@@ -6,13 +6,14 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/25 14:51:10 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 03:29:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <curses.h>
 #include <term.h>
+#include <stdlib.h>
 
 static int		minishell_builtin_parse2(int ac, char **av, t_list **env)
 {
@@ -27,8 +28,10 @@ static int		minishell_builtin_parse2(int ac, char **av, t_list **env)
 	return (0);
 }
 
-static int		minishell_builtin_parse(int ac, char **av, t_list **env)
+static int		minishell_builtin_parse(int ac, char **av, t_list **env,
+		t_shell *shell)
 {
+	(void)shell;
 	if ((!av) || (!av[0]))
 		return (FLAG_BUILTIN);
 	if (!ft_strcmp(av[0], "exit"))
@@ -41,7 +44,7 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env)
 	if (!ft_strcmp(av[0], "cd"))
 		return (minishell_cd(ac, av, env));
 	if (!ft_strcmp(av[0], "env"))
-		return (minishell_envcmd(ac, av, env));
+		return (minishell_envcmd(ac, av, shell));
 	else if (!ft_strcmp(av[0], "export"))
 		return (minishell_export(ac, av, env));
 	else if (!ft_strcmp(av[0], "setenv"))
@@ -68,7 +71,7 @@ static int		minishell_builtin_parse(int ac, char **av, t_list **env)
 ** deal with it !
 */
 
-int				minishell_builtin(const char *cmd, t_list **environement)
+int				minishell_builtin(const char *cmd, t_shell *shell)
 {
 	if (!cmd)
 		return (FLAG_BUILTIN);
@@ -77,5 +80,11 @@ int				minishell_builtin(const char *cmd, t_list **environement)
 		minishell_error(ERR_NOTFOUND, ft_strdup(cmd), 1);
 		return (FLAG_BUILTIN);
 	}
-	return (minishell_spliter(cmd, environement, &minishell_builtin_parse));
+	return (minishell_spliter(cmd, shell, &minishell_builtin_parse));
+}
+
+void			minishell_builtin_clear(void *content, size_t size)
+{
+	free(content);
+	(void)size;
 }

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/24 18:40:52 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 03:01:19 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,16 +118,16 @@ static int	minishell_exec(const char *cmd, t_list *env)
 ** called by: main() / minishell_envcmd()
 */
 
-int			minishell_runcmd(const char *cmd, t_list **environement)
+int			minishell_runcmd(const char *cmd, t_shell *shell)
 {
 	int	ret;
 
 	while ((*cmd) && (ft_strany(*cmd, SEPARATORS)))
 		cmd++;
-	ret = minishell_builtin(cmd, environement);
+	ret = minishell_builtin(cmd, shell);
 	if ((ret & FLAG_QUIT) || (ret & FLAG_BUILTIN))
 		return (ret);
-	else if ((ret = minishell_exec(cmd, *environement)) & FLAG_NOTFOUND)
+	else if ((ret = minishell_exec(cmd, shell->env)) & FLAG_NOTFOUND)
 		minishell_error(ERR_NOTFOUND,
 				ft_strndup(cmd, ft_strsublenstr(cmd, SEPARATORS)), 1);
 	return (ret & MASK_RET);
