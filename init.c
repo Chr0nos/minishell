@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 17:06:45 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/27 00:55:51 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int			minishell_init(char **environement, t_shell *shell)
 {
 	signal(SIGINT, &minishell_signal);
 	shell->history = NULL;
+	shell->history_pos = NULL;
 	shell->builtins = minishell_builtin_init();
 	minishell_envload(&shell->env, environement);
 	minishell_set_shell_level(&shell->env);
@@ -58,6 +59,6 @@ int			minishell_quit(t_shell *shell, int result)
 	if (shell->builtins)
 		ft_lstdel(&shell->builtins, &minishell_builtin_clear);
 	if (shell->history)
-		ft_lstdel(&shell->history, NULL);
+		ft_lstdel(&shell->history, &minishell_builtin_clear);
 	return (result);
 }

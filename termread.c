@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/22 02:49:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 22:52:42 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/27 00:50:50 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,6 @@ static int		minishell_termread_char(unsigned int keycode, t_shell *shell,
 	{
 		buff[(*pos)++] = (char)keycode;
 		write(1, &keycode, 1);
-	}
-	else if (keycode == MKEY_UP)
-	{
-		shell->history_pos = shell->history_pos->next;
-		if (!shell->history_pos)
-			shell->history_pos = shell->history;
-		minishell_termread_empty(buff, pos, ft_strlen(buff));
-		ft_strcpy(buff, (char *)shell->history_pos->content);
-		*pos = (int)ft_strlen(buff);
 	}
 	buff[*pos] = '\0';
 	return (minishell_termcap_completion(keycode, pos, buff, shell));
