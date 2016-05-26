@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 15:44:09 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 16:46:56 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void			minishell_termcap_backspace(void);
 char			*minishell_complete(const char *buff, const char *path);
 int		minishell_termcap_completion(int keycode, int *pos, char *buff,
 		t_list *env);
-t_list			*minishell_init_builtin(void);
+t_list			*minishell_builtin_init(void);
 void			minishell_builtin_clear(void *content, size_t size);
 int				minishell_clear(int ac, char **av, t_shell *shell);
 

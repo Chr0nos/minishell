@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 15:40:37 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 17:06:45 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ const char	*minishell_getterm(t_list *env)
 int			minishell_init(char **environement, t_shell *shell)
 {
 	signal(SIGINT, &minishell_signal);
-	shell->builtins = minishell_init_builtin();
+	shell->history = NULL;
+	shell->builtins = minishell_builtin_init();
 	minishell_envload(&shell->env, environement);
 	minishell_set_shell_level(&shell->env);
 	if (!ENABLE_TERMCAPS)
@@ -56,27 +57,7 @@ int			minishell_quit(t_shell *shell, int result)
 	minishell_envfree(shell->env);
 	if (shell->builtins)
 		ft_lstdel(&shell->builtins, &minishell_builtin_clear);
+	if (shell->history)
+		ft_lstdel(&shell->history, NULL);
 	return (result);
-}
-
-t_list	*minishell_init_builtin(void)
-{
-	t_list			*lst;
-	const size_t	s = sizeof(t_builtin);
-	t_list			*(*add)(t_list **, t_list *);
-
-	lst = NULL;
-	add = &ft_lstadd;
-	add(&lst, ft_lstnew(&(t_builtin){"cd", &minishell_cd}, s));
-	add(&lst, ft_lstnew(&(t_builtin){"env", &minishell_envcmd}, s));
-	add(&lst, ft_lstnew(&(t_builtin){"export", &minishell_export}, s));
-	add(&lst, ft_lstnew(&(t_builtin){"setenv", &minishell_setenv}, s));
-	add(&lst, ft_lstnew(&(t_builtin){"unsetenv", &minishell_unsetenv}, s));
-	add(&lst, ft_lstnew(&(t_builtin){"purgeenv", &minishell_purgeenv}, s));
-	add(&lst, ft_lstnew(&(t_builtin){"match", &minishell_match}, s));
-	add(&lst, ft_lstnew(&(t_builtin){"help", &minishell_help}, s));
-	add(&lst, ft_lstnew(&(t_builtin){"exit", &minishell_exit}, s));
-	if (ENABLE_TERMCAPS)
-		add(&lst, ft_lstnew(&(t_builtin){"clear", &minishell_clear}, s));
-	return (lst);
 }

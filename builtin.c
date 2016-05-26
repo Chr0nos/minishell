@@ -6,45 +6,45 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 00:59:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 15:43:53 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 17:01:21 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-static int		minishell_builtin_parse2(int ac, char **av, t_shell *shell)
+static int		minishell_builtin_show(int ac, char **av, t_shell *shell)
 {
-	if (!ft_strcmp(av[0], "help"))
-		return (minishell_help(ac, av, shell));
-	else if (!ft_strcmp(av[0], "nope"))
-		return (FLAG_BUILTIN);
-	else if (!ft_strcmp(av[0], "match"))
-		return (minishell_match(ac, av, shell));
-	else if ((ENABLE_TERMCAPS) && (!ft_strcmp(av[0], "clear")))
-		return (minishell_clear(ac, av, shell));
-	return (0);
+	t_list	*b;
+
+	(void)ac;
+	(void)av;
+	b = shell->builtins;
+	while (b)
+	{
+		ft_putendl(((t_builtin*)b->content)->name);
+		b = b->next;
+	}
+	return (FLAG_BUILTIN);
 }
 
 static int		minishell_builtin_parse(int ac, char **av, t_shell *shell)
 {
+	t_list	*builtin;
+
 	if ((!av) || (!av[0]))
 		return (FLAG_BUILTIN);
-	if (!ft_strcmp(av[0], "exit"))
-		return (minishell_exit(ac, av, shell));
-	if (!ft_strcmp(av[0], "cd"))
-		return (minishell_cd(ac, av, shell));
-	if (!ft_strcmp(av[0], "env"))
-		return (minishell_envcmd(ac, av, shell));
-	else if (!ft_strcmp(av[0], "export"))
-		return (minishell_export(ac, av, shell));
-	else if (!ft_strcmp(av[0], "setenv"))
-		return (minishell_setenv(ac, av, shell));
-	else if (!ft_strcmp(av[0], "unsetenv"))
-		return (minishell_unsetenv(ac, av, shell));
-	else if (!ft_strcmp(av[0], "purgeenv"))
-		return (minishell_purgeenv(ac, av, shell));
-	return (minishell_builtin_parse2(ac, av, shell));
+	builtin = shell->builtins;
+	while (builtin)
+	{
+		if (!ft_strcmp(av[0], ((t_builtin*)builtin->content)->name))
+		{
+			return (((t_builtin*)builtin->content)->f(ac, av, shell) |
+					FLAG_BUILTIN);
+		}
+		builtin = builtin->next;
+	}
+	return (FLAG_UNKNOW);
 }
 
 int				minishell_builtin(const char *cmd, t_shell *shell)
@@ -63,4 +63,27 @@ void			minishell_builtin_clear(void *content, size_t size)
 {
 	free(content);
 	(void)size;
+}
+
+t_list			*minishell_builtin_init(void)
+{
+	t_list			*lst;
+	const size_t	s = sizeof(t_builtin);
+	t_list			*(*add)(t_list **, t_list *);
+
+	lst = NULL;
+	add = &ft_lstadd;
+	add(&lst, ft_lstnew(&(t_builtin){"cd", &minishell_cd}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"env", &minishell_envcmd}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"export", &minishell_export}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"setenv", &minishell_setenv}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"unsetenv", &minishell_unsetenv}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"purgeenv", &minishell_purgeenv}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"match", &minishell_match}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"help", &minishell_help}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"exit", &minishell_exit}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"builtins", &minishell_builtin_show}, s));
+	if (ENABLE_TERMCAPS)
+		add(&lst, ft_lstnew(&(t_builtin){"clear", &minishell_clear}, s));
+	return (lst);
 }
