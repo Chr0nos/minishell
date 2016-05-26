@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/22 02:49:12 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/24 19:46:12 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 17:21:56 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <unistd.h>
 #include <curses.h>
 #include <term.h>
-#define READ_OK 1
-#define READ_AGAIN 0
 
 static void		minishell_termread_empty(char *buff, int *pos, size_t len)
 {
@@ -37,37 +35,6 @@ static void		minishell_termread_clear(char *buff, int *pos)
 		return ;
 	tputs(res, 0, &minishell_termcaps_cb);
 	minishell_showprompt();
-}
-
-
-int		minishell_termcap_completion(int keycode, int *pos, char *buff,
-	t_list *env)
-{
-	char	*complete;
-	char	*path;
-	char	*subbuff;
-	size_t	cl;
-
-	(void)env;
-	if (keycode != 9)
-		return (READ_AGAIN);
-	if ((path = getcwd(NULL, 4096)))
-	{
-		buff[*pos] = '\0';
-		subbuff = ft_strrchr(buff, ' ');
-		if ((subbuff) && (*subbuff == ' '))
-			subbuff++;
-		if ((!(complete = minishell_complete(subbuff,
-		path))) && (ft_mfree(1, path)))
-			return (READ_AGAIN);
-		if (!(cl = ft_strlen(complete)))
-			return (READ_AGAIN);
-		write(1, complete, cl);
-		ft_memcpy(&buff[*pos], complete, cl + 1);
-		*pos += (int)cl;
-		ft_mfree(2, path, complete);
-	}
-	return (READ_AGAIN);
 }
 
 static int		minishell_termread_char(unsigned short keycode, t_list *env,

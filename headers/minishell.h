@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 16:46:56 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 17:22:04 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 # define FLAG_BUILTIN 1 << 29
 # define FLAG_QUIT 1 << 30
 # define MASK_RET 255
+# define READ_OK 1
+# define READ_AGAIN 0
 
 typedef struct	s_env
 {
