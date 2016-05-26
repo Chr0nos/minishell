@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 12:48:39 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 15:34:20 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void		minishell_envcmdset(int ac, char **av, t_shell *shell)
 	}
 	else
 		minishell_envshow(subshell.env);
-	minishell_purgeenv(ac, av, &subshell.env);
+	minishell_purgeenv(ac, av, shell);
 }
 
 static int		minishell_envlessi(int ac, char **av, t_shell *shell)
@@ -80,10 +80,12 @@ static int		minishell_envlessi(int ac, char **av, t_shell *shell)
 	{
 		fakeshell.buff = NULL;
 		fakeshell.builtins = shell->builtins;
-		subcmd = ft_strunsplit((const char **)(unsigned long)&av[p], ' ');
-		minishell_runcmd(subcmd, &fakeshell);
-		minishell_envfree(fakeshell.env);
-		free(subcmd);
+		if ((subcmd = ft_strunsplit((const char **)(unsigned long)&av[p], ' ')))
+		{
+			minishell_runcmd(subcmd, &fakeshell);
+			minishell_envfree(fakeshell.env);
+			free(subcmd);
+		}
 	}
 	else
 		minishell_envshow(fakeshell.env);
@@ -97,8 +99,6 @@ static int		minishell_envlessi(int ac, char **av, t_shell *shell)
 
 int				minishell_envcmd(int ac, char **av, t_shell *shell)
 {
-	if (!shell->env)
-		return (FLAG_BUILTIN);
 	if (ac == 1)
 		return (minishell_envshow(shell->env) | FLAG_BUILTIN);
 	else if (!ft_strcmp(av[1], "-i"))
@@ -106,7 +106,7 @@ int				minishell_envcmd(int ac, char **av, t_shell *shell)
 	else if (av[1][0] != '-')
 		minishell_envcmdset((int)ac, av, shell);
 	else if (!ft_strcmp(av[1], "-u"))
-		minishell_unsetenv((int)ac - 1, &av[1], &shell->env);
+		minishell_unsetenv((int)ac - 1, &av[1], shell);
 	else
 		minishell_error(ERR_ENVPARSE_UNKNOW, av[1], 0);
 	return (FLAG_BUILTIN);

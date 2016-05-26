@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 21:09:49 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 03:25:35 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 15:32:39 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,6 @@ typedef struct	s_runcmd
 	int			padding;
 }				t_runcmd;
 
-typedef struct	s_builtin
-{
-	const char	*name;
-	int			(*f)(int ac, char **av, t_list **env);
-}				t_builtin;
-
 typedef struct	s_shell
 {
 	t_term		term;
@@ -64,6 +58,12 @@ typedef struct	s_shell
 	t_list		*history;
 	char		*buff;
 }				t_shell;
+
+typedef struct	s_builtin
+{
+	const char	*name;
+	int			(*f)(int, char **, t_shell *);
+}				t_builtin;
 
 enum			e_errors
 {
@@ -92,24 +92,24 @@ char			*minishell_getapp_path(const char *app, const char *pathlist);
 char			**minishell_envmake(t_list *env);
 void			minishell_envtabfree(char **env);
 int				minishell_envcmd(int ac, char **av, t_shell *shell);
-int				minishell_unsetenv(int ac, char **av, t_list **env);
+int				minishell_unsetenv(int ac, char **av, t_shell *shell);
 int				minishell_builtin(const char *cmd, t_shell *shell);
 void			minishell_cd_real(t_list **env, const char *dir);
-int				minishell_cd(int ac, char **av, t_list **env);
+int				minishell_cd(int ac, char **av, t_shell *shell);
 int				minishell_cd_home(t_list **env);
 int				minishell_spliter(const char *cmd, t_shell *shell,
-		int (*f)(int, char **, t_list **, t_shell *));
-int				minishell_setenv(int ac, char **av, t_list **env);
+		int (*f)(int, char **, t_shell *));
+int				minishell_setenv(int ac, char **av, t_shell *shell);
 void			minishell_setenv_val(t_list **env, t_env *e);
 void			minishell_addenv(t_list **env, const char *name, char *value);
 void			minishell_editenv(t_env *e, char *val);
 int				minishell_esort(t_list *a, t_list *b);
 t_env			*minishell_getenv_byname(t_list *env, const char *key);
 void			*minishell_envdup(void *content);
-int				minishell_purgeenv(int ac, char **av, t_list **env);
+int				minishell_purgeenv(int ac, char **av, t_shell *shell);
 void			minishell_setenvval(const char *name, char *value,
 		t_list **env);
-int				minishell_help(int ac, char **av, t_list **env);
+int				minishell_help(int ac, char **av, t_shell *shell);
 int				minishell_prompt(char *buff, t_list *env);
 int				minishell_quit(t_shell *shell, int result);
 int				minishell_init(char **environement, t_shell *shell);
@@ -120,11 +120,11 @@ int				minishell_showprompt(void);
 void			minishell_signal(int num);
 char			**minishell_split(const char *cmd);
 const char		*minishell_getterm(t_list *env);
-int				minishell_export(int ac, char **av, t_list **env);
+int				minishell_export(int ac, char **av, t_shell *shell);
 void			minishell_envcmdsetval(t_list **subenv, char *str);
-int				minishell_exit(int ac, char **av, t_list **env);
+int				minishell_exit(int ac, char **av, t_shell *shell);
 char			**minishell_completion(const char *match, const char *path);
-int				minishell_match(int ac, char **av, t_list **env);
+int				minishell_match(int ac, char **av, t_shell *shell);
 int				minishell_prompt_skip(char *buff, int *pos, int x);
 int				minishell_termcap_read(t_list *env, char *buff, int *pos,
 		int x);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 18:59:20 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/18 16:28:52 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 15:25:39 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,28 +81,28 @@ void		minishell_cd_real(t_list **env, const char *dir)
 	}
 }
 
-int			minishell_cd(int ac, char **av, t_list **env)
+int			minishell_cd(int ac, char **av, t_shell *shell)
 {
 	t_env	*e;
 
 	if (ac == 1)
-		minishell_cd_home(env);
+		minishell_cd_home(&shell->env);
 	else if (ac > 2)
 		ft_putendl_fd("minishell: error: cd: too many parameters", 2);
 	else if (!ft_strcmp(av[1], "~"))
-		minishell_cd_home(env);
+		minishell_cd_home(&shell->env);
 	else if (!ft_strcmp(av[1], "-"))
 	{
-		e = minishell_getenv_byname(*env, "OLDPWD");
+		e = minishell_getenv_byname(shell->env, "OLDPWD");
 		if ((e) && (ft_strcmp(e->value, "-")))
 		{
-			minishell_cd_real(env, e->value);
+			minishell_cd_real(&shell->env, e->value);
 			minishell_pwd();
 		}
 		else
 			ft_putendl("No valid parent available");
 	}
 	else
-		minishell_cd_real(env, av[1]);
+		minishell_cd_real(&shell->env, av[1]);
 	return (FLAG_BUILTIN);
 }

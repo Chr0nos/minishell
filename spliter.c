@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spliter.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/06 17:28:50 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 03:27:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 15:32:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char			**minishell_split(const char *cmd)
 }
 
 int				minishell_spliter(const char *cmd, t_shell *shell,
-		int (*f)(int, char **, t_list **, t_shell *))
+		int (*f)(int, char **, t_shell *))
 {
 	char	**av;
 	size_t	size;
@@ -85,7 +85,7 @@ int				minishell_spliter(const char *cmd, t_shell *shell,
 	if (!(av = minishell_split(cmd)))
 		return (1);
 	size = ft_tabcount((void**)av);
-	ret = f((int)(size) - 1, av, &shell->env, shell);
+	ret = f((int)(size) - 1, av, shell);
 	ft_free_tab(av, (unsigned int)size);
 	free(av);
 	return (ret);

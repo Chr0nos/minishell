@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 03:16:07 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 15:23:23 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_list	*minishell_init_builtin(void)
 	lst = NULL;
 	add = &ft_lstadd;
 	add(&lst, ft_lstnew(&(t_builtin){"cd", &minishell_cd}, s));
-	//add(&lst, ft_lstnew(&(t_builtin){"env", &minishell_envcmd}, s));
+	add(&lst, ft_lstnew(&(t_builtin){"env", &minishell_envcmd}, s));
 	add(&lst, ft_lstnew(&(t_builtin){"export", &minishell_export}, s));
 	add(&lst, ft_lstnew(&(t_builtin){"setenv", &minishell_setenv}, s));
 	add(&lst, ft_lstnew(&(t_builtin){"unsetenv", &minishell_unsetenv}, s));

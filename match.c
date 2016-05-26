@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   match.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 18:37:50 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 21:16:04 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 15:30:08 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int		minishell_match(int ac, char **av, t_list **env)
+int		minishell_match(int ac, char **av, t_shell *shell)
 {
 	char	**tab;
 	int		p;
 	char	*dir;
 
-	(void)env;
+	(void)shell;
 	if (ac < 2)
 	{
 		ft_putendl("minishell: match: usage: match [pattern] <folder path>");
