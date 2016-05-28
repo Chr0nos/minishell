@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/05 16:51:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 15:34:20 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/28 02:11:20 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void		minishell_envcmdset(int ac, char **av, t_shell *shell)
 	}
 	else
 		minishell_envshow(subshell.env);
-	minishell_purgeenv(ac, av, shell);
+	minishell_purgeenv(ac, av, &subshell);
 }
 
 static int		minishell_envlessi(int ac, char **av, t_shell *shell)
