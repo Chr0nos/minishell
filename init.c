@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/06/02 13:25:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/06/02 13:49:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ const char	*minishell_getterm(t_list *env)
 
 int			minishell_init(char **environement, t_shell *shell)
 {
-	signal(SIGINT, &minishell_signal);
+	signal(SIGINT | SIGTSTP, &minishell_signal);
 	shell->history = NULL;
 	shell->history_pos = NULL;
 	shell->builtins = minishell_builtin_init();
