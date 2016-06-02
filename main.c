@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/27 15:32:47 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/06/02 13:27:58 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int	minishell_runmulticmd(const char *cmd, t_shell *shell)
 	}
 	ft_free_tab(commands, (unsigned int)p);
 	free(commands);
+	ft_lstadd(&shell->history, ft_lstnewstr(cmd));
 	return (ret);
 }
 
