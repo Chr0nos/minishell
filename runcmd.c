@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   runcmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 23:53:32 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:35:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/06/02 13:26:50 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,39 +18,51 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
-static int	minishell_exec_result(char **args, char **environement)
+static int	minishell_exec_result(t_runcmd *rcmd)
 {
 	int		ret;
 
-	wait(&ret);
-	minishell_arguments_free(args);
-	minishell_envtabfree(environement);
+	waitpid(rcmd->child_pid, &ret, 0);
+	minishell_termcap_start(*rcmd->term, rcmd->env);
+	minishell_arguments_free(rcmd->args);
+	minishell_envtabfree(rcmd->environement);
 	signal(SIGINT, &minishell_signal);
+	if (WEXITSTATUS(ret))
+		return (FLAG_ERROR | ret);
 	return (ret);
 }
 
-static int	minishell_exec_real(const char *app, const char *cmd, t_list *env)
-{
-	char	**args;
-	char	**environement;
-	pid_t	pid;
+/*
+** singletone setup:
+** call exec real with APP = null , cmd = NULL and env = address of termis
+** this use a very nasty cast, please future me: forgive me...
+*/
 
-	args = NULL;
-	environement = NULL;
-	if ((pid = fork()) == 0)
+int			minishell_exec_real(const char *app, const char *cmd, t_list *env)
+{
+	t_runcmd		rcmd;
+	static t_term	*term = NULL;
+
+	if ((!app) && (!cmd) && (env) && ((term = (t_term*)(unsigned long)env)))
+		return (0);
+	rcmd.args = NULL;
+	rcmd.environement = NULL;
+	rcmd.term = term;
+	rcmd.env = env;
+	tcsetattr(STDIN, 0, term);
+	if ((rcmd.child_pid = fork()) == 0)
 	{
-		minishell_disable_termcaps();
-		signal(SIGINT, SIG_DFL);
-		args = minishell_arguments_parse(cmd, app);
-		environement = minishell_envmake(env);
-		if (execve(app, args, environement) == -1)
-		{
-			minishell_error(ERR_EXEC, NULL, 0);
-			exit(0);
-		}
+		rcmd.args = minishell_arguments_parse(cmd, app);
+		rcmd.environement = minishell_envmake(env);
+		minishell_child(app, rcmd.args, rcmd.environement);
+	}
+	else if ((rcmd.child_pid < 0) && (!minishell_termcap_start(*term, env)))
+	{
+		ft_putendl_fd("minishell: error: failed to fork", 2);
+		return (FLAG_ERROR);
 	}
 	else
-		return (minishell_exec_result(args, environement));
+		return (minishell_exec_result(&rcmd));
 	return (0);
 }
 
@@ -90,9 +102,8 @@ static int	minishell_exec(const char *cmd, t_list *env)
 	if (((app[0] == '/') || (app[0] == '.')) &&
 			(lstat(app, &st) >= 0))
 		return (minishell_execpath(app, env, cmd));
-	if ((!env) || (!(pathlist = minishell_envval(env, "PATH"))))
-		pathlist = MINISHELL_PATH_DEFAULT;
-	if ((fullpath = minishell_getapp_path(app, pathlist)) != NULL)
+	if (((pathlist = minishell_envval(env, "PATH")) != NULL) &&
+			((fullpath = minishell_getapp_path(app, pathlist)) != NULL))
 	{
 		ret = minishell_exec_real(fullpath, cmd, env);
 		free(fullpath);
@@ -107,16 +118,16 @@ static int	minishell_exec(const char *cmd, t_list *env)
 ** called by: main() / minishell_envcmd()
 */
 
-int			minishell_runcmd(const char *cmd, t_list **environement)
+int			minishell_runcmd(const char *cmd, t_shell *shell)
 {
 	int	ret;
 
 	while ((*cmd) && (ft_strany(*cmd, SEPARATORS)))
 		cmd++;
-	ret = minishell_builtin(cmd, environement);
+	ret = minishell_builtin(cmd, shell);
 	if ((ret & FLAG_QUIT) || (ret & FLAG_BUILTIN))
 		return (ret);
-	else if ((ret = minishell_exec(cmd, *environement)) & FLAG_NOTFOUND)
+	else if ((ret = minishell_exec(cmd, shell->env)) & FLAG_NOTFOUND)
 		minishell_error(ERR_NOTFOUND,
 				ft_strndup(cmd, ft_strsublenstr(cmd, SEPARATORS)), 1);
 	return (ret & MASK_RET);

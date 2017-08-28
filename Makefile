@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: snicolet <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/05/03 17:26:33 by snicolet          #+#    #+#              #
-#*   Updated: 2016/05/16 18:38:50 by snicolet         ###   ########.fr       *#
+#    Updated: 2016/05/26 23:02:07 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ CC=clang -g3
 OBJ=main.o errors.o environement.o arguments.o envmake.o builtin.o path.o \
 	envcmd.o cd.o spliter.o setenv.o unsetenv.o envdup.o help.o runcmd.o \
 	prompt.o shlvl.o buffer.o termcaps.o init.o signal.o export.o exit.o \
-	completion.o match.o prompt2.o
+	completion.o match.o pwd.o envshow.o child.o termread.o \
+	purgeenv.o clear.o termcomplete.o history.o
 
 all: $(NAME)
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setenv.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/07 00:45:24 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/16 02:46:34 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 15:26:06 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ t_env	*minishell_getenv_byname(t_list *env, const char *key)
 {
 	while (env)
 	{
-		if (ft_strcmp(((t_env*)env->content)->name, key) == 0)
+		if ((env->content) &&
+		(ft_strcmp(((t_env*)env->content)->name, key) == 0))
 			return ((t_env *)env->content);
 		env = env->next;
 	}
@@ -56,7 +57,7 @@ void	minishell_setenvval(const char *name, char *value, t_list **env)
 		minishell_editenv(e, value);
 }
 
-int		minishell_setenv(int ac, char **av, t_list **env)
+int		minishell_setenv(int ac, char **av, t_shell *shell)
 {
 	char	*value;
 
@@ -69,6 +70,6 @@ int		minishell_setenv(int ac, char **av, t_list **env)
 		value = ft_strunsplit((const char **)(unsigned long)&av[2], ' ');
 	else
 		value = ft_strdup("");
-	minishell_setenvval(av[1], value, env);
+	minishell_setenvval(av[1], value, &shell->env);
 	return (FLAG_BUILTIN);
 }

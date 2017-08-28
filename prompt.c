@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/11 12:33:03 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:05:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/26 20:38:45 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <termios.h>
 #include <stdlib.h>
-
+/*
 static int	minishell_prompt_line(char *buff, int pos)
 {
 	buff[++pos] = '\0';
@@ -58,6 +58,7 @@ static int	minishell_prompt_cbc(char *buff, t_list *env)
 		ft_putendl_fd("minishell: error: line is too long", 2);
 	return (FLAG_ERROR);
 }
+*/
 
 /*
 ** this function should not return anything until a new line was made
@@ -67,13 +68,13 @@ static int	minishell_prompt_cbc(char *buff, t_list *env)
 ** return: the size of the line
 */
 
-int			minishell_prompt(char *buff, t_list *env)
+int			minishell_prompt(char *buff, t_shell *shell)
 {
 	int		ret;
 
 	minishell_showprompt();
 	if (ENABLE_TERMCAPS)
-		ret = minishell_prompt_cbc(buff, env);
+		ret = minishell_termread(buff, shell);
 	else
 		ret = (int)read(STDIN, buff, SHELL_BUFF_SIZE);
 	if (ret == 0)

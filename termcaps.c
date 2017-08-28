@@ -3,77 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   termcaps.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 19:27:04 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:41:43 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/05/27 00:48:18 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
-#include "keycodes.h"
 #include <curses.h>
 #include <term.h>
 #include <unistd.h>
 
-static int	minishell_termcaps_cb(int x)
+int			minishell_termcaps_cb(int x)
 {
 	ft_putchar(x);
 	return (0);
 }
 
-void		minishell_termcaps_key(int key, t_list *env)
+void		minishell_termcap_backspace(void)
 {
-	char	*res;
-
-	if (key == MKEY_BACKSPACE)
-	{
-		tgetent(NULL, minishell_getterm(env));
-		res = tgetstr("dc", NULL);
-	}
-	else if (key == MKEY_CLEAR)
-		res = tgetstr("cl", NULL);
-	else
-		res = NULL;
-	if (res)
-		tputs(res, 0, &minishell_termcaps_cb);
-	if (key == MKEY_CLEAR)
-		minishell_showprompt();
+	tputs(tgetstr("le", NULL), 0, &minishell_termcaps_cb);
+	tputs(tgetstr("dc", NULL), 0, &minishell_termcaps_cb);
 }
 
-static void	minishell_prompt_cbc_backspace(int *pos, t_list *env, char *buff)
+int			minishell_termcap_start(t_term term, t_list *env)
 {
-	if (*pos > 0)
+	const char	*nameterm;
+
+	nameterm = minishell_getterm(env);
+	if (tgetent(NULL, nameterm) == ERR)
 	{
-		*pos -= 1;
-		minishell_termcaps_key(MKEY_BACKSPACE, env);
-		write(1, "\b \b", 3);
+		ft_putstr_fd("minishell: error: failed to init termcaps\n", 2);
+		ft_printf("shell name: %s\n", nameterm);
+		return (ERR_EXIT);
 	}
-	buff[*pos] = '\0';
-	(*pos)--;
-}
-
-int			minishell_termcap_read(t_list *env, char *buff, int *pos, int x)
-{
-	if (x == MKEY_CTRL_D)
-		return (FLAG_QUIT);
-	else if (x == MKEY_CLEAR)
-	{
-		minishell_termcaps_key(MKEY_CLEAR, env);
-		buff[0] = '\0';
-		*pos = -1;
-	}
-	else if (x == MKEY_BACKSPACE)
-		minishell_prompt_cbc_backspace(pos, env, buff);
-	return (1);
-}
-
-void		minishell_disable_termcaps(void)
-{
-	t_term	term;
-
-	tcgetattr(0, &term);
-	term.c_lflag |= (unsigned long)(ICANON | ECHO);
-	tcsetattr(STDIN, 0, &term);
+	term.c_lflag &= ~((unsigned long)ICANON);
+	term.c_lflag &= ~((unsigned long)ECHO);
+	tcsetattr(STDIN, TCSANOW, &term);
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/15 16:07:37 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 19:51:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/06/02 13:49:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <term.h>
 #include <curses.h>
 #include <unistd.h>
+#include <signal.h>
 
 const char	*minishell_getterm(t_list *env)
 {
@@ -30,24 +31,17 @@ const char	*minishell_getterm(t_list *env)
 ** because the main still keep the original environement for the cleanup stage
 */
 
-int			minishell_init(t_list **env, struct termios term)
+int			minishell_init(char **environement, t_shell *shell)
 {
-	const char	*nameterm;
-
-	minishell_set_shell_level(env);
+	signal(SIGINT | SIGTSTP, &minishell_signal);
+	shell->history = NULL;
+	shell->history_pos = NULL;
+	shell->builtins = minishell_builtin_init();
+	minishell_envload(&shell->env, environement);
+	minishell_set_shell_level(&shell->env);
 	if (!ENABLE_TERMCAPS)
 		return (1);
-	nameterm = minishell_getterm(*env);
-	if (tgetent(NULL, nameterm) == ERR)
-	{
-		ft_putstr_fd("minishell: error: failed to init termcaps\n", 2);
-		ft_printf("shell name: %s\n", nameterm);
-		return (ERR_EXIT);
-	}
-	term.c_lflag &= ~((unsigned long)ICANON);
-	term.c_lflag &= ~((unsigned long)ECHO);
-	tcsetattr(STDIN, TCSANOW, &term);
-	return (1);
+	return (minishell_termcap_start(shell->term, shell->env));
 }
 
 /*
@@ -57,10 +51,14 @@ int			minishell_init(t_list **env, struct termios term)
 ** (if they where not enabled)
 */
 
-int			minishell_quit(t_list *env, struct termios *term, int result)
+int			minishell_quit(t_shell *shell, int result)
 {
 	if (ENABLE_TERMCAPS)
-		tcsetattr(STDIN, 0, term);
-	minishell_envfree(env);
+		tcsetattr(STDIN, 0, &shell->term);
+	minishell_envfree(shell->env);
+	if (shell->builtins)
+		ft_lstdel(&shell->builtins, &minishell_builtin_clear);
+	if (shell->history)
+		ft_lstdel(&shell->history, &minishell_builtin_clear);
 	return (result);
 }

@@ -1,42 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   match.c                                            :+:      :+:    :+:   */
+/*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/05/16 18:37:50 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/26 15:30:08 by snicolet         ###   ########.fr       */
+/*   Created: 2016/05/26 22:54:03 by snicolet          #+#    #+#             */
+/*   Updated: 2016/05/26 23:10:52 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
-#include <stdlib.h>
-#include <unistd.h>
 
-int		minishell_match(int ac, char **av, t_shell *shell)
+static void	minishell_history_show(int nb, t_list *history)
 {
-	char	**tab;
-	int		p;
-	char	*dir;
+	if (history)
+	{
+		minishell_history_show(nb - 1, history->next);
+		ft_printf("[%d] %s\n", nb, (char*)history->content);
+	}
+}
 
-	(void)shell;
-	if (ac < 2)
-	{
-		ft_putendl("minishell: match: usage: match [pattern] <folder path>");
-		return (FLAG_BUILTIN);
-	}
-	dir = (ac > 2) ? ft_strdup(av[2]) : getcwd(NULL, 4096);
-	tab = minishell_completion(av[1], dir);
-	free(dir);
-	p = 0;
-	while (tab[p])
-	{
-		ft_putendl(tab[p]);
-		free(tab[p]);
-		p++;
-	}
-	free(tab);
+int			minishell_history(int ac, char **av, t_shell *shell)
+{
+	const int	hs = (int)ft_lstsize(shell->history);
+
+	(void)ac;
+	(void)av;
+	minishell_history_show(hs, shell->history);
 	return (FLAG_BUILTIN);
 }

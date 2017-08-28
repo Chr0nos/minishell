@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/03 17:34:47 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:48:05 by snicolet         ###   ########.fr       */
+/*   Updated: 2016/06/02 13:27:58 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <unistd.h>
-#include <signal.h>
 #include <stdlib.h>
 #include <termios.h>
 
-static int	minishell_runmulticmd(const char *cmd, t_list **env)
+static int	minishell_runmulticmd(const char *cmd, t_shell *shell)
 {
 	char	**commands;
 	size_t	p;
@@ -28,7 +27,7 @@ static int	minishell_runmulticmd(const char *cmd, t_list **env)
 	commands = ft_strsplit(cmd, ';');
 	while (commands[p])
 	{
-		if ((ret = minishell_runcmd(commands[p], env)) & FLAG_QUIT)
+		if ((ret = minishell_runcmd(commands[p], shell)) & FLAG_QUIT)
 		{
 			ft_free_tab(commands, (unsigned int)ft_tabcount((void**)commands));
 			free(commands);
@@ -38,10 +37,11 @@ static int	minishell_runmulticmd(const char *cmd, t_list **env)
 	}
 	ft_free_tab(commands, (unsigned int)p);
 	free(commands);
+	ft_lstadd(&shell->history, ft_lstnewstr(cmd));
 	return (ret);
 }
 
-static int	minishell_exec_params(int ac, char **av, t_list **env)
+static int	minishell_exec_params(int ac, char **av, t_shell *shell)
 {
 	int		ret;
 	char	*cmd;
@@ -50,36 +50,36 @@ static int	minishell_exec_params(int ac, char **av, t_list **env)
 		return (0);
 	if (!(cmd = ft_strunsplit((const char **)(unsigned long)&av[1], ' ')))
 		return (FLAG_QUIT);
-	ret = minishell_runmulticmd(cmd, env);
+	ret = minishell_runmulticmd(cmd, shell);
 	free(cmd);
 	return (ret);
 }
 
 int			main(int ac, char **av, char **env)
 {
-	t_term			term;
-	t_list			*environement;
 	char			buff[SHELL_BUFF_SIZE];
 	int				ret;
 	int				r;
+	t_shell			shell;
 
-	tcgetattr(0, &term);
-	signal(SIGINT, &minishell_signal);
-	minishell_envload(&environement, env);
-	minishell_init(&environement, term);
-	if ((r = minishell_exec_params(ac, av, &environement)) & FLAG_QUIT)
-		return (minishell_quit(environement, &term, r & MASK_RET));
-	while ((ret = (int)minishell_prompt(buff, environement)) >= 0)
+	shell.buff = (char*)buff;
+	tcgetattr(0, &shell.term);
+	minishell_exec_real(NULL, NULL, (t_list *)(unsigned long)&shell.term);
+	minishell_init(env, &shell);
+	if ((r = minishell_exec_params(ac, av, &shell)) & FLAG_QUIT)
+		return (minishell_quit(&shell, r & MASK_RET));
+	while (((ret = (int)minishell_prompt(buff, &shell)) >= 0) &&
+		(!(ret & FLAG_QUIT)))
 	{
 		if (ret & FLAG_QUIT)
 			break ;
 		if ((ret > 1) && (ret < SHELL_BUFF_SIZE))
 		{
 			buff[ret - 1] = '\0';
-			r = minishell_runmulticmd(buff, &environement);
+			r = minishell_runmulticmd(buff, &shell);
 			if (r & FLAG_QUIT)
 				break ;
 		}
 	}
-	return (minishell_quit(environement, &term, r & MASK_RET));
+	return (minishell_quit(&shell, r & MASK_RET));
 }

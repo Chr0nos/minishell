@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt2.c                                          :+:      :+:    :+:   */
+/*   clear.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/05/17 17:58:08 by snicolet          #+#    #+#             */
-/*   Updated: 2016/05/17 20:39:37 by snicolet         ###   ########.fr       */
+/*   Created: 2016/05/26 15:36:02 by snicolet          #+#    #+#             */
+/*   Updated: 2016/05/26 15:44:41 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "keycodes.h"
+#include <curses.h>
+#include <term.h>
 
-int		minishell_prompt_skip(char *buff, int *pos, int x)
+int		minishell_clear(int ac, char **av, t_shell *shell)
 {
-	char	c;
-
-	(void)x;
-	c = buff[*pos];
-	if (((c >= 65) && (c <= 68)) || (c == 27))
-	{
-		buff[(*pos)--] = '\0';
-		return (1);
-	}
-	return (0);
+	(void)ac;
+	(void)av;
+	(void)shell;
+	tputs(tgetstr("cl", NULL), 0, minishell_termcaps_cb);
+	return (FLAG_BUILTIN);
 }
