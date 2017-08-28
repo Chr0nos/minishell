@@ -12,8 +12,11 @@
 
 #include "minishell.h"
 
-static void	minishell_unsetenv_lst(t_env *e)
+static void	minishell_unsetenv_lst(void *ptr)
 {
+	t_env	*e;
+
+	e = ptr;
 	ft_mfree(3, e->name, e->value, e);
 }
 

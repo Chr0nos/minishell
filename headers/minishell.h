@@ -20,18 +20,18 @@
 # define MINISHELL_PATH2 "/opt/X11/bin:/usr/local/go/bin:/usr/local/munki:"
 # define MINISHELL_PATH3 "/Library/TeX/texbin"
 # define MINISHELL_PATH_DEFAULT MINISHELL_PATH1 MINISHELL_PATH2 MINISHELL_PATH3
-# define BUFF_SIZE _POSIX_ARG_MAX
+# define SHELL_BUFF_SIZE _POSIX_ARG_MAX
 # define DEFAULT_TERM "xterm-256color"
 # define SEPARATORS " \t"
 # define DQUOTE (char)34
 # define STDIN STDIN_FILENO
 # define CFG_SETSHLVL 1
 # define ENABLE_TERMCAPS 0
-# define FLAG_NOTFOUND 1 << 26
-# define FLAG_UNKNOW 1 << 27
-# define FLAG_ERROR 1 << 28
-# define FLAG_BUILTIN 1 << 29
-# define FLAG_QUIT 1 << 30
+# define FLAG_NOTFOUND	(1 << 26)
+# define FLAG_UNKNOW	(1 << 27)
+# define FLAG_ERROR		(1 << 28)
+# define FLAG_BUILTIN	(1 << 29)
+# define FLAG_QUIT		(1 << 30)
 # define MASK_RET 255
 
 typedef struct	s_env

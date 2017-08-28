@@ -38,7 +38,8 @@ static int	minishell_prompt_cbc(char *buff, t_list *env)
 	int			x;
 
 	minishell_prompt_cbc_init(&ret, &pos, key);
-	while ((pos < BUFF_SIZE) && ((ret = (int)read(STDIN_FILENO, key, 2)) > 0))
+	while ((pos < SHELL_BUFF_SIZE) &&
+			((ret = (int)read(STDIN_FILENO, key, 2)) > 0))
 	{
 		x = (int)(*(unsigned short*)(unsigned long)key);
 		buff[pos] = key[0];
@@ -53,7 +54,7 @@ static int	minishell_prompt_cbc(char *buff, t_list *env)
 		pos++;
 		key[1] = '\0';
 	}
-	if (pos >= BUFF_SIZE)
+	if (pos >= SHELL_BUFF_SIZE)
 		ft_putendl_fd("minishell: error: line is too long", 2);
 	return (FLAG_ERROR);
 }
@@ -74,7 +75,7 @@ int			minishell_prompt(char *buff, t_list *env)
 	if (ENABLE_TERMCAPS)
 		ret = minishell_prompt_cbc(buff, env);
 	else
-		ret = (int)read(STDIN, buff, BUFF_SIZE);
+		ret = (int)read(STDIN, buff, SHELL_BUFF_SIZE);
 	if (ret == 0)
 	{
 		write(1, "\n", 1);
@@ -87,7 +88,6 @@ int			minishell_showprompt(void)
 {
 	char	*cwd;
 	char	*dir;
-	char	*path;
 
 	if (!(cwd = getcwd(NULL, 4096)))
 	{
@@ -97,9 +97,7 @@ int			minishell_showprompt(void)
 	dir = ft_strrchr(cwd, '/') + 1;
 	if (*dir == '\0')
 		dir--;
-	path = ft_strmjoin(2, dir, " $> ");
-	ft_putstr(path);
+	ft_printf("%s $> ", dir);
 	free(cwd);
-	free(path);
 	return (1);
 }

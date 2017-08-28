@@ -59,7 +59,7 @@ int			main(int ac, char **av, char **env)
 {
 	t_term			term;
 	t_list			*environement;
-	char			buff[BUFF_SIZE];
+	char			buff[SHELL_BUFF_SIZE];
 	int				ret;
 	int				r;
 
@@ -73,7 +73,7 @@ int			main(int ac, char **av, char **env)
 	{
 		if (ret & FLAG_QUIT)
 			break ;
-		if ((ret > 1) && (ret < BUFF_SIZE))
+		if ((ret > 1) && (ret < SHELL_BUFF_SIZE))
 		{
 			buff[ret - 1] = '\0';
 			r = minishell_runmulticmd(buff, &environement);

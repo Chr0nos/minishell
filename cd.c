@@ -76,8 +76,8 @@ void		minishell_cd_real(t_list **env, const char *dir)
 		cwd = getcwd(NULL, 4096);
 		if (cwd)
 			minishell_setenvval("PWD", cwd, env);
-		else if (minishell_cd_home(env) == 0)
-			;
+		else
+			minishell_cd_home(env);
 	}
 }
 
